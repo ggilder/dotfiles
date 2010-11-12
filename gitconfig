@@ -1,7 +1,3 @@
-[user]
-	name = Faun
-	email = faun@riseup.net
-
 [alias]
 	co = checkout
 	st = status
