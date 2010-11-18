@@ -58,12 +58,14 @@ rake routes | grep $1
 SSH_ENV="$HOME/.ssh/environment"
 
 function start_agent {
-	echo "Initialising new SSH agent..."
-	/usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
-	echo succeeded
-	chmod 600 "${SSH_ENV}"
-	. "${SSH_ENV}" > /dev/null
-	/usr/bin/ssh-add;
+	if [[ -f "${SSH_ENV}" ]]; then
+		echo "Initialising new SSH agent..."
+		/usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+		echo succeeded
+		chmod 600 "${SSH_ENV}"
+		. "${SSH_ENV}" > /dev/null
+		/usr/bin/ssh-add;
+	fi
 }
 
 # Source SSH settings, if applicable
