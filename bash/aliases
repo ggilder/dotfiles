@@ -10,8 +10,8 @@ if [[ $platform == 'Linux' ]]; then
 elif [[ $platform == 'Darwin' ]]; then
   alias a='ls -lrthG'
   alias ls='ls -G'  # OS-X SPECIFIC - the -G command in OS-X is for colors, in Linux it's no groups
-  export EDITOR="vim"
-  # export EDITOR='mate -w'  # OS-X SPECIFIC - TextMate, w is to wait for TextMate window to close
+  # export EDITOR="vim"
+  export EDITOR='mate -w'  # OS-X SPECIFIC - TextMate, w is to wait for TextMate window to close
 fi
 
 # Other Editors ----------------------------------------------------------
