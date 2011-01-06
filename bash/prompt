@@ -157,8 +157,14 @@ function rvm-prompt-wrapper () {
 }
 
 #\$(__git_ps1 \"(%s)\")\$(parse_svn_branch)
-export PS1="\[\e[0;33m\]${USER}\[\e[0;31m\]\$(rvm-prompt-wrapper)\[\e[0;32m\]\w\[\e[0;33m\]\$(parse_git_svn_revision)\[\e[0m\]→ "
+export PS1="\[$COLOR_RED\]\$(rvm-prompt-wrapper)\[$COLOR_GREEN\]\W\[$COLOR_BROWN\]\$(parse_git_svn_revision)\[$COLOR_NC\]→ "
 
 export PS2='>'   # Secondary prompt
 export PS3='?'   # Prompt 3
 export PS4='+'   # Prompt 4
+
+# This runs before the prompt and sets the title of the xterm* window.  If you set the title in the prompt
+# weird wrapping errors occur on some systems, so this method is superior
+# Turn this off of you are running directly in the console on the machine
+# Set to show current working directory, user, hostname
+export PROMPT_COMMAND='echo -ne "\033]0;${PWD##*/} - ${USER}@${HOSTNAME%%.*}"; echo -ne "\007";'$PROMPT_COMMAND
