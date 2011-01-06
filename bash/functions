@@ -1,0 +1,83 @@
+#### Functions to inspect ruby gems ###########################
+function set_gempaths {
+	if [ -z "$GEMPATHS" ]; then
+		echo "loading gem paths..."
+		GEMPATHS=`gem environment | awk '/GEM PATHS/, /GEM [^P]/ {print $2}' | grep -v GEM`
+	fi	
+}
+function gemdir {
+	set_gempaths
+	echo "$GEMPATHS" | xargs -n 1 -I %s find %s/gems -type d -depth 1 | grep $1 | sort | tail -1
+}
+# really awesome function, use: cdgem <gem name>, cd's into your gems
+# directory and opens gem that best matches the gem name provided
+function cdgem {
+	set_gempaths
+  GEMDIR=`gemdir $1`
+  if [ "$GEMDIR" ] && [ -d "$GEMDIR" ]; then
+cd $GEMDIR
+  else
+echo "No gem found for $1 in $GEMPATHS"
+    return 1
+  fi
+}
+function mategem {
+  (cdgem $1 && mate .)
+}
+
+# =============================
+# = Directory save and recall =
+# =============================
+
+# I got the following from, and mod'd it: http://www.macosxhints.com/article.php?story=20020716005123797
+#    The following aliases (save & show) are for saving frequently used directories
+#    You can save a directory using an abbreviation of your choosing. Eg. save ms
+#    You can subsequently move to one of the saved directories by using cd with
+#    the abbreviation you chose. Eg. cd ms  (Note that no '$' is necessary.)
+
+######### TODO:
+### make save validate argument using regex /^[a-zA-Z]\w*$/
+### maybe downcase argument too
+### and obviously warn on fail
+### ALSO add "unsave" or similar function to manage dirs list
+
+if [ ! -f ~/.dirs ]; then  # if doesn't exist, create it
+	touch ~/.dirs
+fi
+
+alias show='cat ~/.dirs'
+alias showdirs="cat ~/.dirs | ruby -e \"puts STDIN.read.split(10.chr).map{|x| x.gsub(/^(.+)=.+$/, '\\1')}.join(', ')\""
+save (){
+	command sed "/!$/d" ~/.dirs > ~/.dirs1; \mv ~/.dirs1 ~/.dirs; echo "$@"=\"`pwd`\" >> ~/.dirs; source ~/.dirs ; 
+}
+source ~/.dirs  # Initialization for the above 'save' facility: source the .sdirs file
+shopt -s cdable_vars # set the bash option so that no '$' is required when using the above facility
+
+# show dirs at login
+echo "Directory shortcuts:" `showdirs`
+
+
+######## misc ##########
+
+# mkdir, cd into it
+mkcd () {
+	mkdir -p "$*"
+	cd "$*"
+}
+
+# Trash files
+function trash () {
+  local path
+  for path in "$@"; do
+    # ignore any arguments
+    if [[ "$path" = -* ]]; then :
+    else
+      local dst=${path##*/}
+      # append the time if necessary
+      while [ -e ~/.Trash/"$dst" ]; do
+        dst="$dst "$(date +%H-%M-%S)
+      done
+      mv "$path" ~/.Trash/"$dst"
+    fi
+  done
+}
