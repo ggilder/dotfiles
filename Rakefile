@@ -55,17 +55,17 @@ namespace :install do
     end
   
     # Handle ssh pubkey on its own
-    orginal_filename = File.expand_path("#{home}/.ssh/id_dsa.pub")
+    original_filename = File.expand_path("#{home}/.ssh/id_dsa.pub")
 
-    pubfile_exists = File.exist? orginal_filename
-    pubfile_symlink = File.symlink? orginal_filename
+    pubfile_exists = File.exist? original_filename
+    pubfile_symlink = File.symlink? original_filename
   
     if pubfile_exists && !pubfile_symlink
       puts "Linking public ssh key"
       system %Q{mkdir -p "#{home}/.ssh/dotfiles_backup"}
-      system %Q{cp "#{orginal_filename}" "#{home}/.ssh/dotfiles_backup/id_dsa.pub"}
-      system %Q{mv "#{orginal_filename}" "$PWD/#{hostname}.pub"}
-      system %Q{ln -s "$PWD/#{hostname}.pub" "#{orginal_filename}"}
+      system %Q{cp "#{original_filename}" "#{home}/.ssh/dotfiles_backup/id_dsa.pub"}
+      system %Q{mv "#{original_filename}" "$PWD/#{hostname}.pub"}
+      system %Q{ln -s "$PWD/#{hostname}.pub" "#{original_filename}"}
     elsif !pubfile_exists
       puts "No existing ssh key. Exiting..."
     elsif pubfile_symlink
