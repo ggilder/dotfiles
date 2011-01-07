@@ -53,25 +53,6 @@ namespace :install do
         puts "Existing ~/#{file} exists. Skipping..." 
       end
     end
-  
-    # Handle ssh pubkey on its own
-    original_filename = File.expand_path("#{home}/.ssh/id_dsa.pub")
-
-    pubfile_exists = File.exist? original_filename
-    pubfile_symlink = File.symlink? original_filename
-  
-    if pubfile_exists && !pubfile_symlink
-      puts "Linking public ssh key"
-      system %Q{mkdir -p "#{home}/.ssh/dotfiles_backup"}
-      system %Q{cp "#{original_filename}" "#{home}/.ssh/dotfiles_backup/id_dsa.pub"}
-      system %Q{mv "#{original_filename}" "$PWD/#{hostname}.pub"}
-      system %Q{ln -s "$PWD/#{hostname}.pub" "#{original_filename}"}
-    elsif !pubfile_exists
-      puts "No existing ssh key. Exiting..."
-    elsif pubfile_symlink
-      puts "Existing linked ssh key. Skipping..."
-    end
-
   end
 
   desc "Create symbolic link for kaleidoscope integration with git difftool"
