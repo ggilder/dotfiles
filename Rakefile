@@ -1,4 +1,5 @@
 require 'rake'
+require 'pathname'
 require 'ftools' if RUBY_VERSION < "1.9"
 
 hostname =  `printf ${HOSTNAME%%.*}`
@@ -15,10 +16,13 @@ namespace :install do
     replace_all = false
     Dir['*'].each do |file|
       next if %w[Rakefile README LICENSE bin].include? file or %r{(.*)\.pub} =~ file
-    
-      if File.exist?(File.join(ENV['HOME'], ".#{file}")) || (File.symlink? File.join(ENV['HOME'], ".#{file}"))
+      
+      dest = File.join(ENV['HOME'], ".#{file}")
+      if File.exist?(dest) || File.symlink?(dest)
         if replace_all
           replace_file(file, timestamp)
+        elsif Pathname.new(dest).realpath.to_s == File.join(ENV['PWD'], file)
+          puts "correct symlink already exists for "+File.join(ENV['PWD'], file)
         else
           print "overwrite ~/.#{file}? [ynaq] "
           case $stdin.gets.chomp

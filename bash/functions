@@ -1,3 +1,11 @@
+#### Function to update dotfiles
+
+function dotfiles_update {
+	cd ~/src/dotfiles
+	git pull
+	rake install
+}
+
 #### Functions to inspect ruby gems ###########################
 function set_gempaths {
 	if [ -z "$GEMPATHS" ]; then
