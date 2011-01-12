@@ -43,9 +43,12 @@ namespace :install do
     end
 
     # link files in bin dir
+    if `command ls -1 "#{home}/bin" 2>/dev/null` != ''
+      # make backup if bin dir is not empty
+      system %Q{mkdir -p "$HOME/_dot_backups/#{timestamp}/bin/"}
+    end
     system %Q{mkdir -p "#{home}/bin"}
-    system %Q{mkdir -p "$HOME/_dot_backups/#{timestamp}/bin/"}
-  
+    
     Dir['bin/*'].each do |file|
       filepath = File.expand_path("#{home}/#{file}")
       if !(File.exist? filepath) || (File.symlink? filepath)
