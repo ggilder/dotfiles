@@ -50,6 +50,7 @@ function mategem {
 ### make save validate argument using regex /^[a-zA-Z]\w*$/
 ### maybe downcase argument too
 ### and obviously warn on fail
+### and check abbreviation for uniqueness? prompt to overwrite?
 ### ALSO add "unsave" or similar function to manage dirs list
 
 if [ ! -f ~/.dirs ]; then  # if doesn't exist, create it
