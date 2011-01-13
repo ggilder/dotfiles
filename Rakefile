@@ -43,21 +43,23 @@ namespace :install do
     end
 
     # link files in bin dir
-    if `command ls -1 "#{home}/bin" 2>/dev/null` != ''
-      # make backup if bin dir is not empty
-      system %Q{mkdir -p "$HOME/_dot_backups/#{timestamp}/bin/"}
-    end
+    # disabling backup because existing files are not overwritten anyway
+    #if `command ls -1 "#{home}/bin" 2>/dev/null` != ''
+    #  # make backup if bin dir is not empty
+    #  system %Q{mkdir -p "$HOME/_dot_backups/#{timestamp}/bin/"}
+    #end
     system %Q{mkdir -p "#{home}/bin"}
     
     Dir['bin/*'].each do |file|
       filepath = File.expand_path("#{home}/#{file}")
-      if !(File.exist? filepath) || (File.symlink? filepath)
+      if !(File.exist? filepath)
         puts "linking ~/#{file}"
-        system %Q{cp -RLi "#{home}/#{file}" "#{home}/_dot_backups/#{timestamp}/#{file}"}
-        system %Q{rm "#{home}/#{file}"}
         system %Q{ln -s "$PWD/#{file}" "#{home}/#{file}"}
       else
         puts "Existing ~/#{file} exists. Skipping..." 
+        # could back up here
+        # system %Q{cp -RLi "#{home}/#{file}" "#{home}/_dot_backups/#{timestamp}/#{file}"}
+        # system %Q{rm "#{home}/#{file}"}
       end
     end
   end
