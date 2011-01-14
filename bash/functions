@@ -46,21 +46,42 @@ function mategem {
 #    You can subsequently move to one of the saved directories by using cd with
 #    the abbreviation you chose. Eg. cd ms  (Note that no '$' is necessary.)
 
-######### TODO:
-### make save validate argument using regex /^[a-zA-Z]\w*$/
-### maybe downcase argument too
-### and obviously warn on fail
-### and check abbreviation for uniqueness? prompt to overwrite?
-### ALSO add "unsave" or similar function to manage dirs list
-
-if [ ! -f ~/.dirs ]; then  # if doesn't exist, create it
+# if ~/.dirs file doesn't exist, create it
+if [ ! -f ~/.dirs ]; then
 	touch ~/.dirs
 fi
 
 alias show='cat ~/.dirs'
 alias showdirs="cat ~/.dirs | ruby -e \"puts STDIN.read.split(10.chr).map{|x| x.gsub(/^(.+)=.+$/, '\\1')}.join(', ')\""
 save (){
-	command sed "/!$/d" ~/.dirs > ~/.dirs1; \mv ~/.dirs1 ~/.dirs; echo "$@"=\"`pwd`\" >> ~/.dirs; source ~/.dirs ; 
+	local usage
+	usage="Usage: save shortcut_name"
+	if [ $# -lt 1 ]; then
+		echo "$usage"
+		return 1
+	fi
+	if [ $# -gt 1 ]; then
+		echo "Too many arguments!"
+		echo "$usage"
+		return 1
+	fi
+	if [ -z $(echo $@ | grep --color=never "^[a-zA-Z]\w*$") ]; then
+		echo "Bad argument! $@ is not a valid alias!"
+		return 1
+	fi
+	if [ $(cat ~/.dirs | grep --color=never "^$@=" | wc -l) -gt 0 ]; then
+		echo -n "That alias is already set to: "
+		echo $(cat ~/.dirs | awk "/^$@=/" | sed "s/^$@=//" | tail -1)
+		read -p "Do you want to overwrite it? (y/n) " answer
+		if [ ! "$answer" == "y" -a ! "$answer" == "yes" ]; then
+			return 0
+		else
+			# delete existing version(s) of this alias
+			$(cat ~/.dirs | sed "s/^$@=.*//" | sed '/^$/d' > ~/.dirs)
+		fi
+	fi
+	echo "$@"=\"`pwd`\" >> ~/.dirs
+	source ~/.dirs
 }
 source ~/.dirs  # Initialization for the above 'save' facility: source the .sdirs file
 shopt -s cdable_vars # set the bash option so that no '$' is required when using the above facility
