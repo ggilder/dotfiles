@@ -52,7 +52,7 @@ if [ ! -f ~/.dirs ]; then
 fi
 
 alias show='cat ~/.dirs'
-alias showdirs="cat ~/.dirs | ruby -e \"puts STDIN.read.split(10.chr).map{|x| x.gsub(/^(.+)=.+$/, '\\1')}.join(', ')\""
+alias showdirs="cat ~/.dirs | ruby -e \"puts STDIN.read.split(10.chr).sort.map{|x| x.gsub(/^(.+)=.+$/, '\\1')}.join(', ')\""
 save (){
 	local usage
 	usage="Usage: save shortcut_name"
