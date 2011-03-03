@@ -76,12 +76,15 @@ save (){
 		if [ ! "$answer" == "y" -a ! "$answer" == "yes" ]; then
 			return 0
 		else
+			# backup just in case
+			cp ~/.dirs ~/.dirs.bak
 			# delete existing version(s) of this alias
 			$(cat ~/.dirs | sed "s/^$@=.*//" | sed '/^$/d' > ~/.dirs)
 		fi
 	fi
 	echo "$@"=\"`pwd`\" >> ~/.dirs
 	source ~/.dirs
+	echo "Directory shortcuts:" `showdirs`
 }
 source ~/.dirs  # Initialization for the above 'save' facility: source the .sdirs file
 shopt -s cdable_vars # set the bash option so that no '$' is required when using the above facility
