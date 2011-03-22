@@ -6,11 +6,6 @@ source ~/.bash/paths
 source ~/.bash/config
 source ~/.bash/functions
 
-# Add bin directory to path
-if [ -d ~/bin ]; then
- export PATH=:~/bin:$PATH
-fi
-
 # Load in .bashrc
 if [ -f ~/.bashrc ]; then
   source ~/.bashrc
