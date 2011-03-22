@@ -4,7 +4,7 @@ function dotfiles_update {
 	local SAVED_PWD
 	SAVED_PWD="$PWD"
 	cd ~/src/dotfiles
-	git pull
+	git pull --ff-only
 	rake install
 	cd "$SAVED_PWD"
 }
