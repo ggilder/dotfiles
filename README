@@ -11,3 +11,6 @@ Installation
   git clone git://github.com/ggilder/dotfiles ~/src/dotfiles
   cd ~/src/dotfiles
   rake install
+
+To-do:
+Add some ssh-add magic to automatically load oddly-named keys (not just id_rsa, id_dsa, identity)
