@@ -28,24 +28,3 @@ fi
 # Disable flow control commands (keeps C-s from freezing everything)
 stty start undef
 stty stop undef
-
-function sgi {
-sudo gem install $1
-}
-
-function sagi {
-sudo apt-get -y install $1 
-}
-
-function syi {
-sudo yum -y install $1
-}
-
-function glg { 
-gem list | grep $1
-}
-
-
-function rrg { 
-rake routes | grep $1
-}
