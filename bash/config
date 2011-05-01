@@ -18,8 +18,8 @@ bind "set match-hidden-files On"
 bind "set print-completions-horizontally On"
 
 # Bash completion from homebrew
-if [ -f `brew --prefix`/etc/bash_completion ]; then
-  . `brew --prefix`/etc/bash_completion
+if [ -d `brew --prefix`/etc/bash_completion.d ]; then
+  . `brew --prefix`/etc/bash_completion.d/*
 elif [ -f /etc/bash_completion ]; then
 	# Alternatively, Turn on advanced bash completion if the file exists (get it here: http://www.caliban.org/bash/index.shtml#completion)
     . /etc/bash_completion
