@@ -109,7 +109,7 @@ function parse_svn_dirty() {
 
 function parse_git_dirty() {
 		status=`git status 2> /dev/null`
-		dirty=`		 echo -n "${status}" 2> /dev/null | grep -q "Changed but not updated" 2> /dev/null; echo "$?"`
+		dirty=`		 echo -n "${status}" 2> /dev/null | grep -q "Changes not staged" 2> /dev/null; echo "$?"`
 		untracked=`echo -n "${status}" 2> /dev/null | grep -q "Untracked files" 2> /dev/null; echo "$?"`
 		ahead=`		 echo -n "${status}" 2> /dev/null | grep -q "Your branch is ahead of" 2> /dev/null; echo "$?"`
 		newfile=`	 echo -n "${status}" 2> /dev/null | grep -q "new file:" 2> /dev/null; echo "$?"`
