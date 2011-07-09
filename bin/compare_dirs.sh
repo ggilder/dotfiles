@@ -15,7 +15,7 @@ HASHLOG=$(mktemp -t compare_dirs)
 
 trap 'rm -f $HASHLOG' EXIT
 
-cd "$1" && hashdeep -rl . > $HASHLOG
+cd "$1" && hashdeep -erl . > $HASHLOG
 cd "$2" && hashdeep -erla -vv -k $HASHLOG .
 
 exit
