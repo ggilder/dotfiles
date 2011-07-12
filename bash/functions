@@ -117,3 +117,7 @@ function trash () {
     fi
   done
 }
+
+function copypath () {
+	echo -n $PWD | pbcopy
+}
