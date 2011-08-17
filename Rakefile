@@ -16,7 +16,7 @@ namespace :install do
     replace_all = false
     Dir['*'].each do |file|
       next if %w[Rakefile README LICENSE bin].include? file or %r{(.*)\.pub} =~ file
-      
+
       dest = File.join(ENV['HOME'], ".#{file}")
       if File.exist?(dest) || File.symlink?(dest)
         if replace_all
@@ -49,14 +49,14 @@ namespace :install do
     #  system %Q{mkdir -p "$HOME/_dot_backups/#{timestamp}/bin/"}
     #end
     system %Q{mkdir -p "#{home}/bin"}
-    
+
     Dir['bin/*'].each do |file|
       filepath = File.expand_path("#{home}/#{file}")
       if !(File.exist? filepath)
         puts "linking ~/#{file}"
         system %Q{ln -s "$PWD/#{file}" "#{home}/#{file}"}
       else
-        puts "Existing ~/#{file} exists. Skipping..." 
+        puts "Existing ~/#{file} exists. Skipping..."
         # could back up here
         # system %Q{cp -RLi "#{home}/#{file}" "#{home}/_dot_backups/#{timestamp}/#{file}"}
         # system %Q{rm "#{home}/#{file}"}
@@ -90,10 +90,10 @@ end
 def replace_file(file, timestamp)
   system %Q{mkdir -p "$HOME/_dot_backups/#{timestamp}"}
   if File.exist?(File.join(ENV['HOME'], ".#{file}"))
-		puts "Backing up $HOME/.#{file} to $HOME/_dot_backups/#{timestamp}/#{file}"
-  	system %Q{cp -RLi "$HOME/.#{file}" "$HOME/_dot_backups/#{timestamp}/#{file}"}
-	  system %Q{rm "$HOME/.#{file}"}
-	end
+    puts "Backing up $HOME/.#{file} to $HOME/_dot_backups/#{timestamp}/#{file}"
+    system %Q{cp -RLi "$HOME/.#{file}" "$HOME/_dot_backups/#{timestamp}/#{file}"}
+    system %Q{rm "$HOME/.#{file}"}
+  end
   link_file(file)
 end
 

@@ -4,7 +4,7 @@
 export HISTCONTROL=ignoredups
 
 # After each command, checks the windows size and changes lines and columns
-shopt -s checkwinsize 
+shopt -s checkwinsize
 
 # Autocorrect mispelled directories
 shopt -s cdspell
@@ -19,10 +19,10 @@ bind "set print-completions-horizontally On"
 
 # Bash completion from homebrew
 if [ -f `brew --prefix`/etc/bash_completion ]; then
-	. `brew --prefix`/etc/bash_completion
+  . `brew --prefix`/etc/bash_completion
 elif [ -f /etc/bash_completion ]; then
-	# Alternatively, Turn on advanced bash completion if the file exists (get it here: http://www.caliban.org/bash/index.shtml#completion)
-	. /etc/bash_completion
+  # Alternatively, Turn on advanced bash completion if the file exists (get it here: http://www.caliban.org/bash/index.shtml#completion)
+  . /etc/bash_completion
 fi
 
 # Disable flow control commands (keeps C-s from freezing everything)
