@@ -2,6 +2,9 @@
   name = Gabriel Gilder
   email = ggilder@tractionco.com
 
+[github]
+  user = ggilder
+
 [alias]
   co = checkout
   st = status

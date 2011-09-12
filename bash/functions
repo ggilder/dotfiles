@@ -79,7 +79,8 @@ save (){
       # backup just in case
       cp ~/.dirs ~/.dirs.bak
       # delete existing version(s) of this alias
-      $(cat ~/.dirs | sed "s/^$@=.*//" | sed '/^$/d' > ~/.dirs)
+      cat ~/.dirs | sed "s/^$@=.*//" | sed '/^$/d' > ~/.dirs.tmp
+      mv ~/.dirs.tmp ~/.dirs
     fi
   fi
   echo "$@"=\"`pwd`\" >> ~/.dirs
