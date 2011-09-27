@@ -33,6 +33,12 @@ alias la='ls -a'
 alias lla='ls -lah'
 alias q='exit'
 
+# SVN
+alias ss='svn st'
+alias sup='svn up'
+alias sci='svn ci'
+alias sl='svn log'
+
 # Misc
 alias g='grep -i'  # Case insensitive grep
 alias f='find . -iname'
