@@ -1,9 +1,10 @@
 #echo "=> Loading `pwd`/bash_profile"
 
-source ~/.anyshell/aliases
 source ~/.anyshell/paths
 source ~/.bash/config
+source ~/.anyshell/aliases
 source ~/.bash/functions
+source ~/.anyshell/functions
 
 # Load in .bashrc
 if [ -f ~/.bashrc ]; then

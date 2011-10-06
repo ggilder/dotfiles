@@ -2,6 +2,7 @@ source $HOME/.anyshell/paths
 source $HOME/.zsh/config
 source $HOME/.zsh/completion
 source $HOME/.anyshell/aliases
+source $HOME/.anyshell/functions
 
 # use .localrc for settings specific to one system
 [[ -f ~/.localrc ]] && .  ~/.localrc
