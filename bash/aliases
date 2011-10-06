@@ -1,31 +1,25 @@
-#echo "=> Loading `pwd`/aliases"
-
 # Handle the fact that this file will be used with multiple OSs
 platform=`uname`
 if [[ $platform == 'Linux' ]]; then
   alias a='ls -lth --color'
-  alias ls='ls --color=auto' # For linux
+  alias ls='ls --color=auto'
   export EDITOR="vim"
   alias get='sudo apt-get install'
 elif [[ $platform == 'Darwin' ]]; then
-  alias a='ls -lthG'
+  alias a='ls -lthG' # sort by date modified
   alias ls='ls -G'  # OS-X SPECIFIC - the -G command in OS-X is for colors, in Linux it's no groups
-  # export EDITOR="vim"
   export EDITOR='mate -w'  # OS-X SPECIFIC - TextMate, w is to wait for TextMate window to close
+  alias lock="open /System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app"
+  alias flushdns="dscacheutil -flushcache"
 fi
 
-# Code -----------------------------------------------------------------
-
+# ruby (irb)
 alias irb='irb --readline -r irb/completion'
 
-# RVM -----------------------------------------------------------------
-
+# shortcut for trusting and loading newly created .rvmrc files
 alias rvmrc='rvm rvmrc trust && rvm rvmrc load'
 
-# Flush DNS cache
-alias flushdns="dscacheutil -flushcache"
-
-# Navigation -------------------------------------------------------
+# Navigation and directory listing
 alias ..='cd ..'
 alias ...='cd .. ; cd ..'
 alias ll='ls -hl'
@@ -33,19 +27,32 @@ alias la='ls -a'
 alias lla='ls -lah'
 alias q='exit'
 
-# SVN
+# SVN shortcuts
 alias ss='svn st'
 alias sup='svn up'
 alias sci='svn ci'
 alias sl='svn log'
 
+# git shortcuts
+alias gl='git pull'
+alias gp='git push'
+alias gd='git diff'
+alias gc='git commit'
+alias gca='git commit -a'
+alias gcm='git commit -m'
+alias gco='git checkout'
+alias gb='git branch'
+alias g='git status'
+alias gs='git status'
+alias grm="git status | grep deleted | awk '{print \$3}' | xargs git rm"
+alias gg='git lg'
+
 # Misc
-alias g='grep -i'  # Case insensitive grep
+alias grep='grep -i'  # Case insensitive grep
 alias f='find . -iname'
 alias ducks='du -cksh * | sort -rn' # Lists folders and files sizes in the current folder
 alias m='more'
 alias df='df -h'
-
 alias sha1="openssl sha1"
 
 # Shows most used commands, cool script I got this from: http://lifehacker.com/software/how-to/turbocharge-your-terminal-274317.php
