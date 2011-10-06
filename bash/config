@@ -9,6 +9,9 @@ shopt -s checkwinsize
 # Autocorrect mispelled directories
 shopt -s cdspell
 
+# set the bash option so that no '$' is required to cd to saved dirs
+shopt -s cdable_vars
+
 # bash completion settings (actually, these are readline settings)
 bind "set completion-ignore-case on" # note: bind used instead of sticking these in .inputrc
 bind "set bell-style none"
