@@ -144,3 +144,17 @@ RPROMPT="$(rprompt_info)"
 PS2='>'
 PS3='?'
 PS4='+'
+
+function title() {
+  print -Pn "\e]2;%~ - %n@%m\a"
+}
+
+# precmd is called just before the prompt is printed
+function precmd() {
+  title
+}
+
+# preexec is called just before any command line is executed
+function preexec() {
+  title
+}
