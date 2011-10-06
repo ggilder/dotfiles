@@ -1,5 +1,6 @@
 source $HOME/.anyshell/paths
 source $HOME/.zsh/config
+source $HOME/.zsh/prompt
 source $HOME/.zsh/completion
 source $HOME/.anyshell/aliases
 source $HOME/.anyshell/functions

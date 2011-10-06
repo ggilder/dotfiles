@@ -35,19 +35,3 @@ setopt HIST_VERIFY # don't execute history expansions directly
 bindkey '^[^[[D' backward-word # option-left
 bindkey '^[^[[C' forward-word # option-right
 bindkey '^[[3~' delete-char # forward delete key
-
-# prompt
-function prompt_info(){
-  local host='%{$terminfo[bold]$fg[cyan]%}%m%{$reset_color%}'
-  local current_dir='%{$fg[green]%}${PWD/#$HOME/~}%{$reset_color%}'
-  local rvm_ruby='%{$fg[red]%}$(rvm_prompt_info)%{$reset_color%}'
-  local git_branch='%{$fg[yellow]%}$(git_prompt_info)%{$reset_color%}'
-  echo "${host}:${current_dir} ${rvm_ruby} ${git_branch}
-%{$fg[white]%}→%{$reset_color%} "
-}
-function rprompt_info(){
-  local return_code="%(?..%{$fg[red]%}%?↵%{$reset_color%})"
-  echo "%{$(echotc UP 1)%}${return_code}%{$(echotc DO 1)%}"
-}
-PROMPT="$(prompt_info)"
-RPROMPT="$(rprompt_info)"
