@@ -1,0 +1,7 @@
+# override default rvm_prompt_info
+ruby_version=$(~/.rvm/bin/rvm-prompt i v p 2> /dev/null)
+if [[ -n $ruby_version ]]; then
+  echo "($ruby_version)"
+else
+  echo "(system)"
+fi

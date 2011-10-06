@@ -1,0 +1,58 @@
+# user functions
+fpath=(~/.zsh/functions $fpath)
+# autoload anything in the "functions" dir, with -U flag to prevent user aliases from interfering with the functions
+autoload -U ~/.zsh/functions/*(:t)
+
+autoload colors ; colors
+
+# misc settings
+setopt NO_BG_NICE # don't nice background tasks
+setopt NO_HUP # don't send the HUP signal to running jobs when the shell exits
+setopt IGNORE_EOF # do not exit on end-of-file
+setopt NO_LIST_BEEP # don't beep on an ambiguous completion
+setopt LOCAL_OPTIONS # allow functions to have local options
+setopt LOCAL_TRAPS # allow functions to have local traps
+setopt PROMPT_SUBST # run expansions and substitutions in prompts
+setopt CORRECT # correct spelling of commands
+setopt COMPLETE_IN_WORD # cursor stays in place and completion is done from both ends
+setopt RMSTARSILENT # don't confirm an rm *
+setopt CDABLE_VARS
+setopt CLOBBER # allows `>' redirection to truncate existing files, and `>>' to create files
+setopt EXTENDED_GLOB # treat the `#', `~' and `^' characters as part of patterns for filename generation
+setopt NULL_GLOB # if a pattern has no matches, don't report an error
+
+# history settings
+HISTFILE=~/.zsh_history
+HISTSIZE=1000
+SAVEHIST=1000
+setopt SHARE_HISTORY # share history between sessions (implies INC_APPEND_HISTORY)
+setopt EXTENDED_HISTORY # add timestamps to history
+setopt HIST_IGNORE_ALL_DUPS  # don't record dupes in history
+setopt HIST_REDUCE_BLANKS # remove superfluous blanks
+setopt HIST_VERIFY # don't execute history expansions directly
+
+# fix a few key bindings
+bindkey '^[^[[D' backward-word # option-left
+bindkey '^[^[[C' forward-word # option-right
+bindkey '^[[3~' delete-char # forward delete key
+
+# prompt
+function prompt_info(){
+  local host='%{$terminfo[bold]$fg[blue]%}%m%{$reset_color%}'
+  local current_dir='%{$fg[green]%}${PWD/#$HOME/~}%{$reset_color%}'
+  local rvm_ruby='%{$fg[red]%}$(rvm_prompt_info)%{$reset_color%}'
+  local git_branch='%{$fg[yellow]%}$(git_prompt_info)%{$reset_color%}'
+  echo "${host}:${current_dir} ${rvm_ruby} ${git_branch}
+%B→%b "
+}
+function rprompt_info(){
+  local return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%})"
+  echo "%{$(echotc UP 1)%}${return_code}$(~/bin/batcharge.py)%{$(echotc DO 1)%}"
+}
+PROMPT="$(prompt_info)"
+RPROMPT="$(rprompt_info)"
+
+ZSH_THEME_GIT_PROMPT_PREFIX=""
+ZSH_THEME_GIT_PROMPT_SUFFIX=""
+ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}✗%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_CLEAN=" %{$fg[green]%}✔%{$reset_color%}"
