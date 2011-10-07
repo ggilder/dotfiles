@@ -92,8 +92,7 @@ function dotfiles_update {
   SAVED_PWD="$PWD"
   cd $HOME/src/dotfiles
   git pull --ff-only
-  git submodule init
-  git submodule update
+  git submodule update --init
   rake install
   cd "$SAVED_PWD"
 }
