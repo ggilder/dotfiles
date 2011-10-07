@@ -90,7 +90,7 @@ function mategem {
 function dotfiles_update {
   local SAVED_PWD
   SAVED_PWD="$PWD"
-  cd ~/src/dotfiles
+  cd $HOME/src/dotfiles
   git pull --ff-only
   git submodule init
   git submodule update
