@@ -43,14 +43,15 @@ function save (){
   if [ $(cat ~/.dirs | grep --color=never "^$@=" | wc -l) -gt 0 ]; then
     echo -n "That alias is already set to: "
     echo $(cat ~/.dirs | awk "/^$@=/" | sed "s/^$@=//" | tail -1)
-    read -p "Do you want to overwrite it? (y/n) " answer
-    if [ ! "$answer" == "y" -a ! "$answer" == "yes" ]; then
+    echo -n "Do you want to overwrite it? (y/n) "
+    read answer
+    if [ ! "$answer" = "y" -a ! "$answer" = "yes" ]; then
       return 0
     else
       # backup just in case
       cp ~/.dirs ~/.dirs.bak
       # delete existing version(s) of this alias
-      cat ~/.dirs | sed "s/^$@=.*//" | sed '/^$/d' > ~/.dirs.tmp
+      cat ~/.dirs | sed "/^$@=.*/d" > ~/.dirs.tmp
       mv ~/.dirs.tmp ~/.dirs
     fi
   fi
