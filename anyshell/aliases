@@ -1,11 +1,11 @@
 # Handle the fact that this file will be used with multiple OSs
 platform=`uname`
-if [[ $platform == 'Linux' ]]; then
+if [[ $platform = 'Linux' ]]; then
   alias a='ls -lth --color'
   alias ls='ls --color=auto'
   export EDITOR="vim"
   alias get='sudo apt-get install'
-elif [[ $platform == 'Darwin' ]]; then
+elif [[ $platform = 'Darwin' ]]; then
   alias a='ls -lthG' # sort by date modified
   alias ls='ls -G'  # OS-X SPECIFIC - the -G command in OS-X is for colors, in Linux it's no groups
   export EDITOR='mate -w'  # OS-X SPECIFIC - TextMate, w is to wait for TextMate window to close
