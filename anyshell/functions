@@ -54,6 +54,10 @@ function save (){
       mv ~/.dirs.tmp ~/.dirs
     fi
   fi
+  # add a newline to the end of the file if necessary
+  if [ $(cat ~/.dirs | sed -n '/.*/p' | wc -l) -gt $(cat ~/.dirs | wc -l) ]; then
+    echo >> ~/.dirs
+  fi
   echo "$@"=\"`pwd`\" >> ~/.dirs
   source ~/.dirs
   echo "Directory shortcuts:" `showdirs`
