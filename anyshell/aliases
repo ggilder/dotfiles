@@ -16,9 +16,6 @@ fi
 # ruby (irb)
 alias irb='irb --readline -r irb/completion'
 
-# shortcut for trusting and loading newly created .rvmrc files
-alias rvmrc='rvm rvmrc trust && rvm rvmrc load'
-
 # Navigation and directory listing
 alias ..='cd ..'
 alias ...='cd .. ; cd ..'

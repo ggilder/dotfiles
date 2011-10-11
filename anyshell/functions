@@ -123,3 +123,16 @@ function trash () {
 function copypath () {
   echo -n $PWD | pbcopy
 }
+
+# project rvmrc files
+function rvmrc () {
+  if [ $# -lt 1 ]; then
+    echo "Trusting existing .rvmrc file"
+    rvm rvmrc trust && rvm rvmrc load
+  else
+    echo "Creating new .rvmrc file"
+    cmd="echo \"rvm $1 --create\" > .rvmrc && rvm rvmrc trust && rvm rvmrc load"
+    echo "running: $cmd"
+    eval $cmd
+  fi
+}
