@@ -71,7 +71,7 @@ echo "Directory shortcuts:" `showdirs`
 function gemdir {
   local GEMPATHS
   GEMPATHS=`gem environment gempaths | tr ':' '\n'`
-  echo "$GEMPATHS" | xargs -n 1 -I %s find %s/gems -type d -depth 1 | grep $1 | sort | tail -1
+  echo "$GEMPATHS" | xargs -n 1 -I %s find %s/gems -type d -depth 1 | grep "/$1" | sort | tail -1
 }
 # really awesome function, use: cdgem <gem name>, cd's into your gems
 # directory and opens gem that best matches the gem name provided
