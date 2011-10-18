@@ -15,3 +15,6 @@ zstyle ':completion:*:approximate:*' max-errors 1 numeric
 #Use cache for completion
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.zsh_cache
+
+# turn off completion of users, otherwise zsh shits itself on VPN
+zstyle ':completion:*' users ''
