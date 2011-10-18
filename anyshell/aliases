@@ -20,8 +20,10 @@ alias irb='irb --readline -r irb/completion'
 alias ..='cd ..'
 alias ...='cd .. ; cd ..'
 alias ll='ls -hl'
-alias la='ls -a'
+alias la='ls -ah'
 alias lla='ls -lah'
+alias lt='ls -th'
+alias llt='ls -lth'
 alias q='exit'
 
 # SVN shortcuts
