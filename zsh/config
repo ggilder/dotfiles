@@ -1,5 +1,5 @@
 # user functions
-fpath=(~/.zsh/functions $fpath)
+# fpath=(~/.zsh/functions $fpath)
 # autoload anything in the "functions" dir, with -U flag to prevent user aliases from interfering with the functions
 #autoload -U ~/.zsh/functions/*(:t)
 
