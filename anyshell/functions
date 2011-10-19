@@ -141,3 +141,12 @@ function rvmrc () {
     eval $cmd
   fi
 }
+
+function newest () {
+  if [ $# -lt 1 ]; then
+    ls -1t | head -n 5 | nl
+    echo 'Type `newest #` to open that file.'
+  else
+    open "$(ls -1t | head -n $1 | tail -n 1)"
+  fi
+}
