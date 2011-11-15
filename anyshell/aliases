@@ -49,6 +49,7 @@ alias grm="git status | grep deleted | awk '{print \$3}' | xargs git rm"
 alias gg='git lg'
 alias ggg='git logc'
 alias gggg='git logd'
+alias gpto='git push --tags origin'
 
 # Misc
 alias grep='grep -i'  # Case insensitive grep
