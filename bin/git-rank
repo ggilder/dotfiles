@@ -34,7 +34,17 @@ htmlize = ARGV.delete("-h")
 
 author = nil
 state = :pre_author
-`git log -M -C -C -p --no-color`.each_line do |l|
+diffs = `git log -M -C -C -p --no-color`
+unless diffs.valid_encoding?
+  %w[ISO-8859-1 US-ASCII].each do |enc|
+    newdiffs = diffs.dup.force_encoding(enc)
+    if newdiffs.valid_encoding?
+      diffs = newdiffs.encode("UTF-8")
+      break
+    end
+  end
+end
+diffs.each_line do |l|
   case
   when (state == :pre_author || state == :post_author) && l =~ /Author: (.*)$/
     author = $1
