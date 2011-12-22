@@ -152,7 +152,21 @@ function newest () {
 }
 
 function mdbuild () {
+  read -d '' head <<"EOF"
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv=Content-type content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title></title>
+</head>
+<body>
+EOF
+  local foot="</body>\n</html>\n"
   for input in "$@"; do
-    markdown $input | smartypants > ${input%.*}.html
+    out=${input%.*}.html
+    echo $head > $out
+    markdown $input | smartypants >> $out
+    echo $foot >> $out
   done
 }
