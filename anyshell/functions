@@ -150,3 +150,9 @@ function newest () {
     open "$(ls -1t | head -n $1 | tail -n 1)"
   fi
 }
+
+function mdbuild () {
+  for input in "$@"; do
+    markdown $input | smartypants > ${input%.*}.html
+  done
+}
