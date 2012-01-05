@@ -68,20 +68,14 @@ function save (){
 echo "Directory shortcuts:" `showdirs`
 
 #### Functions to inspect ruby gems ###########################
-function gemdir {
-  local GEMPATHS
-  GEMPATHS=`gem environment gempaths | tr ':' '\n'`
-  echo "$GEMPATHS" | xargs -n 1 -I %s find %s/gems -type d -depth 1 | grep "/$1" | sort | tail -1
-}
-# really awesome function, use: cdgem <gem name>, cd's into your gems
-# directory and opens gem that best matches the gem name provided
+## removed old `gemdir` function in favor of a ruby script, see bin/gemdir ##
 function cdgem {
   local GEMDIR
   GEMDIR=$(gemdir $1)
   if [ "$GEMDIR" ] && [ -d "$GEMDIR" ]; then
     cd $GEMDIR
   else
-    echo "No gem found for $1 in:\n$GEMPATHS"
+    echo "No gem found for $1"
     return 1
   fi
 }
