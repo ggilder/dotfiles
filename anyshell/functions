@@ -130,7 +130,7 @@ function rvmrc () {
     rvm rvmrc trust && rvm rvmrc load
   else
     echo "Creating new .rvmrc file"
-    cmd="echo \"rvm $1 --create\" > .rvmrc && rvm rvmrc trust && rvm rvmrc load"
+    cmd="rvm --rvmrc --create use $1"
     echo "running: $cmd"
     eval $cmd
   fi
