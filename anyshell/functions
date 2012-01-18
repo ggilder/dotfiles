@@ -145,6 +145,7 @@ function newest () {
   fi
 }
 
+# build html from markdown, optimized for legibility on mobile devices
 function mdbuild () {
   read -d '' head <<"EOF"
 <!DOCTYPE html>
