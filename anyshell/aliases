@@ -50,6 +50,7 @@ alias gg='git lg'
 alias ggg='git logc'
 alias gggg='git logd'
 alias gpto='git push --tags origin'
+alias gitmine="git log --author='$(git config --get user.name)' --pretty=format:'%Cgreen%ad%Creset %s%C(yellow)%d%Creset %Cred(%h)%Creset' --date=short"
 
 # Misc
 alias grep='grep -i'  # Case insensitive grep
