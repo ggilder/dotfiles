@@ -151,10 +151,21 @@ function title() {
 
 # precmd is called just before the prompt is printed
 function precmd() {
-  title
+  if [[ "$TERM" == "screen" ]]; then
+    local SHELLNAME=$(basename $SHELL)
+    print -Pn "\ek$SHELLNAME\e\\" # set screen title
+    print -Pn "\e]2;$SHELLNAME\a" # must (re)set xterm title
+  else
+    title
+  fi
 }
 
 # preexec is called just before any command line is executed
 function preexec() {
-  title
+  if [[ "$TERM" == "screen" ]]; then
+    local CMD=${1[(wr)^(*=*|sudo|-*)]}
+    echo -ne "\ek$CMD\e\\"
+  else
+    title
+  fi
 }
