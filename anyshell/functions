@@ -154,6 +154,7 @@ function mdbuild () {
   <meta http-equiv=Content-type content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width">
   <title></title>
+  <style>body{font-family:Helvetica;margin:2em;}</style>
 </head>
 <body>
 EOF
