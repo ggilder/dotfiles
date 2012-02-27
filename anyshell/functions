@@ -147,6 +147,22 @@ function newest () {
 
 # build html from markdown, optimized for legibility on mobile devices
 function mdbuild () {
+  for input in "$@"; do
+    out=${input%.*}.html
+    mdgenerate $input > $out
+  done
+}
+
+function mdpreview () {
+  for file in "$@"; do
+    local TMPFILE=`mktemp -t mdpreview` || exit 1
+    mv $TMPFILE $TMPFILE.html
+    mdgenerate $file > $TMPFILE.html
+    open $TMPFILE.html
+  done
+}
+
+function mdgenerate () {
   read -d '' head <<"EOF"
 <!DOCTYPE html>
 <html>
@@ -159,12 +175,9 @@ function mdbuild () {
 <body>
 EOF
   local foot="</body>\n</html>\n"
-  for input in "$@"; do
-    out=${input%.*}.html
-    echo $head > $out
-    markdown $input | smartypants >> $out
-    echo $foot >> $out
-  done
+  echo $head
+  markdown "$@" | smartypants
+  echo $foot
 }
 
 # convert tabs to spaces
