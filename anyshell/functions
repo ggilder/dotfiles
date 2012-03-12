@@ -191,3 +191,12 @@ function tabs2spaces () {
     cp $file $file.tmp && expand -t 2 $file > $file.tmp && mv $file.tmp $file
   done
 }
+
+# kill processes
+function pskill () {
+  if [ $# -lt 1 ]; then
+    echo "No grep string provided!"
+    return 1
+  fi
+  psgrep "$*" | tail -n +2 | sed 's/  */ /g' | cut -d ' ' -f 2 | xargs kill -9
+}
