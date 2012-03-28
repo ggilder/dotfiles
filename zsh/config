@@ -13,7 +13,8 @@ setopt NO_LIST_BEEP # don't beep on an ambiguous completion
 setopt LOCAL_OPTIONS # allow functions to have local options
 setopt LOCAL_TRAPS # allow functions to have local traps
 setopt PROMPT_SUBST # run expansions and substitutions in prompts
-setopt CORRECT # correct spelling of commands
+unsetopt correct_all # don't autocorrect
+unsetopt correct # don't autocorrect commands
 setopt COMPLETE_IN_WORD # cursor stays in place and completion is done from both ends
 setopt RMSTARSILENT # don't confirm an rm *
 setopt CDABLE_VARS
