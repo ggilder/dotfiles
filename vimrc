@@ -45,3 +45,6 @@ augroup CommandTExtension
   autocmd FocusGained * CommandTFlush
   autocmd BufWritePost * CommandTFlush
 augroup END
+
+" Type C-A after some math to calculate the result
+ino <C-A> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
