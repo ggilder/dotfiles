@@ -157,7 +157,7 @@ function mdpreview () {
   for file in "$@"; do
     local TMPFILE=`mktemp -t mdpreview` || exit 1
     mv $TMPFILE $TMPFILE.html
-    mdgenerate $file > $TMPFILE.html
+    mdgenerate $file "$PWD/" > $TMPFILE.html
     open $TMPFILE.html
   done
 }
@@ -171,12 +171,11 @@ function mdgenerate () {
   <meta name="viewport" content="width=device-width">
   <title></title>
   <style>body{font-family:Helvetica;margin:2em;}</style>
-</head>
-<body>
 EOF
+  head="$head\n  <link rel=\"stylesheet\" type=\"text/css\" href=\"$2style.css\">\n</head>\n<body>"
   local foot="</body>\n</html>\n"
   echo $head
-  markdown "$@" | smartypants
+  markdown "$1" | smartypants
   echo $foot
 }
 
