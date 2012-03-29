@@ -1,3 +1,5 @@
+call pathogen#infect()
+call pathogen#helptags()
 syntax on                 " Enable syntax highlighting
 filetype plugin indent on " Enable filetype-specific indenting and plugins
 
