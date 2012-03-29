@@ -38,3 +38,10 @@ map <Leader>v :vnew <C-R>=expand("%:p:h") . '/'<CR>
 
 " close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+" refresh command-t cache when files are written or when vim gains focus
+augroup CommandTExtension
+  autocmd!
+  autocmd FocusGained * CommandTFlush
+  autocmd BufWritePost * CommandTFlush
+augroup END
