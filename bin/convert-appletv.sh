@@ -5,8 +5,8 @@ if [ $# -lt 1 ]; then
   return 1
 fi
 
-for file in $@; do
-  test -f "$file" || continue
-  out=`basename "$file" | sed s/.${file##*.}/.m4v/`
-  HandBrakeCLI -i "$file" -o "$HOME/Desktop/$out" --preset "AppleTV 2"
+while [ "$1" != "" ]; do
+  out=`basename "$1" | sed s/.${1##*.}/.m4v/`
+  HandBrakeCLI -i "$1" -o "$HOME/Desktop/$out" --preset "AppleTV 2"
+  shift
 done
