@@ -34,12 +34,39 @@ set grepprg=ack " Use Ack instead of grep
 set shiftround " When at 3 spaces and I hit >>, go to 4, not 5.
 set shellcmdflag=-ic " Use interactive shell within vim (enables zsh aliases and functions)
 set whichwrap+=<,>,h,l,[,] " let cursor keys wrap around lines
+set hlsearch " highlight search matches
 
-" Edit another file in the same directory as the current file
-" uses expression to extract path from current file's path
-map <Leader>e :e <C-R>=expand("%:p:h") . '/'<CR>
-map <Leader>s :split <C-R>=expand("%:p:h") . '/'<CR>
-map <Leader>v :vnew <C-R>=expand("%:p:h") . '/'<CR>
+" Minimum window sizes
+set winwidth=84
+" We have to have a winheight bigger than we want to set winminheight. But if
+" we set winheight to be huge before winminheight, the winminheight set will
+" fail.
+set winheight=5
+set winminheight=5
+set winheight=999
+
+" Press Space to toggle highlighting on/off, and show current value.
+nnoremap <Space> :set hlsearch! hlsearch?<CR>
+
+" Edit or view files in same directory as current file
+cnoremap %% <C-R>=expand('%:h').'/'<cr>
+map <leader>e :edit %%
+map <leader>v :view %%
+map <leader>s :split %%
+
+" Switch between the last two files
+nnoremap <leader><leader> <c-^>
+
+" Windows and splits
+" Open new vertical split
+nnoremap <leader>w <C-w>v<C-w>l
+" navigate splits
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+" close window
+nnoremap <C-x> <C-w>q
 
 " close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
