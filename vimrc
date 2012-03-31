@@ -1,6 +1,6 @@
 call pathogen#infect()
 call pathogen#helptags()
-syntax on                 " Enable syntax highlighting
+syntax on " Enable syntax highlighting
 if &term == 'xterm-256color'
   set background=light
   colorscheme solarized
@@ -14,7 +14,7 @@ let mapleader = ","
 
 set nocompatible
 set backspace=indent,eol,start " allow backspacing over everything in insert mode
-set history=500		" keep 500 lines of command line history
+set history=500 " keep 500 lines of command line history
 set autoindent
 set ruler
 set nowrap
@@ -26,7 +26,7 @@ set sw=2
 set smarttab
 set incsearch " highlight search term incrementally
 set ignorecase smartcase
-set laststatus=2  " Always show status line.
+set laststatus=2 " Always show status line.
 set number 
 set gdefault " assume the /g flag on :s substitutions to replace all matches in a line
 set hidden " allow hidden unsaved buffers
