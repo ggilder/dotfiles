@@ -32,7 +32,8 @@ set gdefault " assume the /g flag on :s substitutions to replace all matches in 
 set hidden " allow hidden unsaved buffers
 set grepprg=ack " Use Ack instead of grep
 set shiftround " When at 3 spaces and I hit >>, go to 4, not 5.
-set shellcmdflag=-ic " Use interactive shell within vim (enables zsh aliases and functions)
+" Disabled for now because it seems to suspend vim with some commands
+" set shellcmdflag=-ic " Use interactive shell within vim (enables zsh aliases and functions)
 set whichwrap+=<,>,h,l,[,] " let cursor keys wrap around lines
 set hlsearch " highlight search matches
 
