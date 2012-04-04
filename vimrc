@@ -15,6 +15,7 @@ set history=500 " keep 500 lines of command line history
 set autoindent
 set ruler
 set nowrap
+set linebreak " if wrap is turned on, break lines at whitespace
 set noswapfile
 set nobackup
 set guioptions-=T
