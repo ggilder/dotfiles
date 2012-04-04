@@ -1,10 +1,7 @@
 call pathogen#infect()
 call pathogen#helptags()
 syntax on " Enable syntax highlighting
-if &term == 'xterm-256color'
-  set background=light
-  colorscheme solarized
-endif
+colorscheme tutticolori
 filetype plugin indent on " Enable filetype-specific indenting and plugins
 
 " ruby: autoindent with two spaces, always expand tabs
