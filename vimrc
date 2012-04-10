@@ -1,3 +1,4 @@
+set encoding=utf-8 
 call pathogen#infect()
 call pathogen#helptags()
 syntax on " Enable syntax highlighting
