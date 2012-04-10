@@ -83,3 +83,6 @@ augroup END
 
 " Type C-A after some math to calculate the result
 ino <C-A> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
+
+" powerline config
+let g:Powerline_symbols = 'fancy'
