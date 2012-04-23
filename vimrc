@@ -39,6 +39,7 @@ set shiftround " When at 3 spaces and I hit >>, go to 4, not 5.
 set whichwrap+=<,>,h,l,[,] " let cursor keys wrap around lines
 set hlsearch " highlight search matches
 set mouse=a " use mouse if enabled
+set clipboard=unnamed " use Mac clipboard for yank/paste/etc.
 
 " Minimum window sizes
 set winwidth=84
