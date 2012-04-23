@@ -3,7 +3,6 @@
 source ~/.anyshell/paths
 source ~/.bash/config
 source ~/.anyshell/aliases
-source ~/.bash/functions
 source ~/.anyshell/functions
 
 # Load in .bashrc
