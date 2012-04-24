@@ -89,4 +89,5 @@ ino <C-A> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
 " powerline config
 let g:Powerline_symbols = 'fancy'
 
-autocmd BufRead,BufNewFile * syntax match Tab /\t/ | hi Tab ctermbg=red
+" highlight tabs
+autocmd BufRead,BufNewFile * syntax match Tab /\t/ | hi Tab ctermbg=grey
