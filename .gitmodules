@@ -34,3 +34,6 @@
 [submodule "vim/bundle/jst"]
 	path = vim/bundle/jst
 	url = https://github.com/briancollins/vim-jst.git
+[submodule "vim/bundle/trailing-whitespace"]
+	path = vim/bundle/trailing-whitespace
+	url = https://github.com/bronson/vim-trailing-whitespace.git

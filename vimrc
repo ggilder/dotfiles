@@ -1,4 +1,4 @@
-set encoding=utf-8 
+set encoding=utf-8
 call pathogen#infect()
 call pathogen#helptags()
 syntax on " Enable syntax highlighting
@@ -29,7 +29,7 @@ set smarttab
 set incsearch " highlight search term incrementally
 set ignorecase smartcase
 set laststatus=2 " Always show status line.
-set number 
+set number
 set gdefault " assume the /g flag on :s substitutions to replace all matches in a line
 set hidden " allow hidden unsaved buffers
 set grepprg=ack " Use Ack instead of grep
@@ -40,6 +40,14 @@ set whichwrap+=<,>,h,l,[,] " let cursor keys wrap around lines
 set hlsearch " highlight search matches
 set mouse=a " use mouse if enabled
 set clipboard=unnamed " use Mac clipboard for yank/paste/etc.
+
+" show tabs and nbsp
+set list listchars=tab:» ,nbsp:•
+highlight SpecialKey ctermfg=darkyellow guifg=darkyellow
+
+" highlight trailing whitespace
+highlight ExtraWhitespace ctermbg=darkgreen guibg=lightgreen ctermfg=grey guifg=grey
+match ExtraWhitespace /\s\+$/
 
 " Minimum window sizes
 set winwidth=84
@@ -88,6 +96,3 @@ ino <C-A> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
 
 " powerline config
 let g:Powerline_symbols = 'fancy'
-
-" highlight tabs
-autocmd BufRead,BufNewFile * syntax match Tab /\t/ | hi Tab ctermbg=grey
