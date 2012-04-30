@@ -11,7 +11,7 @@ elif [[ $platform = 'Darwin' ]]; then
   export EDITOR='mate -w'  # OS-X SPECIFIC - TextMate, w is to wait for TextMate window to close
   alias lock="open /System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app"
   alias flushdns="dscacheutil -flushcache"
-  
+
   if [ -d /Applications/MacVim.app/ ]; then
     # use MacVim over built-in Mac OS version
     alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
@@ -27,6 +27,7 @@ alias irb='irb --readline -r irb/completion'
 alias ..='cd ..'
 alias ...='cd .. ; cd ..'
 alias ll='ls -hl'
+alias l='ls -hl'
 alias la='ls -ah'
 alias lla='ls -lah'
 alias lt='ls -th'
