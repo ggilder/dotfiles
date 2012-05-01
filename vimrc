@@ -92,3 +92,11 @@ ino <C-A> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
 
 " powerline config
 let g:Powerline_symbols = 'fancy'
+
+function LocalSettings()
+  let localconfig = $HOME . '/.vimrc.local'
+  if filereadable(localconfig)
+    so `=localconfig`
+  endif
+endfunction
+call LocalSettings()
