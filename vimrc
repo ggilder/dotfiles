@@ -40,6 +40,17 @@ set whichwrap+=<,>,h,l,[,] " let cursor keys wrap around lines
 set hlsearch " highlight search matches
 set mouse=a " use mouse if enabled
 set clipboard=unnamed " use Mac clipboard for yank/paste/etc.
+set pumheight=15 " Limit completion popup menu height
+
+" Ignore various files in open/command-t
+" Images
+set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.ico,*.psd
+" Other binaries
+set wildignore+=*.sqlite3,*.ipa
+" Xcode stuff
+set wildignore+=*.xcodeproj/*,*.xib,*.cer,*.icns
+" Misc temp stuff
+set wildignore+=*.pid,*/tmp/*
 
 " show tabs and nbsp
 set list listchars=tab:» ,nbsp:•
@@ -86,6 +97,10 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 
 " refresh command-t cache every time
 map <leader>t :CommandTFlush<cr>\|:CommandT<cr>
+" Let ESC close command-t (and then remap arrows for navigation)
+let g:CommandTCancelMap = ['<ESC>', '<C-c>']
+let g:CommandTSelectNextMap = ['<C-n>', '<C-j>', '<ESC>OB']
+let g:CommandTSelectPrevMap = ['<C-p>', '<C-k>', '<ESC>OA']
 
 " Type C-A after some math to calculate the result
 ino <C-A> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
