@@ -22,4 +22,4 @@ source $HOME/.anyshell/functions
 # Enable RVM
 export rvm_path="$HOME/.rvm"
 [[ -s $rvm_path/scripts/rvm ]] && source $rvm_path/scripts/rvm
-# __rvm_project_rvmrc # only necessary for iTerm?
+

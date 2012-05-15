@@ -41,6 +41,7 @@ set hlsearch " highlight search matches
 set mouse=a " use mouse if enabled
 set clipboard=unnamed " use Mac clipboard for yank/paste/etc.
 set pumheight=15 " Limit completion popup menu height
+set shell=bash " Seems to be necessary to get Rails.vim to use the correct version of Ruby
 
 " Ignore various files in open/command-t
 " Images
