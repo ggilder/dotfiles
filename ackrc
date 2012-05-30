@@ -1,9 +1,3 @@
---ignore-dir=rails
-# search all file types
--a
-# case-insensitive
--i
-
 # Add the .rake extension to ruby types
 --type-add
 ruby=.rake
