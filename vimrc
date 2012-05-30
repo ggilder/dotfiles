@@ -55,7 +55,7 @@ set wildignore+=*.pid,*/tmp/*
 
 " show tabs and nbsp
 set list listchars=tab:» ,nbsp:•
-highlight SpecialKey ctermfg=darkyellow guifg=darkyellow
+highlight SpecialKey ctermfg=grey guifg=grey
 
 " highlight trailing whitespace
 highlight ExtraWhitespace ctermbg=darkgreen guibg=lightgreen ctermfg=grey guifg=grey
