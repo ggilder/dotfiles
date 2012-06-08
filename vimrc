@@ -3,7 +3,9 @@ call pathogen#infect()
 call pathogen#helptags()
 syntax on " Enable syntax highlighting
 colorscheme tutticolori
-highlight Search     ctermfg=White
+highlight clear Search
+highlight Search cterm=reverse
+highlight IncSearch ctermfg=black
 filetype plugin indent on " Enable filetype-specific indenting and plugins
 
 " ruby: autoindent with two spaces, always expand tabs
