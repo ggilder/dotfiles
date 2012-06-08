@@ -1,3 +1,6 @@
 # Add the .rake extension to ruby types
 --type-add
 ruby=.rake
+--type-set
+jst=.jst
+
