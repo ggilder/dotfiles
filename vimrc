@@ -98,6 +98,8 @@ nnoremap <C-x> <C-w>q
 " close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
+nnoremap :Q :qall
+
 " refresh command-t cache every time
 map <leader>t :CommandTFlush<cr>\|:CommandT<cr>
 " Let ESC close command-t (and then remap arrows for navigation)
