@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+require 'fileutils'
+
+def applescript script
+  `osascript -e "#{escape_quotes(script)}"`
+end
+
+def escape_quotes str
+  str.to_s.gsub('"', '\"')
+end
+
+class FileOperator
+  def initialize dest
+    @dest = Pathname.new(dest)
+  end
+end
+
+class FileCopier < FileOperator
+  def copy file
+    FileUtils.cp file, @dest
+    @dest + File.basename(file)
+  end
+end
+
+class FileMover < FileOperator
+  def copy file
+    FileUtils.mv file, @dest
+    @dest + File.basename(file)
+  end
+end
+
+move_files = ARGV.delete("--move")
+src = ARGV.shift
+unless src
+  abort "Usage: add-to-itunes [--move] path"
+end
+dest = "#{ENV['HOME']}/Music/iTunes/iTunes Music"
+
+if File.directory?(src)
+  files = Dir.glob(Pathname.new(src) + '**/*.{mp3,m4v,mov}')
+else
+  files = [Pathname.new(src)]
+end
+
+copier = move_files ? FileMover.new(dest) : FileCopier.new(dest)
+
+files.each do |file|
+  puts file
+  dest_file = copier.copy(file)
+  applescript %[tell application "iTunes" to add (POSIX file "#{escape_quotes(dest_file)}")]
+end
+
