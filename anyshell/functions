@@ -199,3 +199,13 @@ function pskill () {
   fi
   psgrep "$*" | tail -n +2 | sed 's/  */ /g' | cut -d ' ' -f 2 | xargs kill -9
 }
+
+# run a command multiple time
+function dotimes () {
+  cmd=("${@[@]:2}")
+  local i=$1
+  while [ $i -gt 0 ]
+    do $cmd
+    i=`expr $i - 1`
+  done
+}
