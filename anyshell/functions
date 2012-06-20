@@ -202,7 +202,8 @@ function pskill () {
 
 # run a command multiple time
 function dotimes () {
-  cmd=("${@[@]:2}")
+  local args=$@
+  local cmd=("${args[@]:2}")
   local i=$1
   while [ $i -gt 0 ]
     do $cmd
