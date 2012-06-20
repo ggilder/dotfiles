@@ -200,12 +200,20 @@ function pskill () {
   psgrep "$*" | tail -n +2 | sed 's/  */ /g' | cut -d ' ' -f 2 | xargs kill -9
 }
 
-# run a command multiple time
+# run a command multiple times
 function dotimes () {
-  local i=$1
+  if [[ $# -lt 2 ]]; then
+    echo "usage: dotimes number-of-times command-to-run"
+    return 1
+  fi
+  local max=$1
+  local i=0
   shift
-  while [ $i -gt 0 ]; do
-    $@ || return 1
-    i=`expr $i - 1`
+  while [ $i -lt $max ]; do
+    i=`expr $i + 1`
+    $@
+    if [[ $? -gt 0 ]]; then
+      echo "FAILED on try $i" && return 1
+    fi
   done
 }
