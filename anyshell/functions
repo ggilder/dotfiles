@@ -208,12 +208,15 @@ function dotimes () {
   fi
   local max=$1
   local i=0
+  local fails=0
   shift
   while [ $i -lt $max ]; do
     i=`expr $i + 1`
     $@
     if [[ $? -gt 0 ]]; then
-      echo "FAILED on try $i" && return 1
+      echo "FAILED on try $i"
+      fails=`expr $fails + 1`
     fi
   done
+  echo "$fails out of $max runs failed."
 }
