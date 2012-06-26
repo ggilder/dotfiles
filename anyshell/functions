@@ -213,10 +213,15 @@ function dotimes () {
   while [ $i -lt $max ]; do
     i=`expr $i + 1`
     $@
+    echo -n "\n#### "
     if [[ $? -gt 0 ]]; then
-      echo "FAILED on try $i"
+      echo -n "FAILED"
       fails=`expr $fails + 1`
+    else
+      echo -n "PASSED"
     fi
+    echo -n " ($i/$max, $fails fails)"
+    echo -n " ####\n\n"
   done
-  echo "$fails out of $max runs failed."
+  echo "\n\n#### $fails out of $max runs failed. ####\n"
 }
