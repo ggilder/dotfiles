@@ -3,4 +3,5 @@
 ruby=.rake
 --type-set
 jst=.jst
-
+--type-set
+cuke=.feature
