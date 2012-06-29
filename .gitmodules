@@ -16,9 +16,6 @@
 [submodule "vim/bundle/ack"]
 	path = vim/bundle/ack
 	url = https://github.com/mileszs/ack.vim.git
-[submodule "vim/bundle/syntastic"]
-	path = vim/bundle/syntastic
-	url = https://github.com/scrooloose/syntastic.git
 [submodule "vim/bundle/rake"]
 	path = vim/bundle/rake
 	url = git://github.com/tpope/vim-rake.git
@@ -52,3 +49,6 @@
 [submodule "vim/bundle/localvimrc"]
 	path = vim/bundle/localvimrc
 	url = git@github.com:ggilder/localvimrc.git
+[submodule "vim/bundle/syntastic"]
+	path = vim/bundle/syntastic
+	url = https://github.com/halostatue/syntastic.git
