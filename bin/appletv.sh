@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 
-for file in {,**/}*.{avi,mkv,mov}; do
+files=(**/*.(avi|mkv|mov))
+for file in $files; do
   convert-appletv.sh "$file"
 done
