@@ -3,6 +3,7 @@ call pathogen#infect()
 call pathogen#helptags()
 syntax on " Enable syntax highlighting
 colorscheme tutticolori
+set t_Co=256
 highlight clear Search
 highlight Search cterm=reverse
 highlight IncSearch ctermfg=black
