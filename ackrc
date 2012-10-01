@@ -5,3 +5,7 @@ ruby=.rake
 jst=.jst
 --type-set
 cuke=.feature
+--type-set
+coffee=.coffee
+--type-set
+sass=.sass
