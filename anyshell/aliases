@@ -71,6 +71,7 @@ alias df='df -h'
 alias sha1="openssl sha1"
 alias bi="bundle install"
 alias be="bundle exec"
+alias j="jobs"
 
 # macirb doesn't like the irbrc
 alias macirb="macirb -f"
