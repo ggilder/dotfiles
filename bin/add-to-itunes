@@ -32,17 +32,19 @@ class FileMover < FileOperator
 end
 
 move_files = ARGV.delete("--move")
-src = ARGV.shift
-unless src
+sources = ARGV
+if sources.empty?
   abort "Usage: add-to-itunes [--move] path"
 end
 dest = "#{ENV['HOME']}/Music/iTunes/iTunes Music"
 
-if File.directory?(src)
-  files = Dir.glob(Pathname.new(src) + '**/*.{mp3,m4v,mov}')
-else
-  files = [Pathname.new(src)]
-end
+files = sources.map do |src|
+  if File.directory?(src)
+    Dir.glob(Pathname.new(src) + '**/*.{mp3,m4v,mov}')
+  else
+    [Pathname.new(src)]
+  end
+end.flatten
 
 copier = move_files ? FileMover.new(dest) : FileCopier.new(dest)
 
@@ -51,4 +53,3 @@ files.each do |file|
   dest_file = copier.copy(file)
   applescript %[tell application "iTunes" to add (POSIX file "#{escape_quotes(dest_file)}")]
 end
-
