@@ -14,6 +14,8 @@ autocmd FileType ruby,eruby,yaml set sw=2 sts=2 et
 " recognize .md as markdown
 autocmd BufRead,BufNewFile *.md set filetype=markdown
 autocmd FileType markdown setl wrap linebreak nolist
+" modify keyword pattern in SASS documents
+autocmd FileType sass setl iskeyword+=-
 
 let mapleader = ","
 
