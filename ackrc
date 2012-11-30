@@ -9,5 +9,5 @@ cuke=.feature
 coffee=.coffee
 --type-set
 sass=.sass
---type-add
+--type-set
 handlebars=.handlebars
