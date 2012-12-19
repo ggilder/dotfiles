@@ -34,12 +34,6 @@ alias lt='ls -th'
 alias llt='ls -lth'
 alias q='exit'
 
-# SVN shortcuts
-alias ss='svn st'
-alias sup='svn up'
-alias sci='svn ci'
-alias sl='svn log'
-
 # git shortcuts
 alias gl='git pull --ff-only'
 alias gp='git push'

@@ -236,3 +236,55 @@ function dotimes () {
   done
   echo "\n\n#### $fails out of $max runs failed. ####\n"
 }
+
+# RVM info
+
+function rvm-prompt-wrapper () {
+  [ -e "$HOME/.rvm/bin/rvm-prompt" ] && echo "$($HOME/.rvm/bin/rvm-prompt i v p g s)"
+}
+
+######################################
+# Consolidated Git prompt functions
+######################################
+
+function parse_git_dirty() {
+  git_stat=`git status 2> /dev/null`
+  dirty=`    echo -n "${git_stat}" | grep -q "Changes not staged"; echo "$?"`
+  dirty2=`   echo -n "${git_stat}" | grep -q "Changed but not updated"; echo "$?"`
+  untracked=`echo -n "${git_stat}" | grep -q "Untracked files"; echo "$?"`
+  ahead=`    echo -n "${git_stat}" | grep -q "Your branch is ahead of"; echo "$?"`
+  newfile=`  echo -n "${git_stat}" | grep -q "new file:"; echo "$?"`
+  renamed=`  echo -n "${git_stat}" | grep -q "renamed:"; echo "$?"`
+  staged=`   echo -n "${git_stat}" | grep -q "Changes to be committed:"; echo "$?"`
+  bits=''
+  if [ "${dirty}" -eq "0" ] || [ "${dirty2}" -eq "0" ]; then
+    bits="${bits}☭"
+  fi
+  if [ "${untracked}" -eq "0" ]; then
+    bits="${bits}?"
+  fi
+  if [ "${newfile}" -eq "0" ]; then
+    bits="${bits}*"
+  fi
+  if [ "${ahead}" -eq "0" ]; then
+    bits="${bits}+"
+  fi
+  if [ "${renamed}" -eq "0" ]; then
+    bits="${bits}>"
+  fi
+  if [ "${staged}" -eq "0" ]; then
+    bits="${bits}∆"
+  fi
+  echo "${bits}"
+}
+
+function parse_git_branch() {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/(\1$(parse_git_dirty))/"
+}
+
+function parse_git_revision() {
+  ref1=$(parse_git_branch)
+  if [ -n "$ref1" ]; then
+    echo "${ref1}"
+  fi
+}
