@@ -2,13 +2,22 @@ function prompt_info(){
   local host='%{$terminfo[bold]$fg[cyan]%}%m%{$reset_color%}'
   local current_dir='%{$fg[green]%}${PWD/#$HOME/~}%{$reset_color%}'
   local rvm_ruby='%{$fg[red]%}$(rvm-prompt-wrapper)%{$reset_color%}'
-  local scm='%{$fg[yellow]%}$(parse_git_revision)%{$reset_color%}'
-  echo "${host}:${current_dir} ${rvm_ruby} ${scm}
+  local git_info='$(git_info)'
+  echo "${host}:${current_dir} ${rvm_ruby} ${git_info}
 %{$fg[white]%}→%{$reset_color%} "
 }
 function rprompt_info(){
   local return_code="%(?..%{$fg[red]%}%?↵%{$reset_color%})"
   echo "%{$(echotc UP 1)%}${return_code}%{$(echotc DO 1)%}"
+}
+
+function git_info(){
+local git_rev="$(parse_git_revision)"
+  if [[ "x" != "x$git_rev" ]]; then
+    echo "%{$fg[yellow]%}$git_rev%{$reset_color%} %{$fg[cyan]%}$(git config user.email)%{$reset_color%}"
+  else
+    echo ""
+  fi
 }
 
 PROMPT="$(prompt_info)"
