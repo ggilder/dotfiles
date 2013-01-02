@@ -59,3 +59,7 @@
   cmd = chdiff \"$LOCAL\" \"$REMOTE\"
 [difftool "Kaleidoscope"]
   cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
+
+[include]
+  path = ~/.gitconfig.local
+
