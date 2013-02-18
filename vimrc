@@ -50,8 +50,8 @@ set pumheight=15 " Limit completion popup menu height
 set shell=bash " Seems to be necessary to get Rails.vim to use the correct version of Ruby
 
 " Ignore various files in open
-" Images
-set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.ico,*.psd
+" Images etc.
+set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.ico,*.psd,*.pdf
 " Other binaries
 set wildignore+=*.sqlite3,*.ipa
 " Xcode stuff
