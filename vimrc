@@ -87,6 +87,9 @@ map <leader>e :edit %%
 map <leader>v :view %%
 map <leader>s :split %%
 
+" Search in project/directory
+map <leader>/ :Ack<Space>
+
 " Switch between the last two files
 nnoremap <leader><leader> <c-^>
 
