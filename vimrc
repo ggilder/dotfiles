@@ -58,6 +58,8 @@ set wildignore+=*.sqlite3,*.ipa
 set wildignore+=*.xcodeproj/*,*.xib,*.cer,*.icns
 " Misc temp stuff
 set wildignore+=*.pid,*/tmp/*
+" vendor dir in Rails projects
+set wildignore+=*/vendor/*
 
 " show tabs and nbsp
 set list listchars=tab:» ,nbsp:•
