@@ -85,6 +85,12 @@ namespace :install do
       puts "please install ksdiff before runnning this tool"
     end
   end
+
+  desc "Set up command-T plugin for vim"
+  task :commandt do
+    path = File.join(File.dirname(__FILE__), "vim/bundle/command-t/ruby/command-t")
+    puts `cd #{path} && ruby extconf.rb && make`
+  end
 end
 
 def replace_file(file, timestamp)
