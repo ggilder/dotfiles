@@ -50,7 +50,7 @@ set pumheight=15 " Limit completion popup menu height
 set shell=bash " Seems to be necessary to get Rails.vim to use the correct version of Ruby
 
 " Ignore various files in open
-" Images etc.
+" Images
 set wildignore+=*.jpg,*.jpeg,*.gif,*.png,*.ico,*.psd,*.pdf
 " Other binaries
 set wildignore+=*.sqlite3,*.ipa
@@ -58,8 +58,6 @@ set wildignore+=*.sqlite3,*.ipa
 set wildignore+=*.xcodeproj/*,*.xib,*.cer,*.icns
 " Misc temp stuff
 set wildignore+=*.pid,*/tmp/*
-" vendor dir in Rails projects
-set wildignore+=*/vendor/*
 
 " show tabs and nbsp
 set list listchars=tab:» ,nbsp:•
@@ -109,7 +107,12 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 
 nnoremap :Q :qall
 
-let g:ctrlp_map = '<leader>t'
+" refresh command-t cache every time
+map <leader>t :CommandTFlush<cr>\|:CommandT<cr>
+" Let ESC close command-t (and then remap arrows for navigation)
+let g:CommandTCancelMap = ['<ESC>', '<C-c>']
+let g:CommandTSelectNextMap = ['<C-n>', '<C-j>', '<ESC>OB']
+let g:CommandTSelectPrevMap = ['<C-p>', '<C-k>', '<ESC>OA']
 
 " Type C-A after some math to calculate the result
 ino <C-A> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
