@@ -92,7 +92,7 @@ map <leader>s :split %%
 " Search in project/directory
 nnoremap <leader>/ :Ack<Space>
 " Search current word in project/directory
-nnoremap <leader>f :exec "Ack " . expand("<cWORD>")<CR>
+nnoremap <leader>f :exec "Ack " . expand("<cword>")<CR>
 
 " Switch between the last two files
 nnoremap <leader><leader> <c-^>
