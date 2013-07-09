@@ -40,7 +40,6 @@ set laststatus=2 " Always show status line.
 set number
 set gdefault " assume the /g flag on :s substitutions to replace all matches in a line
 set hidden " allow hidden unsaved buffers
-set grepprg=ack " Use Ack instead of grep
 set shiftround " When at 3 spaces and I hit >>, go to 4, not 5.
 " Disabled for now because it seems to suspend vim with some commands
 " set shellcmdflag=-ic " Use interactive shell within vim (enables zsh aliases and functions)
@@ -90,9 +89,9 @@ map <leader>v :view %%
 map <leader>s :split %%
 
 " Search in project/directory
-nnoremap <leader>/ :Ack<Space>
+nnoremap <leader>/ :Ag<Space>
 " Search current word in project/directory
-nnoremap <leader>f :exec "Ack " . expand("<cword>")<CR>
+nnoremap <leader>f :exec "Ag " . expand("<cword>")<CR>
 
 " Switch between the last two files
 nnoremap <leader><leader> <c-^>
