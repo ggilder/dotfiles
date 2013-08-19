@@ -61,6 +61,8 @@ set wildignore+=*.xcodeproj/*,*.xib,*.cer,*.icns
 set wildignore+=*.pid,*/tmp/*
 " vendor dir in Rails projects
 set wildignore+=*/vendor/*
+" node modules dir
+set wildignore+=*/node_modules/*
 
 " show tabs and nbsp
 set list listchars=tab:» ,nbsp:•
