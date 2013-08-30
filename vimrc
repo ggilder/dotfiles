@@ -95,8 +95,9 @@ nnoremap <leader>/ :Ag<Space>
 " Search current word in project/directory
 function SearchInProject()
   let word = expand("<cword>")
-  :exec "/" . word
-  :exec "Ag " . word
+  let @/=word
+  set hls
+  exec "Ag " . word
 endfunction
 nnoremap <leader>f :call SearchInProject()<CR>
 
