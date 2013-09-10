@@ -32,6 +32,7 @@ function title() {
 
 # precmd is called just before the prompt is printed
 function precmd() {
+  tmux-set-window-name
   if [[ "$TERM" == "screen" ]]; then
     local SHELLNAME=$(basename $SHELL)
     print -Pn "\ek$SHELLNAME\e\\" # set screen title
@@ -43,8 +44,13 @@ function precmd() {
 
 # preexec is called just before any command line is executed
 function preexec() {
+  local CMD=${1[(wr)^(*=*|sudo|-*)]}
+  if [[ "$CMD" == "ssh" ]]; then
+    tmux-set-window-name "${1[(ws: :)2]}"
+  else
+    tmux-set-window-name "$(basename $PWD):$CMD"
+  fi
   if [[ "$TERM" == "screen" ]]; then
-    local CMD=${1[(wr)^(*=*|sudo|-*)]}
     echo -ne "\ek$CMD\e\\"
   else
     title

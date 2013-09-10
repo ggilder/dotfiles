@@ -291,6 +291,11 @@ function parse_git_revision() {
 
 function tmux-set-window-name() {
   if [[ -n $TMUX ]]; then
-    tmux rename-window $(basename $PWD)
+    if [[ -n "$1" ]]; then
+      local window_name=$1
+    else
+      local window_name=$(basename $PWD)
+    fi
+    tmux rename-window $window_name
   fi
 }
