@@ -50,3 +50,7 @@ function preexec() {
     title
   fi
 }
+
+function chpwd() {
+  tmux-set-window-name
+}

@@ -288,3 +288,9 @@ function parse_git_revision() {
     echo "${ref1}"
   fi
 }
+
+function tmux-set-window-name() {
+  if [[ -n $TMUX ]]; then
+    tmux rename-window $(basename $PWD)
+  fi
+}

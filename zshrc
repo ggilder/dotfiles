@@ -23,3 +23,5 @@ source $HOME/.anyshell/functions
 export rvm_path="$HOME/.rvm"
 [[ -s $rvm_path/scripts/rvm ]] && source $rvm_path/scripts/rvm
 
+# Initial tmux window name
+tmux-set-window-name
