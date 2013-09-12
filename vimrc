@@ -16,6 +16,7 @@ autocmd BufRead,BufNewFile Capfile set filetype=ruby
 " recognize .md as markdown
 autocmd BufRead,BufNewFile *.md set filetype=markdown
 autocmd FileType markdown setl wrap linebreak nolist
+autocmd FileType text setl wrap linebreak nolist
 " modify keyword pattern in SASS documents
 autocmd FileType sass setl iskeyword+=-
 
