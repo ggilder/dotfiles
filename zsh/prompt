@@ -47,6 +47,9 @@ function preexec() {
   local CMD=${1[(wr)^(*=*|sudo|-*)]}
   if [[ "$CMD" == "ssh" ]]; then
     tmux-set-window-name "${1[(ws: :)2]}"
+  elif [[ "$CMD" == "fg" ]]; then
+    local fg_cmd=$(basename `jobs | grep '+ suspended' | sed -e 's/.*suspended *\([^ ]*\).*/\1/'`)
+    tmux-set-window-name "$(basename $PWD):$fg_cmd"
   else
     tmux-set-window-name "$(basename $PWD):$CMD"
   fi
