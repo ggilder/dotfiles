@@ -2,6 +2,7 @@
 
 # TODO:
 # - load additional pair detail source files
+# - write tests for CLI
 
 require 'test/unit/testcase'
 require 'pathname'
@@ -339,14 +340,6 @@ module GitPairTestHelpers
         @called
       end
     end
-  end
-end
-
-class TestGitPairCLI < Test::Unit::TestCase
-  include GitPairTestHelpers
-
-  def test_foo
-    assert true
   end
 end
 
