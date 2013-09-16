@@ -57,6 +57,10 @@ alias gggg="git log --pretty=format:'%C(yellow)%h %Creset(%cr) %C(green)%aN <%aE
 alias gitmine="git log --author='$(git config --get user.name)' --pretty=format:'%Cgreen%ad%Creset %s%C(yellow)%d%Creset %Cred(%h)%Creset' --date=short"
 alias git-delete-merged-branches="git branch --merged master | cut -b 3- | grep --invert-match '^master$' | xargs git branch -d"
 
+# git pairing
+alias me_and="gitpair me_and"
+alias just_me="gitpair just_me"
+
 # Misc
 alias grep='grep -i'  # Case insensitive grep
 alias f='find . -iname'

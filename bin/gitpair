@@ -1,0 +1,496 @@
+#!/usr/bin/env ruby
+
+# TODO:
+# - load additional pair detail source files
+
+require 'test/unit/testcase'
+require 'pathname'
+require 'forwardable'
+require 'fileutils'
+require 'tempfile'
+require 'tmpdir'
+
+module GitPair
+  class CLI
+    def initialize(args, input=$stdin, output=$stdout, error=$stderr)
+      @command = args.shift || "usage"
+      @args = args
+      @input = input
+      @output = output
+      @error = error
+    end
+
+    def run
+      self.send("run_#{@command}", @args)
+    rescue StandardError => e
+      if ENV['DEBUG']
+        abort("#{e.class}: #{e}\n  #{e.backtrace.join("\n  ")}")
+      else
+        abort(e.message)
+      end
+    end
+
+    def run_usage(args)
+      say "Usage:"
+      say "  Pair with other_username:"
+      say "    gitpair me_and other_username"
+      say
+      say "  Restore to original git author:"
+      say "    gitpair just_me"
+      say
+      say "  Run internal tests:"
+      say "    gitpair --test"
+    end
+
+    def run_me_and(args)
+      partner_username = args.shift
+      abort("No pair given!") unless partner_username
+      partner = user_store.find(partner_username)
+      if partner.nil?
+        partner_name = ask "What is #{partner_username}'s full name?"
+        partner = User.new(partner_name, partner_username)
+        user_store.add(partner_username, partner)
+      end
+      current_repo.save_original_user!
+      pair_user = current_repo.original_user.pair_with(partner)
+      current_repo.user = pair_user
+      say "Setting git author to #{pair_user}"
+    end
+
+    def run_just_me(args)
+      current_repo.restore_original_user!
+      say "Restored git author to #{current_repo.user}"
+    end
+
+    def say(message='')
+      @output.puts message
+    end
+
+    def ask(prompt)
+      @output.puts prompt
+      @input.gets.chomp
+    end
+
+    def abort(message)
+      @error.puts message
+      exit 1
+    end
+
+    def current_repo
+      @current_repo ||= Repo.new(Dir.getwd)
+    end
+
+    def user_store
+      @user_store ||= UserStore.new
+    end
+  end
+
+  class User < Struct.new(:name, :email)
+    def pair_with(user)
+      User.new(pair_name(user.name), pair_email(user.email))
+    end
+
+    def pair_name(other_name)
+      "#{name} and #{other_name}"
+    end
+
+    def pair_email(other_email)
+      user, domain = email.split('@')
+      other_user, _ = other_email.split('@')
+      "#{user}+#{other_user}@#{domain}"
+    end
+
+    def to_s
+      "#{name} <#{email}>"
+    end
+  end
+
+  class UserStore
+    DEFAULT_STORE_PATH = File.expand_path('~/.gitpair_users')
+
+    def initialize(path=DEFAULT_STORE_PATH)
+      @path = path
+    end
+
+    def find(username)
+      users[username]
+    end
+
+    def add(username, user)
+      users[username] = user
+      append_user(username, user)
+    end
+
+    private
+    def users
+      @users ||= load_users
+    end
+
+    def load_users
+      user_hash = {}
+      file = File.open(@path).each_line do |line|
+        username, name = line.chomp.split('|')
+        user_hash[username] = User.new(name, username)
+      end
+      user_hash
+    rescue Errno::ENOENT
+      user_hash
+    ensure
+      file.close if file
+    end
+
+    def append_user(username, user)
+      File.open(@path, 'a') do |f|
+        f.write "#{username}|#{user.name}\n"
+      end
+    end
+  end
+
+  class Repo
+    extend Forwardable
+    class MissingOriginalUser < RuntimeError; end
+
+    def_delegators :@adapter, :root, :user, :user=, :original_user, :original_user=
+
+    def initialize(path)
+      @adapter = RepoAdapter.new(path)
+    end
+
+    def save_original_user!
+      return if original_user
+      self.original_user = user
+    end
+
+    def restore_original_user!
+      u = original_user
+      raise MissingOriginalUser.new("Cannot restore, missing original user!") if u.nil?
+      self.user = u
+      self.original_user = nil
+    end
+  end
+
+  class RepoAdapter
+    def initialize(path)
+      @path = path
+    end
+
+    def root
+      run 'git rev-parse --show-toplevel'
+    end
+
+    def user
+      name = run 'git config user.name'
+      email = run 'git config user.email'
+      User.new(name, email)
+    end
+
+    def user=(user)
+      run %{git config user.name "#{user.name}"}
+      run %{git config user.email "#{user.email}"}
+    end
+
+    def original_user
+      name = run 'git config gitpair.originaluser.name'
+      email = run 'git config gitpair.originaluser.email'
+      User.new(name, email)
+    rescue
+      nil
+    end
+
+    def original_user=(user)
+      if user.nil?
+        run 'git config --remove-section gitpair.originaluser'
+      else
+        run %{git config gitpair.originaluser.name "#{user.name}"}
+        run %{git config gitpair.originaluser.email "#{user.email}"}
+      end
+    end
+
+    private
+    def run(command)
+      in_repo { ShellCommand.run_or_die!(command) }
+    end
+
+    def in_repo
+      Dir.chdir(@path) { yield }
+    end
+  end
+
+  # Hacky little workaround for Ruby 1.8.7's lack of exit status with popen3
+  class ShellCommand
+    class Error < RuntimeError; end
+    attr_reader :result, :error, :status
+
+    def self.run_or_die!(command)
+      cmd = new(command)
+      raise Error.new(cmd.error) unless cmd.success?
+      cmd.result
+    end
+
+    def initialize(command)
+      @result = `#{command} 2>#{err_file.path}`.chomp
+      @error = File.read(err_file.path).chomp
+      @status = $?.exitstatus
+    ensure
+      remove_err_file
+    end
+
+    def success?
+      @status == 0
+    end
+
+    private
+    def err_file
+      @err_file ||= Tempfile.new('ruby-shell-command')
+    end
+
+    def remove_err_file
+      @err_file.close!
+    end
+  end
+end
+
+
+### TESTS!
+
+module GitPairTestHelpers
+  def create_temp_file(content='')
+    file = Tempfile.new('gitpair-test')
+    at_exit { file.close! }
+    File.open(file.path, 'w') {|f| f.write content }
+    file.path
+  end
+
+  def create_temp_repo
+    dir = Dir.mktmpdir('gitpair-test-repo')
+    at_exit { FileUtils.remove_entry_secure dir }
+    FileUtils.cd(dir) do
+      cmd = [
+        'git init',
+        'mkdir foo',
+        'git config user.name "Foo Bar"',
+        'git config user.email foo@bar.baz'
+      ].join(';')
+      `#{cmd}`
+    end
+    Pathname.new(dir).realpath.to_s
+  end
+
+  # DIY super-simple mocks
+  class Mock
+    attr_reader :name, :expectations
+
+    def initialize(name='mock')
+      @name = name
+      @expectations = {}
+    end
+
+    def should_receive(meth_name)
+      expectations[meth_name] = Expectation.new(self, meth_name)
+    end
+
+    def expectations_met?
+      met = true
+      expectations.each_pair do |meth_name, expectation|
+        unless expectation.met?
+          $stderr.puts "Expectation not met: #{meth_name} not received on #{name}."
+          met = false
+        end
+      end
+      met
+    end
+
+    def method_missing(meth_name, *args, &block)
+      expectation = expectations[meth_name]
+      if expectation
+        expectation.call(*args, &block)
+      else
+        raise "Unexpected message #{meth_name} received on #{name}."
+      end
+    end
+
+    class Expectation
+      attr_reader :meth_name
+
+      def initialize(mock, meth_name)
+        @meth_name = "#{mock.name}##{meth_name}"
+        @called = false
+      end
+
+      def call(*args, &block)
+        if @args && args != @args
+          raise "Unexpected arguments #{args.inspect} passed to #{meth_name}."
+        end
+        @called = true
+        @return_val
+      end
+
+      def with(*args)
+        @args = args
+        self
+      end
+
+      def and_return(val)
+        @return_val = val
+        self
+      end
+
+      def met?
+        @called
+      end
+    end
+  end
+end
+
+class TestGitPairCLI < Test::Unit::TestCase
+  include GitPairTestHelpers
+
+  def test_foo
+    assert true
+  end
+end
+
+class TestGitPairRepoAdapter < Test::Unit::TestCase
+  include GitPairTestHelpers
+
+  def setup
+    @dir = create_temp_repo
+    @repo = GitPair::RepoAdapter.new("#{@dir}/foo")
+  end
+
+  def test_resolves_repo_root
+    assert_equal @dir, @repo.root
+  end
+
+  def test_retrieves_user
+    user = GitPair::User.new("Foo Bar", "foo@bar.baz")
+    assert_equal user, @repo.user
+  end
+
+  def test_updates_user
+    user = GitPair::User.new("Goo Bar", "goo@bar.boz")
+    @repo.user = user
+    assert_equal user, @repo.user
+  end
+
+  def test_initial_original_user_is_nil
+    assert_nil @repo.original_user
+  end
+
+  def test_updates_original_user
+    user = GitPair::User.new("Goo Bar", "goo@bar.boz")
+    @repo.original_user = user
+    assert_equal user, @repo.original_user
+  end
+
+  def test_clears_original_user
+    user = GitPair::User.new("Goo Bar", "goo@bar.boz")
+    @repo.original_user = user
+    @repo.original_user = nil
+    assert_nil @repo.original_user
+  end
+end
+
+class TestGitPairRepo < Test::Unit::TestCase
+  include GitPairTestHelpers
+
+  def setup
+    @dir = create_temp_repo
+    @repo = GitPair::Repo.new(@dir)
+    @original_user = GitPair::User.new("Foo Bar", "foo@bar.baz")
+  end
+
+  def test_it_saves_original_user
+    @repo.save_original_user!
+    assert_equal @original_user, @repo.original_user
+  end
+
+  def test_it_doesnt_overwrite_original_user
+    @repo.save_original_user!
+    @repo.user = GitPair::User.new("Somebody", "somebody@example.com")
+    @repo.save_original_user!
+    assert_equal @original_user, @repo.original_user
+  end
+
+  def test_it_restores_original_user_and_clears_cache
+    @repo.save_original_user!
+    @repo.user = GitPair::User.new("Somebody", "somebody@example.com")
+    @repo.restore_original_user!
+    assert_equal @original_user, @repo.user
+    assert_nil @repo.original_user
+  end
+
+  def test_restore_fails_with_no_original_user
+    assert_raises(GitPair::Repo::MissingOriginalUser) {
+      @repo.restore_original_user!
+    }
+  end
+end
+
+class TestGitPairUser < Test::Unit::TestCase
+  include GitPairTestHelpers
+
+  def setup
+    @jeeves = GitPair::User.new("Jeeves", "jeeves@wodehouse.com")
+    @bertie = GitPair::User.new("Bertie Wooster", "bertie@wooster.com")
+  end
+
+  def test_paired_users_combine_names
+    user = @jeeves.pair_with(@bertie)
+    assert_equal "Jeeves and Bertie Wooster", user.name
+  end
+
+  def test_paired_users_combine_emails
+    user = @jeeves.pair_with(@bertie)
+    assert_equal "jeeves+bertie@wodehouse.com", user.email
+  end
+
+  def test_paired_users_use_first_email_domain
+    user = @bertie.pair_with(@jeeves)
+    assert_equal "bertie+jeeves@wooster.com", user.email
+  end
+end
+
+class TestGitPairUserStore < Test::Unit::TestCase
+  include GitPairTestHelpers
+
+  def setup
+    @gabriel = GitPair::User.new("Gabriel Gilder", "gabriel")
+    @foo = GitPair::User.new("Foo Bar", "foo")
+  end
+
+  def create_user_store
+    file = create_temp_file
+    File.open(file, 'w') do |f|
+      f.write "gabriel|Gabriel Gilder\n"
+      f.write "foo|Foo Bar\n"
+    end
+    GitPair::UserStore.new(file)
+  end
+
+  def test_retrieves_known_users
+    users = create_user_store
+    assert_equal @gabriel, users.find("gabriel")
+    assert_equal @foo, users.find("foo")
+  end
+
+  def test_returns_nil_for_unknown_users
+    users = create_user_store
+    assert_nil users.find("derp")
+  end
+
+  def test_it_saves_known_users
+    file = create_temp_file
+    users = GitPair::UserStore.new(file)
+    users.add('gabriel', @gabriel)
+    content = File.read(file)
+    assert_match(/Gabriel Gilder/, content)
+  end
+end
+
+if ARGV[0] == '--test'
+  ARGV.shift
+  require 'test/unit/autorunner'
+else
+  GitPair::CLI.new(ARGV).run
+end
