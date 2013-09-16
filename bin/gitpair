@@ -151,7 +151,7 @@ module GitPair
     extend Forwardable
     class MissingOriginalUser < RuntimeError; end
 
-    def_delegators :@adapter, :root, :user, :user=, :original_user, :original_user=
+    def_delegators :@adapter, :user, :user=, :original_user, :original_user=
 
     def initialize(path)
       @adapter = RepoAdapter.new(path)
@@ -173,10 +173,6 @@ module GitPair
   class RepoAdapter
     def initialize(path)
       @path = path
-    end
-
-    def root
-      run 'git rev-parse --show-toplevel'
     end
 
     def user
@@ -209,11 +205,7 @@ module GitPair
 
     private
     def run(command)
-      in_repo { ShellCommand.run_or_die!(command) }
-    end
-
-    def in_repo
-      Dir.chdir(@path) { yield }
+      Dir.chdir(@path) { ShellCommand.run_or_die!(command) }
     end
   end
 
@@ -349,10 +341,6 @@ class TestGitPairRepoAdapter < Test::Unit::TestCase
   def setup
     @dir = create_temp_repo
     @repo = GitPair::RepoAdapter.new("#{@dir}/foo")
-  end
-
-  def test_resolves_repo_root
-    assert_equal @dir, @repo.root
   end
 
   def test_retrieves_user
