@@ -296,6 +296,7 @@ function tmux-set-window-name() {
     else
       local window_name=$(basename $PWD)
     fi
-    tmux rename-window $window_name
+    pane=$(tmux list-panes -a | grep "$TMUX_PANE" | sed 's/[0-9]*:\([0-9]*\).*/\1/')
+    tmux rename-window -t $pane $window_name
   fi
 }
