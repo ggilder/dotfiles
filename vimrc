@@ -50,6 +50,7 @@ set mouse=a " use mouse if enabled
 set clipboard=unnamed " use Mac clipboard for yank/paste/etc.
 set pumheight=15 " Limit completion popup menu height
 set shell=bash " Seems to be necessary to get Rails.vim to use the correct version of Ruby
+set omnifunc=syntaxcomplete#Complete " Enable omnicompletion
 
 " Ignore various files in open
 " Images
