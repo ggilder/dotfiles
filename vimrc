@@ -61,8 +61,6 @@ set wildignore+=*.sqlite3,*.ipa
 set wildignore+=*.xcodeproj/*,*.xib,*.cer,*.icns
 " Misc temp stuff
 set wildignore+=*.pid,*/tmp/*
-" vendor dir in Rails projects
-set wildignore+=*/vendor/*
 " node modules dir
 set wildignore+=*/node_modules/*
 
