@@ -4,6 +4,7 @@
 # - load additional pair detail source files
 # - write tests for CLI
 
+require 'test/unit'
 require 'test/unit/testcase'
 require 'pathname'
 require 'forwardable'
