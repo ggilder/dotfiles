@@ -4,8 +4,6 @@
 # - load additional pair detail source files
 # - write tests for CLI
 
-require 'test/unit'
-require 'test/unit/testcase'
 require 'pathname'
 require 'forwardable'
 require 'fileutils'
@@ -244,8 +242,13 @@ module GitPair
   end
 end
 
+if ARGV.first != '--test'
+  GitPair::CLI.new(ARGV).run
+  exit
+end
 
 ### TESTS!
+require 'test/unit'
 
 module GitPairTestHelpers
   def create_temp_file(content='')
@@ -470,9 +473,5 @@ class TestGitPairUserStore < Test::Unit::TestCase
   end
 end
 
-if ARGV[0] == '--test'
-  ARGV.shift
-  require 'test/unit/autorunner'
-else
-  GitPair::CLI.new(ARGV).run
-end
+ARGV.shift # get rid of --test so that it doesn't confuse AutoRunner
+exit Test::Unit::AutoRunner.run
