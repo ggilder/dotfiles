@@ -31,15 +31,16 @@ module GitPair
     end
 
     def run_usage(args)
+      script = File.basename(__FILE__)
       say "Usage:"
       say "  Pair with other_username:"
-      say "    gitpair me_and other_username"
+      say "    #{script} me_and other_username"
       say
       say "  Restore to original git author:"
-      say "    gitpair just_me"
+      say "    #{script} just_me"
       say
       say "  Run internal tests:"
-      say "    gitpair --test"
+      say "    #{script} --test"
     end
 
     def run_me_and(args)

@@ -58,8 +58,8 @@ alias gitmine="git log --author='$(git config --get user.name)' --pretty=format:
 alias git-delete-merged-branches="git branch --merged master | cut -b 3- | grep --invert-match '^master$' | xargs git branch -d"
 
 # git pairing
-alias me_and="gitpair me_and"
-alias just_me="gitpair just_me"
+alias me_and="git-pair me_and"
+alias just_me="git-pair just_me"
 
 # Misc
 alias grep='grep -i'  # Case insensitive grep
