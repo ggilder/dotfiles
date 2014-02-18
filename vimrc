@@ -1,13 +1,25 @@
 set encoding=utf-8
 call pathogen#infect()
 call pathogen#helptags()
-syntax on " Enable syntax highlighting
 colorscheme tutticolori
 set t_Co=256
 highlight clear Search
 highlight Search cterm=reverse
 highlight IncSearch ctermfg=black
-filetype plugin indent on " Enable filetype-specific indenting and plugins
+
+let go_vim = $GOROOT . '/misc/vim'
+if isdirectory(go_vim)
+  " Clear filetype flags before changing runtimepath to force Vim to reload them.
+  filetype off
+  filetype plugin indent off
+  set runtimepath+=$GOROOT/misc/vim
+endif
+
+" Enable filetype-specific indenting and plugins
+filetype plugin indent on
+
+" Enable syntax highlighting
+syntax on
 
 " ruby: autoindent with two spaces, always expand tabs
 autocmd FileType ruby,eruby,yaml set sw=2 sts=2 et
@@ -19,6 +31,9 @@ autocmd FileType markdown setl wrap linebreak nolist
 autocmd FileType text setl wrap linebreak nolist
 " modify keyword pattern in SASS documents
 autocmd FileType sass setl iskeyword+=-
+" format go files on save
+autocmd FileType go autocmd BufWritePre <buffer> Fmt
+autocmd FileType go set sw=4 ts=4 noet
 
 let mapleader = ","
 
