@@ -1,6 +1,10 @@
 set encoding=utf-8
 call pathogen#infect()
 call pathogen#helptags()
+
+" Enable syntax highlighting
+syntax on
+
 colorscheme tutticolori
 set t_Co=256
 highlight clear Search
@@ -17,9 +21,6 @@ endif
 
 " Enable filetype-specific indenting and plugins
 filetype plugin indent on
-
-" Enable syntax highlighting
-syntax on
 
 " ruby: autoindent with two spaces, always expand tabs
 autocmd FileType ruby,eruby,yaml set sw=2 sts=2 et
