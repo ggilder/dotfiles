@@ -67,6 +67,7 @@ set clipboard=unnamed " use Mac clipboard for yank/paste/etc.
 set pumheight=15 " Limit completion popup menu height
 set shell=bash " Seems to be necessary to get Rails.vim to use the correct version of Ruby
 set omnifunc=syntaxcomplete#Complete " Enable omnicompletion
+set ttimeoutlen=0 " Shorter key code delay to speed up entering normal mode with ESC
 
 " Ignore various files in open
 " Images
