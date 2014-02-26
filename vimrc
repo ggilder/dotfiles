@@ -1,6 +1,5 @@
 set encoding=utf-8
-call pathogen#infect()
-call pathogen#helptags()
+execute pathogen#infect()
 
 " Enable syntax highlighting
 syntax on
