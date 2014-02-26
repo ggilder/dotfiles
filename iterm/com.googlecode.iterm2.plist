@@ -392,6 +392,8 @@
 	<false/>
 	<key>HideActivityIndicator</key>
 	<false/>
+	<key>HideMenuBarInFullscreen</key>
+	<true/>
 	<key>HideScrollbar</key>
 	<false/>
 	<key>HideTab</key>
@@ -423,7 +425,9 @@
 	<key>MaxVertically</key>
 	<false/>
 	<key>NSColorPanelMode</key>
-	<string>0</string>
+	<string>7</string>
+	<key>NSColorPickerSlidersDefaults</key>
+	<string>1</string>
 	<key>NSNavLastRootDirectory</key>
 	<string>~/src/dotfiles/iterm</string>
 	<key>NSQuotedKeystrokeBinding</key>
@@ -460,14 +464,16 @@
 		<key>TB Size Mode</key>
 		<integer>1</integer>
 	</dict>
+	<key>NSWindow Frame NSColorPanel</key>
+	<string>1867 186 214 309 1440 -180 1920 1080 </string>
 	<key>NSWindow Frame NSFontPanel</key>
-	<string>1975 165 445 270 0 0 2560 1418 </string>
+	<string>2115 353 445 270 0 0 2560 1418 </string>
 	<key>NSWindow Frame Preferences</key>
-	<string>1334 137 924 485 0 0 2560 1418 </string>
+	<string>4 933 924 485 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>926 459 825 586 0 0 2560 1418 </string>
+	<string>6 397 710 481 0 0 1440 878 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>140 5 810 621 0 0 1440 878 </string>
+	<string>1160 619 725 481 0 0 2560 1418 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -1109,11 +1115,11 @@
 			<key>Name</key>
 			<string>Default</string>
 			<key>Non Ascii Font</key>
-			<string>Menlo-RegularForPowerline 11</string>
+			<string>MesloLGS-RegularForPowerline 11</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>Menlo-RegularForPowerline 11</string>
+			<string>MesloLGS-RegularForPowerline 11</string>
 			<key>Option Key Sends</key>
 			<integer>0</integer>
 			<key>Prompt Before Closing 2</key>
@@ -1356,9 +1362,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2013-10-15T17:45:01Z</date>
-	<key>SUSkippedVersion</key>
-	<string>1.0.0.20130319</string>
+	<date>2014-02-24T18:17:07Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>
@@ -1408,6 +1412,6 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>1.0.0.20130624</string>
+	<string>1.0.0.20140112</string>
 </dict>
 </plist>
