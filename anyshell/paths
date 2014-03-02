@@ -1,7 +1,11 @@
 #echo "=> Loading `pwd`/paths"
 
 # TODO: prevent duplication with sub-shells (e.g. tmux)
-export GOROOT="/usr/local/Cellar/go/1.2/libexec"
+if [ -d "/usr/local/Cellar/go/1.2/libexec" ]; then
+  export GOROOT="/usr/local/Cellar/go/1.2/libexec"
+elif [ -d "/usr/local/go/" ]; then
+  export GOROOT="/usr/local/go"
+fi
 export GOPATH="$HOME/go"
 export PATH="$HOME/bin:$GOPATH/bin:$HOME/.rvm/bin:/usr/local/bin:/usr/local/share/npm/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/local/git/bin:$PATH"
 export MANPATH="/usr/local/man:/usr/local/mysql/man:/usr/local/git/man:$MANPATH"
