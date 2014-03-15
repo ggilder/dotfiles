@@ -16,6 +16,8 @@ source $HOME/.zsh/completion
 source $HOME/.anyshell/aliases
 source $HOME/.anyshell/functions
 
+[[ -f `brew --prefix`/etc/profile.d/z.sh ]] && source `brew --prefix`/etc/profile.d/z.sh
+
 # use .localrc for settings specific to one system
 [[ -f ~/.localrc ]] && .  ~/.localrc
 
