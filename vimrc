@@ -4,8 +4,10 @@ execute pathogen#infect()
 " Enable syntax highlighting
 syntax on
 
-colorscheme tutticolori
-set t_Co=256
+" set t_Co=256
+set background=dark
+colorscheme base16-railscasts
+
 highlight clear Search
 highlight Search cterm=reverse
 highlight IncSearch ctermfg=black
