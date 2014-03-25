@@ -97,14 +97,15 @@ set winheight=20
 set winminheight=20
 set winheight=999
 
+" control-w to write file
+nnoremap <C-w> :w<CR>
+inoremap <C-w> <C-o>:w<CR>
+
 " leader-s to toggle highlighting on/off, and show current value.
 nnoremap <leader>s :set hlsearch! hlsearch?<CR>
 
 " Edit or view files in same directory as current file
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
-map <leader>e :edit %%
-map <leader>v :view %%
-map <leader>s :split %%
 
 " Search in project/directory
 nnoremap <leader>/ :Ag<Space>
