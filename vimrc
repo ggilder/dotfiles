@@ -35,7 +35,7 @@ autocmd FileType sass setl iskeyword+=-
 autocmd FileType go autocmd BufWritePre <buffer> Fmt
 autocmd FileType go set sw=4 ts=4 noet
 
-let mapleader = ","
+let mapleader = "\<Space>"
 
 set nocompatible
 set backspace=indent,eol,start " allow backspacing over everything in insert mode
@@ -97,8 +97,8 @@ set winheight=20
 set winminheight=20
 set winheight=999
 
-" Press Space to toggle highlighting on/off, and show current value.
-nnoremap <Space> :set hlsearch! hlsearch?<CR>
+" leader-s to toggle highlighting on/off, and show current value.
+nnoremap <leader>s :set hlsearch! hlsearch?<CR>
 
 " Edit or view files in same directory as current file
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
