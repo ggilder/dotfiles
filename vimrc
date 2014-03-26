@@ -97,19 +97,27 @@ set winheight=20
 set winminheight=20
 set winheight=999
 
+" SPECIAL KEYS
+" CONTROL KEYS
 " control-w to write file
 nnoremap <C-w> :w<CR>
 inoremap <C-w> <C-o>:w<CR>
+" close window
+nnoremap <C-x> <C-w>q
+" Type C-A after some math to calculate the result
+ino <C-A> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
 
+" LEADER KEYS
 " leader-s to toggle highlighting on/off, and show current value.
 nnoremap <leader>s :set hlsearch! hlsearch?<CR>
-
-" Edit or view files in same directory as current file
-cnoremap %% <C-R>=expand('%:h').'/'<cr>
-
+" Switch between the last two files
+nnoremap <leader><leader> <c-^>
+" Open new vertical split
+nnoremap <leader>w <C-w>v<C-w>l
+" CommandT (refresh cache every time)
+map <leader>t :CommandTFlush<cr>\|:CommandT<cr>
 " Search in project/directory
 nnoremap <leader>/ :Ag<Space>
-
 " Search current word in project/directory
 " With or without word boundaries
 function SearchInProject()
@@ -129,29 +137,18 @@ endfunction
 nnoremap <leader>f :call SearchInProject()<CR>
 nnoremap <leader>F :call SearchWordInProject()<CR>
 
-" Switch between the last two files
-nnoremap <leader><leader> <c-^>
-
-" Windows and splits
-" Open new vertical split
-nnoremap <leader>w <C-w>v<C-w>l
-" close window
-nnoremap <C-x> <C-w>q
+" Command-mode expansion for directory of current file
+cnoremap %% <C-R>=expand('%:h').'/'<cr>
+" :Q to quit all open buffers
+nnoremap :Q :qall
 
 " close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
-nnoremap :Q :qall
-
-" refresh command-t cache every time
-map <leader>t :CommandTFlush<cr>\|:CommandT<cr>
 " Let ESC close command-t (and then remap arrows for navigation)
 let g:CommandTCancelMap = ['<ESC>', '<C-c>']
 let g:CommandTSelectNextMap = ['<C-n>', '<C-j>', '<ESC>OB']
 let g:CommandTSelectPrevMap = ['<C-p>', '<C-k>', '<ESC>OA']
-
-" Type C-A after some math to calculate the result
-ino <C-A> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
 
 " airline config
 let g:airline_powerline_fonts = 1
