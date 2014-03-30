@@ -101,8 +101,7 @@ set winheight=999
 
 " SPECIAL KEYS
 " CONTROL KEYS
-" control-w to write file
-nnoremap <C-w> :w<CR>
+" control-w to write file in insert mode
 inoremap <C-w> <C-o>:w<CR>
 " close window
 nnoremap <C-x> <C-w>q
@@ -110,12 +109,14 @@ nnoremap <C-x> <C-w>q
 ino <C-A> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
 
 " LEADER KEYS
+" leader-w to write file
+nnoremap <leader>w :w<CR>
 " leader-s to toggle highlighting on/off, and show current value.
 nnoremap <leader>s :set hlsearch! hlsearch?<CR>
 " Switch between the last two files
 nnoremap <leader><leader> <c-^>
 " Open new vertical split
-nnoremap <leader>w <C-w>v<C-w>l
+nnoremap <leader>v <C-w>v<C-w>l
 " CommandT (refresh cache every time)
 map <leader>t :CommandTFlush<cr>\|:CommandT<cr>
 " Search in project/directory
