@@ -11,6 +11,8 @@ colorscheme base16-railscasts
 highlight clear Search
 highlight Search cterm=reverse
 highlight IncSearch ctermfg=black
+highlight CursorColumn cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+highlight CursorLine cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
 
 let go_vim = $GOROOT . '/misc/vim'
 if isdirectory(go_vim)
@@ -113,6 +115,8 @@ ino <C-A> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
 nnoremap <leader>w :w<CR>
 " leader-s to toggle highlighting on/off, and show current value.
 nnoremap <leader>s :set hlsearch! hlsearch?<CR>
+" leader-c to toggle cursor line
+nnoremap <leader>c :set cursorcolumn! cursorline!<CR>
 " Switch between the last two files
 nnoremap <leader><leader> <c-^>
 " Open new vertical split
