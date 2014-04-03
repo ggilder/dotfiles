@@ -40,6 +40,7 @@ autocmd FileType go autocmd BufWritePre <buffer> Fmt
 autocmd FileType go set sw=4 ts=4 noet
 
 let mapleader = "\<Space>"
+nnoremap ; :
 
 set nocompatible
 set backspace=indent,eol,start " allow backspacing over everything in insert mode
