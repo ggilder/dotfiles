@@ -102,7 +102,12 @@ set winheight=20
 set winminheight=20
 set winheight=999
 
-" SPECIAL KEYS
+"""" SPECIAL KEYS
+
+" SELECTION KEYS
+" highlight last inserted text
+nnoremap gV `[v`]
+
 " CONTROL KEYS
 " control-w to write file in insert mode
 inoremap <C-w> <C-o>:w<CR>
