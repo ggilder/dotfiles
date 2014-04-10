@@ -37,6 +37,9 @@ bindkey '^[^[[D' backward-word # option-left
 bindkey '^[^[[C' forward-word # option-right
 bindkey '^[[3~' delete-char # forward delete key
 
+# Bind Ctrl-O to clear screen
+bindkey '^O' clear-screen
+
 # Ctrl-Z to foreground!
 # http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
 fancy-ctrl-z () {
