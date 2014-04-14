@@ -53,3 +53,6 @@ fancy-ctrl-z () {
 }
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
+
+# Display tabs as 4 spaces
+tabs 4
