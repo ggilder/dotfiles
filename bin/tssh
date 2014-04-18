@@ -41,13 +41,13 @@ starttmux() {
 
   local activewindow="$(activewindow "$sessionid")"
 
+  tmux set-window-option -t "$activewindow" synchronize-panes on > /dev/null
+
   unset hosts[0];
   for i in "${hosts[@]}"; do
     tmux split-window -h -t "$(activepane "$activewindow")" "$(ssh_command $i)"
+    tmux select-layout -t "$activewindow" tiled > /dev/null
   done
-
-  tmux select-layout -t "$activewindow" tiled > /dev/null
-  tmux set-window-option -t "$activewindow" synchronize-panes on > /dev/null
 
   if [ -z "$TMUX" ]; then
     # attach to the session we created
