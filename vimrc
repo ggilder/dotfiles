@@ -103,6 +103,10 @@ set winheight=20
 set winminheight=20
 set winheight=999
 
+" grep settings for Greplace, etc
+set grepprg=ag
+let g:grep_cmd_opts = '--line-numbers --noheading'
+
 """" SPECIAL KEYS
 
 " SELECTION KEYS
