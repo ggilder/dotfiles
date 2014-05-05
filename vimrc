@@ -38,6 +38,9 @@ autocmd FileType sass setl iskeyword+=-
 " format go files on save
 autocmd FileType go autocmd BufWritePre <buffer> Fmt
 autocmd FileType go set sw=4 ts=4 noet
+" protos
+autocmd BufRead,BufNewFile *.proto set filetype=protobuf
+autocmd FileType protobuf setl sw=4 ts=4 noet
 
 let mapleader = "\<Space>"
 nnoremap ; :
