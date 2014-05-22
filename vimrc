@@ -135,8 +135,26 @@ nnoremap <leader>c :set cursorcolumn! cursorline!<CR>
 nnoremap <leader><leader> <c-^>
 " Open new vertical split
 nnoremap <leader>v <C-w>v<C-w>l
-" CommandT (refresh cache every time)
-map <leader>t :CommandTFlush<cr>\|:CommandT<cr>
+
+" Run a given vim command on the results of fuzzy selecting from a given shell
+" command. See usage below.
+function! SelectaCommand(choice_command, selecta_args, vim_command)
+  try
+    silent let selection = system(a:choice_command . " | selecta " . a:selecta_args)
+  catch /Vim:Interrupt/
+    " Swallow the ^C so that the redraw below happens; otherwise there will be
+    " leftovers from selecta on the screen
+    redraw!
+    return
+  endtry
+  redraw!
+  exec a:vim_command . " " . selection
+endfunction
+
+" Find all files in all non-dot directories starting in the working directory.
+" Fuzzy select one of those. Open the selected file with :e.
+nnoremap <leader>t :call SelectaCommand("find * -type f", "", ":e")<cr>
+
 " Search in project/directory
 nnoremap <leader>/ :Ag<Space>
 " Search current word in project/directory
@@ -165,11 +183,6 @@ nnoremap :Q :qall
 
 " close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-
-" Let ESC close command-t (and then remap arrows for navigation)
-let g:CommandTCancelMap = ['<ESC>', '<C-c>']
-let g:CommandTSelectNextMap = ['<C-n>', '<C-j>', '<ESC>OB']
-let g:CommandTSelectPrevMap = ['<C-p>', '<C-k>', '<ESC>OA']
 
 " airline config
 let g:airline_powerline_fonts = 1
