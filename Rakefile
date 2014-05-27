@@ -92,6 +92,8 @@ namespace :install do
   end
 end
 
+task :default => :install
+
 def replace_file(file, timestamp)
   system %Q{mkdir -p "$HOME/_dot_backups/#{timestamp}"}
   if File.exist?(File.join(ENV['HOME'], ".#{file}"))
