@@ -12,8 +12,8 @@ function rprompt_info(){
 }
 
 function git_info(){
-local git_rev="$(parse_git_revision)"
-  if [[ "x" != "x$git_rev" ]]; then
+  local git_rev="$(parse_git_info)"
+  if [ -n "$git_rev" ]; then
     echo "%{$fg[yellow]%}$git_rev%{$reset_color%} %{$fg[cyan]%}$(git config user.email)%{$reset_color%}"
   else
     echo ""

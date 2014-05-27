@@ -16,7 +16,7 @@ else
   }
 fi
 
-export PS1="\[$COLOR_RED\]\$(rvm-prompt-wrapper)\[$COLOR_GREEN\]\W\[$COLOR_BROWN\]\$(parse_git_revision)\[$COLOR_NC\]→ "
+export PS1="\[$COLOR_RED\]\$(rvm-prompt-wrapper)\[$COLOR_GREEN\]\W\[$COLOR_BROWN\]\$(parse_git_info)\[$COLOR_NC\]→ "
 
 export PS2='>'   # Secondary prompt
 export PS3='?'   # Prompt 3
