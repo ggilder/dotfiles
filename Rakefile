@@ -2,7 +2,6 @@ require 'rake'
 require 'pathname'
 require 'ftools' if RUBY_VERSION < "1.9"
 
-hostname =  `printf ${HOSTNAME%%.*}`
 home = `printf $HOME`
 timestamp = Time.now.strftime("%Y-%m-%d_%I-%M-%S")
 
