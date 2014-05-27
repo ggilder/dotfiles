@@ -187,6 +187,9 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 " airline config
 let g:airline_powerline_fonts = 1
 
+" syntastic config
+let g:syntastic_always_populate_loc_list = 1
+
 function LocalSettings()
   let localconfig = $HOME . '/.vimrc.local'
   if filereadable(localconfig)
