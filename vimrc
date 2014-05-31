@@ -112,6 +112,9 @@ let g:grep_cmd_opts = '--line-numbers --noheading'
 
 """" SPECIAL KEYS
 
+" don't yank existing selection when pasting in visual mode
+vnoremap p "_dP
+
 " SELECTION KEYS
 " highlight last inserted text
 nnoremap gV `[v`]
