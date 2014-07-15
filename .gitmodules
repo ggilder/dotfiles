@@ -85,3 +85,6 @@
 [submodule "vim/bundle/vim-unimpaired"]
 	path = vim/bundle/vim-unimpaired
 	url = git://github.com/tpope/vim-unimpaired.git
+[submodule "vim/bundle/file-line"]
+	path = vim/bundle/file-line
+	url = https://github.com/bogado/file-line.git
