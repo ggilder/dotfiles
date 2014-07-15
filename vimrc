@@ -192,6 +192,9 @@ let g:airline_powerline_fonts = 1
 
 " syntastic config
 let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_mode_map = { 'mode': 'active',
+      \ 'active_filetypes': [],
+      \ 'passive_filetypes': ['java'] }
 
 function LocalSettings()
   let localconfig = $HOME . '/.vimrc.local'
