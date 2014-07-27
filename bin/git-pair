@@ -37,7 +37,7 @@ module GitPair
       script = File.basename(__FILE__)
       say "Usage:"
       say "  Pair with other_username:"
-      say "    #{script} me_and other_username"
+      say "    #{script} me_and other_username [other_usernames...]"
       say
       say "  Restore to original git author:"
       say "    #{script} just_me"
@@ -47,16 +47,12 @@ module GitPair
     end
 
     def run_me_and(args)
-      partner_username = args.shift
-      abort("No pair given!") unless partner_username
-      partner = user_store.find(partner_username)
-      if partner.nil?
-        partner_name = ask "What is #{partner_username}'s full name?"
-        partner = User.new(partner_name, partner_username)
-        user_store.add(partner_username, partner)
+      abort("No pair given!") if args.empty?
+      partners = args.map do |username|
+        find_or_create_partner(username)
       end
       current_repo.save_original_user!
-      pair_user = current_repo.original_user.pair_with(partner)
+      pair_user = current_repo.original_user.pair_with(partners)
       current_repo.user = pair_user
       say "Setting git author to #{pair_user}"
     end
@@ -64,6 +60,16 @@ module GitPair
     def run_just_me(args)
       current_repo.restore_original_user!
       say "Restored git author to #{current_repo.user}"
+    end
+
+    def find_or_create_partner(username)
+      partner = user_store.find(username)
+      if partner.nil?
+        partner_name = ask "What is #{username}'s full name?"
+        partner = User.new(partner_name, username)
+        user_store.add(username, partner)
+      end
+      partner
     end
 
     def say(message='')
@@ -90,18 +96,19 @@ module GitPair
   end
 
   class User < Struct.new(:name, :email)
-    def pair_with(user)
-      User.new(pair_name(user.name), pair_email(user.email))
+    def pair_with(users)
+      User.new(pair_name(users.map(&:name)), pair_email(users.map(&:email)))
     end
 
-    def pair_name(other_name)
-      "#{name} and #{other_name}"
+    def pair_name(other_names)
+      [name, *other_names].join(' and ')
     end
 
-    def pair_email(other_email)
+    def pair_email(other_emails)
       user, domain = email.split('@')
-      other_user, _ = other_email.split('@')
-      "#{user}+#{other_user}@#{domain}"
+      other_users = other_emails.map { |email| email.split('@').first }
+      combined_user = [user, *other_users].join('+')
+      "#{combined_user}@#{domain}"
     end
 
     def to_s
@@ -422,21 +429,28 @@ class TestGitPairUser < Test::Unit::TestCase
   def setup
     @jeeves = GitPair::User.new("Jeeves", "jeeves@wodehouse.com")
     @bertie = GitPair::User.new("Bertie Wooster", "bertie@wooster.com")
+    @tuppy = GitPair::User.new("Tuppy Glossop", "tuppy@glossop.org")
   end
 
   def test_paired_users_combine_names
-    user = @jeeves.pair_with(@bertie)
+    user = @jeeves.pair_with([@bertie])
     assert_equal "Jeeves and Bertie Wooster", user.name
   end
 
   def test_paired_users_combine_emails
-    user = @jeeves.pair_with(@bertie)
+    user = @jeeves.pair_with([@bertie])
     assert_equal "jeeves+bertie@wodehouse.com", user.email
   end
 
   def test_paired_users_use_first_email_domain
-    user = @bertie.pair_with(@jeeves)
+    user = @bertie.pair_with([@jeeves])
     assert_equal "bertie+jeeves@wooster.com", user.email
+  end
+
+  def test_more_than_two_pairs
+    user = @jeeves.pair_with([@bertie, @tuppy])
+    assert_equal "jeeves+bertie+tuppy@wodehouse.com", user.email
+    assert_equal "Jeeves and Bertie Wooster and Tuppy Glossop", user.name
   end
 end
 
