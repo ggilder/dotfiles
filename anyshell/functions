@@ -7,7 +7,7 @@
 #    You can save a directory using an abbreviation of your choosing. Eg. save ms
 #    You can subsequently move to one of the saved directories by using cd with
 #    the abbreviation you chose. Eg. cd ms  (Note that no '$' is necessary.)
-#    
+#
 #    Make sure to also set the appropriate shell option:
 #    zsh:
 #      setopt CDABLE_VARS
@@ -299,4 +299,9 @@ function tmux-set-window-name() {
     pane=$(tmux list-panes -a | grep "$TMUX_PANE" | sed 's/[0-9]*:\([0-9]*\).*/\1/')
     tmux rename-window -t $pane "$window_name"
   fi
+}
+
+function be() {
+  bundle check || bundle install
+  bundle exec $@
 }
