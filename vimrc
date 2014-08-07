@@ -41,6 +41,9 @@ autocmd FileType go set sw=4 ts=4 noet
 " protos
 autocmd BufRead,BufNewFile *.proto set filetype=protobuf
 autocmd FileType protobuf setl sw=4 ts=4 noet
+" yaml, coffee folding
+autocmd FileType yaml,coffee setl foldmethod=expr foldexpr=(getline(v:lnum)=~'^$')?-1:((indent(v:lnum)<indent(v:lnum+1))?('>'.indent(v:lnum+1)):indent(v:lnum))
+autocmd FileType yaml,coffee normal zR
 
 let mapleader = "\<Space>"
 nnoremap ; :
