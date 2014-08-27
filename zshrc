@@ -25,5 +25,8 @@ source $HOME/.anyshell/functions
 export rvm_path="$HOME/.rvm"
 [[ -s $rvm_path/scripts/rvm ]] && source $rvm_path/scripts/rvm
 
+# Use FZF
+source ~/.fzf.zsh
+
 # Initial tmux window name
 tmux-set-window-name
