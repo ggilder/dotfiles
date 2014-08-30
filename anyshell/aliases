@@ -8,16 +8,10 @@ if [[ $platform = 'Linux' ]]; then
 elif [[ $platform = 'Darwin' ]]; then
   alias a='ls -lthG' # sort by date modified
   alias ls='ls -G'  # OS-X SPECIFIC - the -G command in OS-X is for colors, in Linux it's no groups
-  export EDITOR='mate -w'  # OS-X SPECIFIC - TextMate, w is to wait for TextMate window to close
   alias lock="open /System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app"
   alias flushdns="dscacheutil -flushcache"
 
-  if [ -d /Applications/MacVim.app/ ]; then
-    # use MacVim over built-in Mac OS version
-    alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
-    export EDITOR='vim -f'
-    alias vimdiff="vim -d"
-  fi
+  export EDITOR='vim -f'
 fi
 
 # ruby (irb)
