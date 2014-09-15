@@ -96,17 +96,6 @@ alias unhitch='hitch -u'
 
 ######## misc ##########
 
-# update dotfiles
-function dotfiles_update {
-  local SAVED_PWD
-  SAVED_PWD="$PWD"
-  cd $HOME/src/dotfiles
-  git pull --ff-only
-  git submodule update --init
-  rake install
-  cd "$SAVED_PWD"
-}
-
 # mkdir, cd into it
 mkcd () {
   mkdir -p "$*"

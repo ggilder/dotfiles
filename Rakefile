@@ -1,13 +1,17 @@
 require 'rake'
 require 'pathname'
-require 'ftools' if RUBY_VERSION < "1.9"
+require 'fileutils'
 
 home = `printf $HOME`
 timestamp = Time.now.strftime("%Y-%m-%d_%I-%M-%S")
 
-task :install => 'install:files'
+task :install => %w(install:submodules install:files)
 
 namespace :install do
+  desc "Update submodules"
+  task :submodules do
+    Dir.chdir(File.dirname(__FILE__)) { puts `git submodule sync && git submodule update --init` }
+  end
 
   desc "install the dot files into user's home directory"
   task :files do
@@ -61,34 +65,6 @@ namespace :install do
         # system %Q{rm "#{home}/#{file}"}
       end
     end
-  end
-
-  desc "Create symbolic link for kaleidoscope integration with git difftool"
-  task :ksdiff do
-    ksdiff = File.expand_path("/usr/local/bin/ksdiff-wrapper")
-    opendiff = File.expand_path("/usr/bin/opendiff")
-    if File.exist?(ksdiff)
-      if !File.exist?(opendiff) && !File.symlink?(opendiff)
-        puts "#{opendiff} doesn't exist, linking..."
-        system %Q{sudo ln -s #{ksdiff} #{opendiff}}
-      elsif File.exist?(opendiff) && !File.symlink?(opendiff)
-        # file already exists. back it up
-        puts "moving #{opendiff} to #{opendiff}_orig"
-        system %Q{sudo mv #{opendiff} #{opendiff}_orig}
-        puts "linking #{ksdiff} to #{opendiff}"
-        system %Q{sudo ln -s #{ksdiff} #{opendiff}}
-      else File.exist?(opendiff) && File.symlink?(opendiff)
-        puts "file already linked"
-      end
-    else
-      puts "please install ksdiff before runnning this tool"
-    end
-  end
-
-  desc "Set up command-T plugin for vim"
-  task :commandt do
-    path = File.join(File.dirname(__FILE__), "vim/bundle/command-t/ruby/command-t")
-    puts `cd #{path} && ruby extconf.rb && make`
   end
 end
 
