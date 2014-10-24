@@ -113,6 +113,9 @@ set winheight=999
 set grepprg=ag
 let g:grep_cmd_opts = '--line-numbers --noheading'
 
+vnoremap < <gv
+vnoremap > >gv
+
 """" SPECIAL KEYS
 
 " don't yank existing selection when pasting in visual mode
