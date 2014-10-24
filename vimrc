@@ -92,6 +92,8 @@ set wildignore+=*.pid,*/tmp/*
 " node modules dir
 set wildignore+=*/node_modules/*
 
+set wildmenu
+
 " show tabs and nbsp
 set list listchars=tab:» ,nbsp:•
 highlight SpecialKey ctermfg=grey guifg=grey
