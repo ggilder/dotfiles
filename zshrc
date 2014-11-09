@@ -24,6 +24,8 @@ source $HOME/.anyshell/functions
 # Enable RVM
 export rvm_path="$HOME/.rvm"
 [[ -s $rvm_path/scripts/rvm ]] && source $rvm_path/scripts/rvm
+# clean up after it
+dedup_pathvar PATH
 
 # Use FZF
 source ~/.fzf.zsh

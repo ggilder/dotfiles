@@ -1,6 +1,5 @@
 #echo "=> Loading `pwd`/paths"
 
-# TODO: prevent duplication with sub-shells (e.g. tmux)
 if [ -d "/usr/local/Cellar/go/1.2/libexec" ]; then
   export GOROOT="/usr/local/Cellar/go/1.2/libexec"
 elif [ -d "/usr/local/go/" ]; then
@@ -10,3 +9,16 @@ export GOPATH="$HOME/go"
 export PATH="$HOME/bin:$GOPATH/bin:$HOME/.rvm/bin:/usr/local/bin:/usr/local/share/npm/bin:/usr/local/heroku/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/local/git/bin:$PATH"
 export MANPATH="/usr/local/man:/usr/local/mysql/man:/usr/local/git/man:$MANPATH"
 export NODE_PATH="/usr/local/lib/node_modules:$NODE_PATH"
+
+# Deduplication of PATH, etc.
+# Based on http://unix.stackexchange.com/a/149054, with fix for single entry case
+dedup_pathvar () {
+  pathvar_name="$1"
+  pathvar_value="$(eval echo \$$pathvar_name)"
+  deduped_path="$(echo $pathvar_value | ruby -e 'puts STDIN.read.split(":").uniq.join(":")')"
+  eval "$pathvar_name=\"$deduped_path\""
+}
+
+dedup_pathvar PATH
+dedup_pathvar MANPATH
+dedup_pathvar NODE_PATH
