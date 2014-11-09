@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# Miscellaneous things to speed up a shell on Mac OS.
+
+set -e
+
+ok() {
+  echo "    OK"
+}
+
+print_auto_master_notice() {
+  echo "You should comment out /home in /etc/auto_master, it's probably not mapped to anything useful."
+  echo "Then run sudo automount -vc"
+}
+
+echo "Checking /etc/auto_master..."
+grep '^/home' /etc/auto_master && print_auto_master_notice || ok
+
+echo "Purging old ASL files..."
+if [ $(find /private/var/log/asl -name '*.asl' | wc -l) -gt 0 ]; then
+  sudo rm -f /private/var/log/asl/*.asl && ok
+else
+  ok
+fi
+
+echo "Checking PATH..."
+dupes=$(echo $PATH | tr ':' "\n" | sort | uniq -d)
+if [ -n "$dupes" ]; then
+  echo "Duplicate entries in path:"
+  for d in $dupes; do echo "    $d"; done
+else
+  ok
+fi
+
+echo "Done."
