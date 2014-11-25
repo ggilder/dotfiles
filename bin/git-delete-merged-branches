@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+git branch --merged master | cut -b 3- | grep --invert-match '^master$' | xargs git branch -d
