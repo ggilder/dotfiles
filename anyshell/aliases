@@ -1,16 +1,12 @@
 # Handle the fact that this file will be used with multiple OSs
 platform=`uname`
 if [[ $platform = 'Linux' ]]; then
-  alias a='ls -lth --color'
   alias ls='ls --color=auto'
   export EDITOR="vim"
-  alias get='sudo apt-get install'
 elif [[ $platform = 'Darwin' ]]; then
-  alias a='ls -lthG' # sort by date modified
   alias ls='ls -G'  # OS-X SPECIFIC - the -G command in OS-X is for colors, in Linux it's no groups
   alias lock="open /System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app"
   alias flushdns="dscacheutil -flushcache"
-
   export EDITOR='vim -f'
 fi
 
@@ -67,9 +63,6 @@ alias df='df -h'
 alias sha1="openssl sha1"
 alias j="jobs"
 alias v="vim"
-
-# macirb doesn't like the irbrc
-alias macirb="macirb -f"
 
 # Shows most used commands, cool script I got this from: http://lifehacker.com/software/how-to/turbocharge-your-terminal-274317.php
 alias profileme="history | awk '{print \$2}' | awk 'BEGIN{FS=\"|\"}{print \$1}' | sort | uniq -c | sort -n | tail -n 20 | sort -nr"
