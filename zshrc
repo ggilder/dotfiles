@@ -19,16 +19,7 @@ record_time "setup"
 source $HOME/.anyshell/paths
 record_time "paths"
 
-# Path to your oh-my-zsh configuration.
-export ZSH=$HOME/.oh-my-zsh
-# Disable weekly auto-update checks
-export DISABLE_AUTO_UPDATE="true"
-source $ZSH/oh-my-zsh.sh
-record_time "oh-my-zsh"
-
 source $HOME/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-plugins=(osx zsh-syntax-highlighting)
 record_time "syntax-highlighting"
 
 source $HOME/.zsh/config
