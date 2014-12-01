@@ -1,5 +1,35 @@
 set encoding=utf-8
-execute pathogen#infect()
+
+call plug#begin('~/.vim/bundle')
+Plug 'bling/vim-airline'
+Plug 'bogado/file-line'
+Plug 'briancollins/vim-jst'
+Plug 'bronson/vim-trailing-whitespace'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'derekwyatt/vim-scala'
+Plug 'elixir-lang/vim-elixir'
+Plug 'ggilder/localvimrc'
+Plug 'kchmck/vim-coffee-script'
+Plug 'lmeijvogel/vim-yaml-helper'
+Plug 'mileszs/ack.vim'
+Plug 'nono/vim-handlebars'
+Plug 'pangloss/vim-javascript'
+Plug 'rking/ag.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/syntastic'
+Plug 'slim-template/vim-slim'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-markdown'
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-rake'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'vim-ruby/vim-ruby'
+Plug 'vim-scripts/VimClojure'
+Plug 'vim-scripts/greplace.vim'
+call plug#end()
 
 " Enable syntax highlighting
 syntax on
