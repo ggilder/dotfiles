@@ -175,10 +175,27 @@ nnoremap <leader>v <C-w>v<C-w>l
 " Toggle invisible characters
 nnoremap <leader><tab> :set nolist!<CR>
 
-" Load FZF
-set rtp+=~/.fzf
+" pick
+function! EscapeFilePath(path)
+  return substitute(a:path, ' ', '\\ ', 'g')
+endfunction
 
-nnoremap <leader>t :FZF<cr>
+function! Pick(choice_command, vim_command)
+  try
+    let selection = system(a:choice_command . " | pick")
+  catch /Vim:Interrupt/
+    " Swallow the ^C so that the redraw below happens; otherwise there will be
+    " UI leftovers on the screen
+    redraw!
+    return
+  endtry
+  redraw!
+  if strlen(selection) > 0
+    exec a:vim_command . " " . EscapeFilePath(selection)
+  endif
+endfunction
+
+nnoremap <leader>t :call Pick("find * -type f", ":e")<cr>
 
 " Search in project/directory
 nnoremap <leader>/ :Ag<Space>
