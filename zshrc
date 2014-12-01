@@ -1,3 +1,5 @@
+typeset -F SECONDS
+
 source $HOME/.anyshell/paths
 
 # Path to your oh-my-zsh configuration.
@@ -16,7 +18,9 @@ source $HOME/.zsh/completion
 source $HOME/.anyshell/aliases
 source $HOME/.anyshell/functions
 
-[[ -f `brew --prefix`/etc/profile.d/z.sh ]] && source `brew --prefix`/etc/profile.d/z.sh
+# "z" script
+z_script="/usr/local/etc/profile.d/z.sh"
+[[ -f $z_script ]] && source $z_script
 
 # use .localrc for settings specific to one system
 [[ -f ~/.localrc ]] && .  ~/.localrc
@@ -32,3 +36,5 @@ source ~/.fzf.zsh
 
 # Initial tmux window name
 tmux-set-window-name
+
+echo "Started up in ${SECONDS}s"

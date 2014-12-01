@@ -22,7 +22,7 @@ fi
 source ~/.dirs
 
 alias show='cat ~/.dirs'
-alias showdirs="cat ~/.dirs | ruby -e \"puts STDIN.read.split(10.chr).sort.map{|x| x.gsub(/^(.+)=.+$/, '\\1')}.join(', ')\""
+alias showdirs="cat ~/.dirs | cut -d '=' -f 1 | tr '\n' ' '"
 
 function save (){
   local usage
@@ -63,9 +63,6 @@ function save (){
   source ~/.dirs
   echo "Directory shortcuts:" `showdirs`
 }
-
-# show dirs at login
-echo "Directory shortcuts:" `showdirs`
 
 #### Functions to inspect ruby gems ###########################
 ## removed old `gemdir` function in favor of a ruby script, see bin/gemdir ##
