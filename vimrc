@@ -1,6 +1,7 @@
 set encoding=utf-8
 
 call plug#begin('~/.vim/bundle')
+Plug 'AndrewRadev/splitjoin.vim'
 Plug 'bling/vim-airline'
 Plug 'bogado/file-line'
 Plug 'briancollins/vim-jst'
