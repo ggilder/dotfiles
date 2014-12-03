@@ -32,6 +32,8 @@ setopt HIST_IGNORE_ALL_DUPS  # don't record dupes in history
 setopt HIST_REDUCE_BLANKS # remove superfluous blanks
 setopt HIST_VERIFY # don't execute history expansions directly
 
+bindkey -e
+
 # fix a few key bindings
 bindkey '^[^[[D' backward-word # option-left
 bindkey '^[^[[C' forward-word # option-right
