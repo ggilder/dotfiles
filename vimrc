@@ -178,6 +178,8 @@ nnoremap <leader>c :set cursorcolumn! cursorline!<CR>
 nnoremap <leader><leader> <c-^>
 " Open new vertical split
 nnoremap <leader>v <C-w>v<C-w>l
+" Toggle invisible characters
+nnoremap <leader><tab> :set nolist!<CR>
 
 " Load FZF
 set rtp+=~/.fzf
