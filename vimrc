@@ -31,6 +31,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'vim-ruby/vim-ruby'
 Plug 'vim-scripts/VimClojure'
 Plug 'vim-scripts/greplace.vim'
+Plug 'fatih/vim-go'
 call plug#end()
 
 " Enable syntax highlighting
@@ -46,14 +47,6 @@ highlight IncSearch ctermfg=black
 highlight CursorColumn cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
 highlight CursorLine cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
 
-let go_vim = $GOROOT . '/misc/vim'
-if isdirectory(go_vim)
-  " Clear filetype flags before changing runtimepath to force Vim to reload them.
-  filetype off
-  filetype plugin indent off
-  set runtimepath+=$GOROOT/misc/vim
-endif
-
 " Enable filetype-specific indenting and plugins
 filetype plugin indent on
 
@@ -68,7 +61,6 @@ autocmd FileType text setl wrap linebreak nolist
 " modify keyword pattern in SASS documents
 autocmd FileType sass setl iskeyword+=-
 " format go files on save
-autocmd FileType go autocmd BufWritePre <buffer> Fmt
 autocmd FileType go set sw=4 ts=4 noet
 " protos
 autocmd BufRead,BufNewFile *.proto set filetype=protobuf
