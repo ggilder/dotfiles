@@ -61,7 +61,8 @@ autocmd FileType text setl wrap linebreak nolist
 " modify keyword pattern in SASS documents
 autocmd FileType sass setl iskeyword+=-
 " format go files on save
-autocmd FileType go set sw=4 ts=4 noet
+autocmd FileType go setl sw=4 ts=4 noet nolist
+
 " protos
 autocmd BufRead,BufNewFile *.proto set filetype=protobuf
 autocmd FileType protobuf setl sw=4 ts=4 noet
