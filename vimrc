@@ -87,6 +87,7 @@ set et " expand tabs
 set sw=2
 set smarttab
 set incsearch " highlight search term incrementally
+set nowrapscan " do not wrap around when hitting n / N
 set ignorecase smartcase
 set laststatus=2 " Always show status line.
 set number
