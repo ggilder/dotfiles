@@ -7,22 +7,25 @@ export NODE_PATH="/usr/local/lib/node_modules:$NODE_PATH"
 
 # Deduplication of PATH, etc.
 # Based on https://github.com/mislav/dotfiles/blob/master/bin/consolidate-path
-dedup_pathvar() {
-  local paths result p
-  local pathvar_name="$1"
-  local pathvar_value="$(eval echo \$$pathvar_name)"
-  typeset -a paths result
+# Only works in zsh
+if [ -n "$ZSH_VERSION" ]; then
+  dedup_pathvar() {
+    local paths result p
+    local pathvar_name="$1"
+    local pathvar_value="$(eval echo \$$pathvar_name)"
+    typeset -a paths result
 
-  paths=("${(s/:/)pathvar_value}")
-  while [[ ${#paths} -gt 0 ]]; do
-    p="${paths[1]}"
-    shift paths
-    [[ -z ${result[(r)$p]} ]] && result+="$p"
-  done
+    paths=("${(s/:/)pathvar_value}")
+    while [[ ${#paths} -gt 0 ]]; do
+      p="${paths[1]}"
+      shift paths
+      [[ -z ${result[(r)$p]} ]] && result+="$p"
+    done
 
-  eval "$pathvar_name=\"${(j+:+)result}\""
-}
+    eval "$pathvar_name=\"${(j+:+)result}\""
+  }
 
-dedup_pathvar PATH
-dedup_pathvar MANPATH
-dedup_pathvar NODE_PATH
+  dedup_pathvar PATH
+  dedup_pathvar MANPATH
+  dedup_pathvar NODE_PATH
+fi
