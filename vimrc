@@ -176,7 +176,7 @@ nnoremap <leader>v <C-w>v<C-w>l
 nnoremap <leader><tab> :set nolist!<CR>
 
 " Load FZF
-set rtp+=~/.fzf
+set rtp+=~/.fzf/*
 
 nnoremap <leader>t :FZF<cr>
 
