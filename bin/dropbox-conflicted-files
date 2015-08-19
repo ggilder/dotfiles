@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+dry_run = true
+files_to_remove = []
+
+dry_run = false if ARGV.delete('--delete')
+dropbox_path = File.expand_path('~/Dropbox')
+
+Dir.chdir(dropbox_path) do
+  Dir.glob('**/*conflicted copy*').each do |path|
+    puts path
+    original = path.sub(%r{ \(.* conflicted copy [\d-]+\)}, '')
+    if system('cmp', path, original)
+      puts "No conflict detected"
+      files_to_remove << path
+    end
+    puts
+  end
+end
+
+if files_to_remove.empty?
+  puts "No conflicted files can be cleaned up."
+else
+  puts "#{files_to_remove.length} identical conflicted files were found."
+  if dry_run
+    puts "Rerun with --delete to clean up these files."
+  else
+    Dir.chdir(dropbox_path) do
+      File.delete(*files_to_remove)
+    end
+    puts "Deleted!"
+  end
+end
