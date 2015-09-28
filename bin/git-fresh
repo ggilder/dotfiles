@@ -5,3 +5,4 @@ set -e
 git checkout master && git pull
 git-delete-merged-branches || echo "Failed to delete some merged branches, continuing."
 git remote prune origin || echo "Failed to prune branches."
+git fetch --prune origin +refs/tags/*:refs/tags/* || echo "Failed to prune tags."
