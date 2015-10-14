@@ -24,7 +24,7 @@ namespace :install do
       if File.exist?(dest) || File.symlink?(dest)
         if replace_all
           replace_file(file, timestamp)
-        elsif Pathname.new(dest).realpath.to_s == File.join(ENV['PWD'], file)
+        elsif Pathname.new(dest).realpath == Pathname.new(ENV['PWD']).join(file).realpath
           puts "correct symlink already exists for "+File.join(ENV['PWD'], file)
         else
           print "overwrite ~/.#{file}? [ynaq] "
