@@ -2,6 +2,7 @@ set encoding=utf-8
 
 call plug#begin('~/.vim/bundle')
 Plug 'AndrewRadev/splitjoin.vim'
+Plug 'benekastah/neomake'
 Plug 'benmills/vimux'
 Plug 'bling/vim-airline'
 Plug 'bogado/file-line'
@@ -132,12 +133,6 @@ match ExtraWhitespace /\s\+$/
 
 " Minimum window sizes
 set winwidth=84
-" We have to have a winheight bigger than we want to set winminheight. But if
-" we set winheight to be huge before winminheight, the winminheight set will
-" fail.
-set winheight=20
-set winminheight=20
-set winheight=999
 
 " grep settings for Greplace, etc
 set grepprg=ag

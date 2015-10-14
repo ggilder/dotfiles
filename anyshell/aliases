@@ -2,12 +2,16 @@
 platform=`uname`
 if [[ $platform = 'Linux' ]]; then
   alias ls='ls --color=auto'
-  export EDITOR="vim"
 elif [[ $platform = 'Darwin' ]]; then
   alias ls='ls -G'  # OS-X SPECIFIC - the -G command in OS-X is for colors, in Linux it's no groups
   alias lock="open /System/Library/Frameworks/ScreenSaver.framework/Versions/A/Resources/ScreenSaverEngine.app"
   alias flushdns="dscacheutil -flushcache"
-  export EDITOR='vim -f'
+fi
+
+if which nvim &>/dev/null; then
+  export EDITOR="nvim"
+else
+  export EDITOR="vim"
 fi
 
 # ruby (irb)
@@ -63,7 +67,7 @@ alias m='more'
 alias df='df -h'
 alias sha1="openssl sha1"
 alias j="jobs"
-alias v="vim"
+alias v=$EDITOR
 
 # Shows most used commands, cool script I got this from: http://lifehacker.com/software/how-to/turbocharge-your-terminal-274317.php
 alias profileme="history | awk '{print \$2}' | awk 'BEGIN{FS=\"|\"}{print \$1}' | sort | uniq -c | sort -n | tail -n 20 | sort -nr"
