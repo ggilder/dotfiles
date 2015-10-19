@@ -203,6 +203,17 @@ endfunction
 nnoremap <leader>f :call SearchInProject()<CR>
 nnoremap <leader>F :call SearchWordInProject()<CR>
 
+function CopyCurrentFileAndLine()
+  call system('echo ' . expand('%') . ':' . line('.') . ' | pbcopy')
+endfunction
+
+function CopyCurrentFile()
+  call system('echo ' . expand('%') . ' | pbcopy')
+endfunction
+
+nnoremap <leader>r :call CopyCurrentFile()<CR>
+nnoremap <leader>R :call CopyCurrentFileAndLine()<CR>
+
 " Command-mode expansion for directory of current file
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 " :Q to quit all open buffers
