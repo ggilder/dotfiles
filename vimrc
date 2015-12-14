@@ -182,6 +182,17 @@ nnoremap <leader>/ :Ag<Space>
 " Search current word in project/directory
 " With or without word boundaries
 function SearchInProject()
+" if has('nvim')
+"function! s:Ag(file_mode, args)
+  " let cmd = "ag --vimgrep --smart-case ".substitute(a:args, '\\', '\\\\', 'g')
+  " let custom_maker = neomake#utils#MakerFromCommand('bash', cmd)
+  " let custom_maker.name = cmd
+  " let custom_maker.remove_invalid_entries = 0
+  " let custom_maker.place_signs = 0
+  " let enabled_makers =  [custom_maker]
+  " call neomake#Make({'enabled_makers': enabled_makers, 'file_mode': a:file_mode}) | echo "running: " . cmd
+" endfunction
+" command! -bang -nargs=* -complete=file Ag call s:Ag(<bang>0, <q-args>)
   let word = expand("<cword>")
   let @/=word
   set hls
