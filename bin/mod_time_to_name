@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+DATE_PATTERN = /^\d{4}-\d{1,2}-\d{1,2}/
+files = ARGV
+
+files.each do |file|
+  mtime = File.mtime(file)
+  formatted_mtime = mtime.strftime('%Y-%m-%d')
+  basefile = File.basename(file)
+  dir = File.dirname(file)
+  new_basefile = if basefile =~ DATE_PATTERN
+    # replace
+    basefile.sub(DATE_PATTERN, formatted_mtime)
+  else
+    # prefix
+    "#{formatted_mtime} #{basefile}"
+  end
+  new_file = File.join(dir, new_basefile)
+  puts "Renaming #{file} to #{new_file}"
+  File.rename(file, new_file)
+end
