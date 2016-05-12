@@ -31,6 +31,7 @@ Plug 'tpope/vim-rake'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
+Plug 'uarun/vim-protobuf'
 Plug 'vim-ruby/vim-ruby'
 Plug 'vim-scripts/VimClojure'
 Plug 'vim-scripts/greplace.vim'
@@ -66,8 +67,7 @@ autocmd FileType sass setl iskeyword+=-
 autocmd FileType go setl sw=4 ts=4 noet nolist
 
 " protos
-autocmd BufRead,BufNewFile *.proto set filetype=protobuf
-autocmd FileType protobuf setl sw=4 ts=4 noet
+autocmd FileType proto setl sw=4 ts=4 noet
 " yaml, coffee folding
 autocmd FileType yaml,coffee setl foldmethod=expr foldexpr=(getline(v:lnum)=~'^$')?-1:((indent(v:lnum)<indent(v:lnum+1))?('>'.indent(v:lnum+1)):indent(v:lnum))
 autocmd FileType yaml,coffee normal zR
