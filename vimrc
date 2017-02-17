@@ -18,7 +18,6 @@ Plug 'lmeijvogel/vim-yaml-helper'
 Plug 'mileszs/ack.vim'
 Plug 'nono/vim-handlebars'
 Plug 'pangloss/vim-javascript'
-Plug 'rking/ag.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/syntastic'
@@ -135,8 +134,8 @@ match ExtraWhitespace /\s\+$/
 set winwidth=84
 
 " grep settings for Greplace, etc
-set grepprg=ag
-let g:grep_cmd_opts = '--line-numbers --noheading'
+set grepprg=rg\ --vimgrep
+let g:ackprg='rg --vimgrep'
 
 vnoremap < <gv
 vnoremap > >gv
@@ -178,12 +177,12 @@ set rtp+=~/.fzf
 nnoremap <leader>t :FZF<cr>
 
 " Search in project/directory
-nnoremap <leader>/ :Ag<Space>
+nnoremap <leader>/ :Ack!<Space>
 " Search current word in project/directory
 " With or without word boundaries
 function SearchInProject()
 " if has('nvim')
-"function! s:Ag(file_mode, args)
+"function! s:Ack!(file_mode, args)
   " let cmd = "ag --vimgrep --smart-case ".substitute(a:args, '\\', '\\\\', 'g')
   " let custom_maker = neomake#utils#MakerFromCommand('bash', cmd)
   " let custom_maker.name = cmd
@@ -192,18 +191,18 @@ function SearchInProject()
   " let enabled_makers =  [custom_maker]
   " call neomake#Make({'enabled_makers': enabled_makers, 'file_mode': a:file_mode}) | echo "running: " . cmd
 " endfunction
-" command! -bang -nargs=* -complete=file Ag call s:Ag(<bang>0, <q-args>)
+" command! -bang -nargs=* -complete=file Ack! call s:Ack!(<bang>0, <q-args>)
   let word = expand("<cword>")
   let @/=word
   set hls
-  exec "Ag " . word
+  exec "Ack! " . word
 endfunction
 
 function SearchWordInProject()
   let word = expand("<cword>")
   let @/='\<' . word . '\>'
   set hls
-  exec "Ag '\\b" . word . "\\b'"
+  exec "Ack! '\\b" . word . "\\b'"
 endfunction
 
 nnoremap <leader>f :call SearchInProject()<CR>
