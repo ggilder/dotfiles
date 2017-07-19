@@ -18,7 +18,7 @@ namespace :install do
 
     replace_all = false
     Dir['*'].each do |file|
-      next if %w[Rakefile README LICENSE bin].include? file or %r{(.*)\.pub} =~ file
+      next if %w[Rakefile README LICENSE bin ssh].include? file or %r{(.*)\.pub} =~ file
 
       dest = File.join(ENV['HOME'], ".#{file}")
       if File.exist?(dest) || File.symlink?(dest)
@@ -64,6 +64,12 @@ namespace :install do
         # system %Q{cp -RLi "#{home}/#{file}" "#{home}/_dot_backups/#{timestamp}/#{file}"}
         # system %Q{rm "#{home}/#{file}"}
       end
+    end
+
+    # Link ssh config
+    if !File.exist?("#{home}/.ssh/config")
+      puts "linking ~/.ssh/config"
+      system %Q{ln -s "$PWD/ssh/config" "#{home}/.ssh/config"}
     end
   end
 end
