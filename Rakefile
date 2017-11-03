@@ -5,7 +5,7 @@ require 'fileutils'
 home = `printf $HOME`
 timestamp = Time.now.strftime("%Y-%m-%d_%I-%M-%S")
 
-task :install => %w(install:submodules install:files)
+task :install => %w(install:submodules install:files clean:symlinks)
 
 namespace :install do
   desc "Update submodules"
@@ -45,12 +45,6 @@ namespace :install do
       end
     end
 
-    # link files in bin dir
-    # disabling backup because existing files are not overwritten anyway
-    #if `command ls -1 "#{home}/bin" 2>/dev/null` != ''
-    #  # make backup if bin dir is not empty
-    #  system %Q{mkdir -p "$HOME/_dot_backups/#{timestamp}/bin/"}
-    #end
     system %Q{mkdir -p "#{home}/bin"}
 
     Dir['bin/*'].each do |file|
@@ -60,9 +54,6 @@ namespace :install do
         system %Q{ln -s "$PWD/#{file}" "#{home}/#{file}"}
       else
         puts "Existing ~/#{file} exists. Skipping..."
-        # could back up here
-        # system %Q{cp -RLi "#{home}/#{file}" "#{home}/_dot_backups/#{timestamp}/#{file}"}
-        # system %Q{rm "#{home}/#{file}"}
       end
     end
 
@@ -70,6 +61,20 @@ namespace :install do
     if !File.exist?("#{home}/.ssh/config")
       puts "linking ~/.ssh/config"
       system %Q{ln -s "$PWD/ssh/config" "#{home}/.ssh/config"}
+    end
+  end
+end
+
+namespace :clean do
+  task :symlinks do
+    Dir["#{ENV['HOME']}/{*,bin/*}"].each do |file|
+      next unless File.symlink?(file)
+      begin
+        Pathname.new(file).realpath
+      rescue Errno::ENOENT
+        puts "Removing broken symlink at #{file}"
+        File.delete(file)
+      end
     end
   end
 end
