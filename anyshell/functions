@@ -64,22 +64,6 @@ function save (){
   echo "Directory shortcuts:" `showdirs`
 }
 
-#### Functions to inspect ruby gems ###########################
-## removed old `gemdir` function in favor of a ruby script, see bin/gemdir ##
-function cdgem {
-  local GEMDIR
-  GEMDIR=$(gemdir $1)
-  if [ "$GEMDIR" ] && [ -d "$GEMDIR" ]; then
-    cd $GEMDIR
-  else
-    echo "No gem found for $1"
-    return 1
-  fi
-}
-function mategem {
-  (cdgem $1 && mate .)
-}
-
 # Hitch
 
 hitch() {
