@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+full = ARGV.delete("--full")
+
+dir = ARGV.first || raise("Must specify a directory")
+
+raise("Must specify a directory, not a file") unless File.directory?(dir)
+
+files_and_mtimes = Dir["#{dir}/**/*"].reject { |f| File.directory?(f) }.map { |f| [f, File.mtime(f)] }
+files_and_mtimes.sort_by! { |(_, mtime)| mtime }
+
+def print_file_and_mtime(file_and_mtime)
+  puts "#{file_and_mtime.last} - #{file_and_mtime.first}"
+end
+
+if full
+  files_and_mtimes.each { |x| print_file_and_mtime(x) }
+else
+  print_file_and_mtime(files_and_mtimes.first)
+  puts "  to"
+  print_file_and_mtime(files_and_mtimes.last)
+end
