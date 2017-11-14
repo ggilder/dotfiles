@@ -1,0 +1,62 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+
+USAGE = <<EOD
+rename-with-mod-time [--dry-run] [--latest] PATH...
+
+PATH may be repeated. Each path will be renamed to prepend its modification
+time (in the format YYYY-MM-DD) unless the name is already prepended.
+
+--dry-run     Prints the actions to be taken without performing them.
+--latest      Uses the latest enclosed mod time (rather than default earliest)
+              when renaming folders.
+--help, -h    Prints this help.
+EOD
+
+DATE_PATTERN = /^\d{4}-\d{1,2}-\d{1,2}\b/
+YEAR_RANGE_PATTERN = /^\d{4}-\d{4}\b/
+
+if ARGV.delete('--help') || ARGV.delete('-h')
+  puts USAGE
+  exit
+end
+
+dry_run = ARGV.delete('--dry-run')
+use_latest = ARGV.delete('--latest')
+
+paths = ARGV
+
+puts "Renaming #{paths.count} files..."
+puts "DRY RUN, no renaming will take place" if dry_run
+
+paths.each do |path|
+  name = File.basename(path)
+  if name =~ DATE_PATTERN || name =~ YEAR_RANGE_PATTERN
+    puts %{[INFO] "#{name}" already appears to include date; skipping.}
+    next
+  end
+  if File.directory?(path)
+    mtimes = Dir[File.join(folder, '**/*')].select { |f| File.file?(f) }.map { |f| File.mtime(f) }
+    mtimes.sort!
+    mtime = use_latest ? mtimes.last : mtimes.first
+    unless mtime
+      puts %{[INFO] No contents found for "#{path}"; skipping.}
+      next
+    end
+  else
+    mtime = File.mtime(path)
+  end
+  new_name = "#{mtime.strftime('%Y-%m-%d')} #{name}"
+  new_path = File.join(File.dirname(path), new_name)
+  if File.exist?(new_path)
+    puts %{[ERROR] Destination "#{new_path}" already exists.}
+  else
+    puts %(Renaming "#{name}" to "#{new_name}".)
+    unless dry_run
+      FileUtils.mv(path, new_path, verbose: true)
+    end
+  end
+end
+
+puts "Done."
