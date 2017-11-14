@@ -37,7 +37,7 @@ paths.each do |path|
     next
   end
   if File.directory?(path)
-    mtimes = Dir[File.join(folder, '**/*')].select { |f| File.file?(f) }.map { |f| File.mtime(f) }
+    mtimes = Dir[File.join(path, '**/*')].select { |f| File.file?(f) }.map { |f| File.mtime(f) }
     mtimes.sort!
     mtime = use_latest ? mtimes.last : mtimes.first
     unless mtime
