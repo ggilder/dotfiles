@@ -2,24 +2,35 @@
 
 dry_run = true
 files_to_remove = []
+files_to_force_remove = []
+conflicts = 0
 
 dry_run = false if ARGV.delete('--delete')
+force = ARGV.delete('--force') && !dry_run
 dropbox_path = File.expand_path('~/Dropbox')
 
 Dir.chdir(dropbox_path) do
   Dir.glob('**/*conflicted copy*').each do |path|
+    conflicts += 1
     puts path
     original = path.sub(%r{ \(.* conflicted copy [\d-]+\)}, '')
     if system('cmp', path, original)
       puts "No conflict detected"
       files_to_remove << path
+    elsif force
+      files_to_force_remove << path
     end
     puts
   end
 end
 
+if conflicts == 0
+  puts "No conflicted files found! 👍"
+  exit
+end
+
 if files_to_remove.empty?
-  puts "No conflicted files can be cleaned up."
+  puts "No conflicted files can be automatically cleaned up."
 else
   puts "#{files_to_remove.length} identical conflicted files were found."
   if dry_run
@@ -30,4 +41,12 @@ else
     end
     puts "Deleted!"
   end
+end
+
+if files_to_force_remove.length > 0
+  puts "Force removing #{files_to_force_remove.length} conflicted files."
+  Dir.chdir(dropbox_path) do
+    File.delete(*files_to_force_remove)
+  end
+  puts "Deleted!"
 end
