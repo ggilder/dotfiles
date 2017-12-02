@@ -14,7 +14,7 @@ time (in the format YYYY-MM-DD) unless the name is already prepended.
 --help, -h    Prints this help.
 EOD
 
-DATE_PATTERN = /^\d{4}-\d{1,2}-\d{1,2}\b/
+DATE_PATTERN = /^\d{4}-\d{1,2}(-\d{1,2})?\b/
 YEAR_RANGE_PATTERN = /^\d{4}-\d{4}\b/
 SECONDS_PER_DAY = 60 * 60 * 24
 SECONDS_PER_MONTH = 30.44 * SECONDS_PER_DAY
