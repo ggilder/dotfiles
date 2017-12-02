@@ -16,6 +16,9 @@ EOD
 
 DATE_PATTERN = /^\d{4}-\d{1,2}-\d{1,2}\b/
 YEAR_RANGE_PATTERN = /^\d{4}-\d{4}\b/
+SECONDS_PER_DAY = 60 * 60 * 24
+SECONDS_PER_MONTH = 30.44 * SECONDS_PER_DAY
+SECONDS_PER_YEAR = 12 * SECONDS_PER_MONTH
 
 if ARGV.delete('--help') || ARGV.delete('-h')
   puts USAGE
@@ -30,6 +33,26 @@ paths = ARGV
 puts "Renaming #{paths.count} files..."
 puts "DRY RUN, no renaming will take place" if dry_run
 
+def delta_description(delta)
+  return "" unless delta
+
+  if delta > SECONDS_PER_YEAR
+    formatted_delta = (delta / SECONDS_PER_YEAR).round(1)
+    unit = "years"
+    flag = "🛑"
+  elsif delta > SECONDS_PER_MONTH
+    formatted_delta = (delta / SECONDS_PER_MONTH).round(1)
+    unit = "months"
+    flag = "⚠️" if formatted_delta > 3
+  else
+    formatted_delta = (delta / SECONDS_PER_DAY).round
+    unit = "days"
+  end
+
+  flag = " #{flag}" if flag
+  return " (∆ #{formatted_delta} #{unit})#{flag}"
+end
+
 paths.each do |path|
   name = File.basename(path)
   if name =~ DATE_PATTERN || name =~ YEAR_RANGE_PATTERN
@@ -39,6 +62,7 @@ paths.each do |path|
   if File.directory?(path)
     mtimes = Dir[File.join(path, '**/*')].select { |f| File.file?(f) }.map { |f| File.mtime(f) }
     mtimes.sort!
+    delta = mtimes.last - mtimes.first
     mtime = use_latest ? mtimes.last : mtimes.first
     unless mtime
       puts %{[INFO] No contents found for "#{path}"; skipping.}
@@ -52,7 +76,7 @@ paths.each do |path|
   if File.exist?(new_path)
     puts %{[ERROR] Destination "#{new_path}" already exists.}
   else
-    puts %(Renaming "#{name}" to "#{new_name}".)
+    puts %(Renaming "#{name}" to "#{new_name}"#{delta_description(delta)})
     unless dry_run
       FileUtils.mv(path, new_path, verbose: true)
     end
