@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
 require 'fileutils'
+require 'open3'
+require 'time'
 
 USAGE = <<EOD
 rename-with-mod-time [--dry-run] [--latest] PATH...
@@ -27,10 +29,12 @@ end
 
 dry_run = ARGV.delete('--dry-run')
 use_latest = ARGV.delete('--latest')
+use_creation = ARGV.delete('--creation')
 
 paths = ARGV
 
 puts "Renaming #{paths.count} files..."
+puts "Using creation time" if use_creation
 puts "DRY RUN, no renaming will take place" if dry_run
 
 def delta_description(delta)
@@ -53,6 +57,26 @@ def delta_description(delta)
   return " (∆ #{formatted_delta} #{unit})#{flag}"
 end
 
+def get_times(files, use_creation: false)
+  times = if use_creation
+            files.map { |f| creation_time(f) }
+          else
+            files.map { |f| File.mtime(f) }
+          end
+  times.sort!
+end
+
+def creation_time(f)
+  Time.parse(
+    Open3.popen3(
+      "stat",
+      "-f",
+      "%SB",
+      f
+    )[1].read.chomp
+  )
+end
+
 paths.each do |path|
   name = File.basename(path)
   if name =~ DATE_PATTERN || name =~ YEAR_RANGE_PATTERN
@@ -60,18 +84,18 @@ paths.each do |path|
     next
   end
   if File.directory?(path)
-    mtimes = Dir[File.join(path, '**/*')].select { |f| File.file?(f) }.map { |f| File.mtime(f) }
-    mtimes.sort!
-    delta = mtimes.last - mtimes.first
-    mtime = use_latest ? mtimes.last : mtimes.first
-    unless mtime
+    files = Dir[File.join(path, '**/*')].select { |f| File.file?(f) }
+    times = get_times(files, use_creation: use_creation)
+    time = use_latest ? times.last : times.first
+    unless time
       puts %{[INFO] No contents found for "#{path}"; skipping.}
       next
     end
+    delta = times.last - times.first
   else
-    mtime = File.mtime(path)
+    time = get_times([path], use_creation: use_creation).first
   end
-  new_name = "#{mtime.strftime('%Y-%m-%d')} #{name}"
+  new_name = "#{time.strftime('%Y-%m-%d')} #{name}"
   new_path = File.join(File.dirname(path), new_name)
   if File.exist?(new_path)
     puts %{[ERROR] Destination "#{new_path}" already exists.}
