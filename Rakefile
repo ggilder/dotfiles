@@ -79,6 +79,16 @@ namespace :clean do
   end
 end
 
+namespace :update do
+  task :fzf do
+    puts "Updating fzf..."
+    system %Q{brew upgrade fzf}
+    latest_fzf = Dir['/usr/local/Cellar/fzf/*'].sort_by { |v| Gem::Version.new(File.basename(v)) }.last
+    system %Q{ln -sfh #{latest_fzf} $HOME/.fzf}
+    system %Q{$HOME/.fzf/install --all}
+  end
+end
+
 task :default => :install
 
 def replace_file(file, timestamp)
