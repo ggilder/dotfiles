@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'open3'
+
 dry_run = true
 files_to_remove = []
 files_to_force_remove = []
@@ -14,11 +16,17 @@ Dir.chdir(dropbox_path) do
     conflicts += 1
     puts path
     original = path.sub(%r{ \(.* conflicted copy [\d-]+\)}, '')
-    if system('cmp', path, original)
+    status = Open3.popen3('cmp', path, original) do |_in, _out, _err, thread|
+      thread.value
+    end
+    if status.success?
       puts "No conflict detected"
       files_to_remove << path
     elsif force
+      puts "Conflicted; will force remove"
       files_to_force_remove << path
+    else
+      puts "Conflicted"
     end
     puts
   end
