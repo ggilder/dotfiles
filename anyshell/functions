@@ -275,3 +275,37 @@ function be() {
   bundle check || bundle install
   bundle exec $@
 }
+
+# Directory hashing/comparison functions
+function shadir-detail() {
+  if [[ $# -lt 1 ]]; then
+    dir="."
+  else
+    dir=$1
+  fi
+  (cd $dir && find -s . -type f -exec shasum {} \;) | grep -v '.DS_Store'
+}
+
+function shadir() {
+  if [[ $# -lt 1 ]]; then
+    dir="."
+  else
+    dir=$1
+  fi
+  shadir-detail $1 | shasum | cut -f 1 -d ' '
+}
+
+function compare-dir-shas() {
+  if [[ $# -lt 2 ]]; then
+    echo "usage: compare-dir-shas directory1 directory2"
+    return 1
+  fi
+  sha1=$(shadir $1)
+  sha2=$(shadir $2)
+  if [[ "$sha1" = "$sha2" ]]; then
+    echo "✅ Match!"
+  else
+    echo "⚠️  Mismatch! $sha1 vs. $sha2"
+    return 1
+  fi
+}
