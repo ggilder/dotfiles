@@ -283,7 +283,7 @@ function shadir-detail() {
   else
     dir=$1
   fi
-  (cd $dir && find -s . -type f -exec shasum {} \;) | grep -v '.DS_Store'
+  (cd $dir && md5deep -lr .) | grep -v '.DS_Store' | grep -v '.fcpcache' | tr '[:upper:]' '[:lower:]' | sort
 }
 
 function shadir() {
