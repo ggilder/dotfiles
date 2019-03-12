@@ -283,7 +283,7 @@ function shadir-detail() {
   else
     dir=$1
   fi
-  (cd $dir && md5deep -lr .) | grep -v '.DS_Store' | grep -v '.fcpcache' | tr '[:upper:]' '[:lower:]' | sort
+  (cd $dir && md5deep -lr .) | grep -v '.DS_Store' | grep -v '.fcpcache' | tr '[:upper:]' '[:lower:]' | sort -k 2
 }
 
 function shadir() {
@@ -293,6 +293,15 @@ function shadir() {
     dir=$1
   fi
   shadir-detail $1 | shasum | cut -f 1 -d ' '
+}
+
+function compare-dirs() {
+  if [[ $# -lt 2 ]]; then
+    echo "usage: compare-dirs directory1 directory2"
+    return 1
+  fi
+
+  diff -U 0 <(shadir-detail $1) <(shadir-detail $2)
 }
 
 function compare-dir-shas() {
