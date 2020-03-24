@@ -13,6 +13,7 @@ time (in the format YYYY-MM-DD) unless the name is already prepended.
 --dry-run     Prints the actions to be taken without performing them.
 --latest      Uses the latest enclosed mod time (rather than default earliest)
               when renaming folders.
+--creation    Rename using creation time rather than mod time.
 --help, -h    Prints this help.
 EOD
 
