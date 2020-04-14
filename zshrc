@@ -58,4 +58,6 @@ tmux-set-window-name
 record_time "tmux-set-window-name"
 
 echo "Started up in $(printf "%d" $(($SECONDS * 1000)))ms"
-print_recorded_times
+if [[ "$SECONDS" -gt "0.5" ]]; then
+  print_recorded_times
+fi
