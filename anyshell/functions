@@ -259,6 +259,17 @@ function parse_git_revision() {
   fi
 }
 
+function ship() {
+  branch=$(git rev-parse --abbrev-ref HEAD)
+  if [[ "$branch" == "HEAD" ]]; then
+    echo "Detached HEAD!"
+  elif [[ "$branch" == "master" ]]; then
+    echo "Don't ship master!"
+  else
+    git push -u origin "$branch"
+  fi
+}
+
 function tmux-set-window-name() {
   if [[ -n "$TMUX" ]]; then
     if [[ -n "$1" ]]; then
