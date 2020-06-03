@@ -174,8 +174,10 @@ nnoremap <leader><tab> :set nolist!<CR>
 
 " Load FZF
 set rtp+=/usr/local/opt/fzf
-
+" Leader-t for FZF
 nnoremap <leader>t :FZF<cr>
+" Leader-d for FZF in same directory
+nnoremap <leader>d :FZF <C-R>=expand('%:h').'/'<cr><cr>
 
 " Search in project/directory
 nnoremap <leader>/ :Ack!<Space>
