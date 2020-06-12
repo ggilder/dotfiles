@@ -1,3 +1,10 @@
 #!/usr/bin/env bash
 
-git branch --merged master | cut -b 3- | grep --invert-match '^master$' | xargs git branch -d
+set -euo pipefail
+
+# Delete regular merges
+git branch --merged master | cut -b 3- | (grep --invert-match '^master$' || echo) | xargs git branch -d
+
+# Delete squash-and-merges
+# copied from https://github.com/not-an-aardvark/git-delete-squashed
+git for-each-ref refs/heads/ "--format=%(refname:short)" | while read -r branch; do (mergeBase=$(git merge-base master "$branch") && [[ $(git cherry master "$(git commit-tree "$(git rev-parse "$branch^{tree}")" -p "$mergeBase" -m _)") == "-"* ]] && git branch -D "$branch") || true; done
