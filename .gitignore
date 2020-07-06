@@ -2,3 +2,5 @@ vim/.netrwhist
 vim/bundle
 config/htop/htoprc
 dlv/.*
+config/coc
+config/configstore
