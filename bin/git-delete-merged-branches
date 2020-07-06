@@ -5,7 +5,16 @@ set -euo pipefail
 # Delete regular merges
 git branch --merged master | cut -b 3- | (grep --invert-match '^master$' || echo) | xargs git branch -d
 
-# Delete squash-and-merges by figuring out branches that would apply no diff to master if merged
+# Two strategies for deleting merged branches:
+
+# Delete branches whose diff from merge-base matches a commit on master
+# i.e. branches merged in a single squashed commit
+# based on https://github.com/not-an-aardvark/git-delete-squashed
+git for-each-ref refs/heads/ "--format=%(refname:short)" | while read -r branch; do (mergeBase=$(git merge-base master "$branch") && [[ $(git cherry master "$(git commit-tree "$(git rev-parse "$branch^{tree}")" -p "$mergeBase" -m _)") == "-"* ]] && git branch -D "$branch") || true; done
+
+# Delete squashed merges by figuring out branches that would apply no diff to
+# master if merged. This attempts to address branches merged in multiple
+# squashed commits.
 git for-each-ref refs/heads/ "--format=%(refname:short)" | while read -r branch; do
 [[ "$branch" == "master" ]] && continue
 ([ -z "$(git merge-tree "$(git merge-base master "$branch")" master "$branch")" ] && git branch -D "$branch") || true
