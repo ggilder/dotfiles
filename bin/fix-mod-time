@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+require 'open3'
+require 'time'
+
+USAGE = <<EOD
+fix-mod-time [--dry-run] PATH...
+
+PATH may be repeated. Each path will have its modification time updated to the
+latest modification time of any file within PATH.
+
+--dry-run     Prints the actions to be taken without performing them.
+--help, -h    Prints this help.
+EOD
+
+if ARGV.delete('--help') || ARGV.delete('-h')
+  puts USAGE
+  exit
+end
+
+dry_run = ARGV.delete('--dry-run')
+
+paths = ARGV
+
+puts "Updating #{paths.count} files..."
+puts "DRY RUN, no renaming will take place" if dry_run
+
+def get_times(files)
+  times = files.map { |f| File.mtime(f) }
+  times.sort!
+end
+
+paths.each do |path|
+  if !File.directory?(path)
+    puts %{[INFO] "#{path}" is not a directory; skipping.}
+    next
+  end
+
+  files = Dir[File.join(path, '**/*')].select { |f| File.file?(f) }
+  times = get_times(files)
+  time = times.last
+  unless time
+    puts %{[INFO] No contents found for "#{path}"; skipping.}
+    next
+  end
+
+  puts %{Updating modification time for "#{path}" to #{time}}
+  unless dry_run
+    File.utime(File.atime(path), time, path)
+  end
+end
+
+puts "Done."
