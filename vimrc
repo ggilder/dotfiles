@@ -228,6 +228,9 @@ endfunction
 nnoremap <leader>r :call CopyCurrentFile()<CR>
 nnoremap <leader>R :call CopyCurrentFileAndLine()<CR>
 
+" CoC rename
+nnoremap <leader>rn <Plug>(coc-rename)
+
 " Command-mode expansion for directory of current file
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 " :Q to quit all open buffers
