@@ -114,6 +114,8 @@ set omnifunc=syntaxcomplete#Complete " Enable omnicompletion
 set ttimeoutlen=0 " Shorter key code delay to speed up entering normal mode with ESC
 set modelines=1 " Use modlines at the end of the file
 set nojoinspaces " Don't put 2 spaces after periods when joining lines with J or gq
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=300
 
 " Ignore various files in open
 " Images
@@ -255,3 +257,7 @@ function LocalSettings()
   endif
 endfunction
 call LocalSettings()
+
+" Go Settings
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
