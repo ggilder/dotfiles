@@ -3,19 +3,41 @@
 require 'fileutils'
 require 'open3'
 require 'time'
+require 'optparse'
+require 'set'
 
-USAGE = <<EOD
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = <<EOD
 rename-with-mod-time [--dry-run] [--latest] PATH...
 
 PATH may be repeated. Each path will be renamed to prepend its modification
 time (in the format YYYY-MM-DD) unless the name is already prepended.
 
---dry-run     Prints the actions to be taken without performing them.
---latest      Uses the latest enclosed mod time (rather than default earliest)
-              when renaming folders.
---creation    Rename using creation time rather than mod time.
---help, -h    Prints this help.
 EOD
+
+  opts.on("--dry-run", "Prints the actions to be taken without performing them") do
+    options[:dry_run] = true
+  end
+
+  opts.on("--latest", "Uses the latest enclosed mod time (rather than default earliest) when renaming folders.") do
+    options[:use_latest] = true
+  end
+
+  opts.on("--creation", "Rename using creation time rather than mod time.") do
+    options[:use_creation] = true
+  end
+
+  opts.on("--format FORMAT", "Rename using the provided format - example: '#DATE# #NAME# misc text #COUNTER#'.") do |format|
+    options[:format] = format
+  end
+
+  opts.on("-h", "--help", "Prints this help") do
+    puts opts
+    exit
+  end
+end.parse!
 
 DATE_PATTERN = /^\d{4}-\d{1,2}(-\d{1,2})?\b/
 YEAR_RANGE_PATTERN = /^\d{4}-\d{4}\b/
@@ -23,20 +45,26 @@ SECONDS_PER_DAY = 60 * 60 * 24
 SECONDS_PER_MONTH = 30.44 * SECONDS_PER_DAY
 SECONDS_PER_YEAR = 12 * SECONDS_PER_MONTH
 
-if ARGV.delete('--help') || ARGV.delete('-h')
-  puts USAGE
-  exit
-end
-
-dry_run = ARGV.delete('--dry-run')
-use_latest = ARGV.delete('--latest')
-use_creation = ARGV.delete('--creation')
-
 paths = ARGV
 
+if options[:format]
+  unless options[:format].include?('#DATE#')
+    $stderr.puts "Format must include '#DATE#'!"
+    exit
+  end
+  unless options[:format].include?('#COUNTER#')
+    $stderr.puts "Format must include '#COUNTER#'!"
+    exit
+  end
+else
+  # use default format
+  options[:format] = "#DATE# #NAME# #COUNTER#"
+end
+
+
 puts "Renaming #{paths.count} files..."
-puts "Using creation time" if use_creation
-puts "DRY RUN, no renaming will take place" if dry_run
+puts "Using creation time" if options[:use_creation]
+puts "DRY RUN, no renaming will take place" if options[:dry_run]
 
 def delta_description(delta)
   return "" unless delta
@@ -78,33 +106,56 @@ def creation_time(f)
   )
 end
 
+# Keep track of new paths we are creating, so that the counter-based renaming
+# will show an accurate result in dry-run mode.
+destination_paths = Set.new
+
 paths.each do |path|
-  name = File.basename(path)
-  if name =~ DATE_PATTERN || name =~ YEAR_RANGE_PATTERN
-    puts %{[INFO] "#{name}" already appears to include date; skipping.}
+  extname = File.extname(path)
+  basename = File.basename(path, extname)
+  if basename =~ DATE_PATTERN || basename =~ YEAR_RANGE_PATTERN
+    puts %{[INFO] "#{basename}#{extname}" already appears to include date; skipping.}
     next
   end
   if File.directory?(path)
     files = Dir[File.join(path, '**/*')].select { |f| File.file?(f) }
-    times = get_times(files, use_creation: use_creation)
-    time = use_latest ? times.last : times.first
+    times = get_times(files, use_creation: options[:use_creation])
+    time = options[:use_latest] ? times.last : times.first
     unless time
       puts %{[INFO] No contents found for "#{path}"; skipping.}
       next
     end
     delta = times.last - times.first
   else
-    time = get_times([path], use_creation: use_creation).first
+    time = get_times([path], use_creation: options[:use_creation]).first
   end
-  new_name = "#{time.strftime('%Y-%m-%d')} #{name}"
-  new_path = File.join(File.dirname(path), new_name)
-  if File.exist?(new_path)
-    puts %{[ERROR] Destination "#{new_path}" already exists.}
-  else
-    puts %(Renaming "#{name}" to "#{new_name}"#{delta_description(delta)})
-    unless dry_run
-      FileUtils.mv(path, new_path, verbose: true)
+
+  # try to find valid name
+  counter = nil
+  new_path = nil
+  new_name = nil
+
+  while true do
+    new_name = options[:format].
+      gsub('#DATE#', time.strftime('%Y-%m-%d')).
+      gsub('#NAME#', basename).
+      gsub('#COUNTER#', counter.to_s).
+      strip + extname
+    new_path = File.join(File.dirname(path), new_name)
+    if File.exist?(new_path) || destination_paths.include?(new_path)
+      # puts %{[ERROR] Destination "#{new_path}" already exists.}
+      counter ||= 0
+      counter += 1
+      redo
+    else
+      destination_paths << new_path
+      break
     end
+  end
+
+  puts %(Renaming "#{basename}#{extname}" to "#{new_name}"#{delta_description(delta)})
+  unless options[:dry_run]
+    FileUtils.mv(path, new_path, verbose: true)
   end
 end
 
