@@ -1,0 +1,80 @@
+#!/usr/bin/env ruby
+
+require 'time'
+require 'open3'
+
+# https://github.com/tonytonyjan/exif
+require 'exif'
+
+require 'pry'
+
+
+USAGE = <<EOD
+fix-photo-times [--dry-run] PATH...
+
+PATH may be repeated. Each path will have its creation and modification times
+updated based on EXIF "Date/Time Original" data (if present in the file).
+
+--dry-run    Print actions to be taken without performing them.
+EOD
+
+if ARGV.delete('--help') || ARGV.delete('-h')
+  puts USAGE
+  exit
+end
+
+dry_run = ARGV.delete('--dry-run')
+
+paths = ARGV
+
+def exif_date_time(path)
+  data = Exif::Data.new(File.open(path))
+  date_time_original = data.date_time_original
+  raise "No Date/Time Original field detected" if date_time_original.nil?
+  parts = date_time_original.split(" ")
+  Time.parse(parts[0].split(":").join("-") + " " + parts[1] + " " + data[:exif][:offset_time_original])
+end
+
+def creation_time(f)
+  result, _, _ = Open3.capture3(
+    "stat",
+    "-f",
+    "%SB",
+    f
+  )
+  Time.parse(result)
+end
+
+def modification_time(f)
+  File.mtime(f)
+end
+
+def set_times(path, time)
+  File.utime(File.atime(path), time, path)
+  _, _, status = Open3.capture3(
+    "SetFile",
+    "-d",
+    time.strftime("%m/%d/%Y %H:%M:%S"),
+    path
+  )
+end
+
+paths.each do |path|
+  path_exif_time = exif_date_time(path)
+  path_creation_time = creation_time(path)
+  path_modification_time = modification_time(path)
+  if path_exif_time != path_creation_time || path_exif_time != path_modification_time
+    if path_exif_time != path_creation_time
+      puts "#{path}: Creation time #{path_creation_time} doesn't match EXIF time #{path_exif_time}"
+    end
+    if path_exif_time != path_modification_time
+      puts "#{path}: Modification time #{path_modification_time} doesn't match EXIF time #{path_exif_time}"
+    end
+    unless dry_run
+      puts "#{path}: Updating creation and modification times."
+      set_times(path, path_exif_time)
+    end
+  else
+    puts "#{path}: no update needed"
+  end
+end
