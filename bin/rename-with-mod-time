@@ -96,14 +96,13 @@ def get_times(files, use_creation: false)
 end
 
 def creation_time(f)
-  Time.parse(
-    Open3.popen3(
-      "stat",
-      "-f",
-      "%SB",
-      f
-    )[1].read.chomp
+  result, _, _ = Open3.capture3(
+    "stat",
+    "-f",
+    "%SB",
+    f
   )
+  Time.parse(result)
 end
 
 # Keep track of new paths we are creating, so that the counter-based renaming
