@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require 'open3'
+
+ARGV.each do |file|
+  ext = File.extname(file)
+  if ext.downcase != ".caf"
+    puts "Skipping non-CAF file #{file}"
+    next
+  end
+
+  target = File.join(File.dirname(file), File.basename(file, ext) + ".wav")
+  out, err, status = Open3.capture3("ffmpeg", "-i", file, target)
+  if status.success?
+    puts "Converted #{file}"
+  else
+    puts "Failed to convert #{file}:"
+    puts err
+  end
+end
