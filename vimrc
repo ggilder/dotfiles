@@ -183,6 +183,7 @@ nnoremap <leader><tab> :set nolist!<CR>
 
 " Load FZF
 set rtp+=/usr/local/opt/fzf
+set rtp+=/opt/homebrew/opt/fzf
 " Leader-t for FZF
 nnoremap <leader>t :FZF<cr>
 " Leader-d for FZF in same directory
