@@ -35,6 +35,7 @@ record_time "functions"
 
 # "z" script
 z_script="/usr/local/etc/profile.d/z.sh"
+[[ -f $z_script ]] || z_script="/opt/homebrew/etc/profile.d/z.sh"
 [[ -f $z_script ]] && source $z_script
 record_time "z"
 
