@@ -10,7 +10,18 @@ task :install => %w(install:dependencies install:submodules install:files clean:
 namespace :install do
   desc "Install dependencies"
   task :dependencies do
-    %w(tmux z fzf reattach-to-user-namespace).each { |formula| brew_install(formula) }
+    %w(
+    tmux
+    nvim
+    z
+    fzf
+    reattach-to-user-namespace
+    rg
+    clipy
+    font-meslo-for-powerline
+    utc-menu-clock
+    htop
+    ).each { |formula| brew_install(formula) }
   end
 
   desc "Update submodules"
@@ -112,5 +123,5 @@ def link_file(file)
 end
 
 def brew_install(formula)
-  puts `brew list #{formula} || brew install #{formula}`
+  puts `brew list #{formula} >/dev/null 2>&1 && echo "#{formula} already installed" || brew install #{formula}`
 end
