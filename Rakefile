@@ -5,9 +5,14 @@ require 'fileutils'
 home = `printf $HOME`
 timestamp = Time.now.strftime("%Y-%m-%d_%I-%M-%S")
 
-task :install => %w(install:submodules install:files clean:symlinks)
+task :install => %w(install:dependencies install:submodules install:files clean:symlinks update:fzf)
 
 namespace :install do
+  desc "Install dependencies"
+  task :dependencies do
+    %w(tmux z fzf reattach-to-user-namespace).each { |formula| brew_install(formula) }
+  end
+
   desc "Update submodules"
   task :submodules do
     Dir.chdir(File.dirname(__FILE__)) { puts `git submodule sync && git submodule update --init` }
@@ -83,7 +88,7 @@ namespace :update do
   task :fzf do
     puts "Updating fzf..."
     system %Q{brew upgrade fzf}
-    latest_fzf = Dir['/usr/local/Cellar/fzf/*'].sort_by { |v| Gem::Version.new(File.basename(v)) }.last
+    latest_fzf = Dir['{/usr/local,/opt/homebrew}/Cellar/fzf/*'].sort_by { |v| Gem::Version.new(File.basename(v)) }.last
     system %Q{ln -sfh #{latest_fzf} $HOME/.fzf}
     system %Q{$HOME/.fzf/install --all}
   end
@@ -104,4 +109,8 @@ end
 def link_file(file)
   puts "linking ~/.#{file}"
   system %Q{ln -s "$PWD/#{file}" "$HOME/.#{file}"}
+end
+
+def brew_install(formula)
+  puts `brew list #{formula} || brew install #{formula}`
 end
