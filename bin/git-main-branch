@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if git show-ref --verify --quiet refs/heads/main ; then
+  echo "main"
+  exit 0
+fi
+
+if git show-ref --verify --quiet refs/heads/master ; then
+  echo "master"
+  exit 0
+fi
+
+exit 1

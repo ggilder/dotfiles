@@ -51,7 +51,7 @@ alias ggg="git log --graph --pretty=format:'%C(yellow)%h %Creset(%cr)%nAuthor: %
 alias gggg="git log --pretty=format:'%C(yellow)%h %Creset(%cr) %C(green)%aN <%aE>%Creset%n%Cblue%s%Creset%n ' --numstat --color | less -R"
 alias gitmine="git log --author='$(git config --get user.name)' --pretty=format:'%Cgreen%ad%Creset %s%C(yellow)%d%Creset %Cred(%h)%Creset' --date=short"
 alias gb="git checkout \$(git branch -r | cut -c 3- | sed 's|[^/]*/||' | fzf)"
-alias gri='git fetch && git rebase -i origin/master'
+alias gri="git fetch && git rebase -i origin/\$(git-main-branch)"
 alias grc='git rebase --continue'
 alias gch='git copy-head'
 
