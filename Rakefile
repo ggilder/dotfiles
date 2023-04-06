@@ -21,6 +21,7 @@ namespace :install do
     font-meslo-for-powerline
     utc-menu-clock
     htop
+    tig
     ).each { |formula| brew_install(formula) }
   end
 
