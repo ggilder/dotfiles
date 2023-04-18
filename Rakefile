@@ -10,19 +10,20 @@ task :install => %w(install:dependencies install:submodules install:files clean:
 namespace :install do
   desc "Install dependencies"
   task :dependencies do
-    %w(
+    brew_bulk_install(%w(
     tmux
-    nvim
+    neovim
     z
     fzf
     reattach-to-user-namespace
-    rg
+    ripgrep
     clipy
     font-meslo-for-powerline
     utc-menu-clock
     htop
     tig
-    ).each { |formula| brew_install(formula) }
+    git-delta
+    ))
   end
 
   desc "Update submodules"
@@ -125,4 +126,13 @@ end
 
 def brew_install(formula)
   puts `brew list #{formula} >/dev/null 2>&1 && echo "#{formula} already installed" || brew install #{formula}`
+end
+
+def brew_bulk_install(formulae)
+  installed = `brew list -1`.split("\n")
+  installed = installed & formulae
+  puts "Already installed: #{installed.join(", ")}" unless installed.empty?
+  (formulae - installed).each do |formula|
+    system "brew install #{formula}"
+  end
 end
