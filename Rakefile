@@ -23,6 +23,7 @@ namespace :install do
     htop
     tig
     git-delta
+    tree
     ))
   end
 
