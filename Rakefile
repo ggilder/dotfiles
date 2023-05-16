@@ -24,6 +24,7 @@ namespace :install do
     tig
     git-delta
     tree
+    md5deep
     ))
   end
 
