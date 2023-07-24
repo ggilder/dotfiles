@@ -56,3 +56,5 @@
   path = ~/.gitconfig.local
 [init]
   defaultBranch = main
+[rebase]
+  instructionFormat = (%an <%ae>) %s
