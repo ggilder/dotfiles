@@ -25,6 +25,7 @@ namespace :install do
     git-delta
     tree
     md5deep
+    watch
     ))
   end
 
