@@ -26,6 +26,7 @@ namespace :install do
     tree
     md5deep
     watch
+    jq
     ))
   end
 
