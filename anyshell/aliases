@@ -54,6 +54,7 @@ alias gb="git checkout \$(git branch -r | cut -c 3- | sed 's|[^/]*/||' | fzf)"
 alias gri="git fetch && git rebase -i origin/\$(git-main-branch)"
 alias grc='git rebase --continue'
 alias gch='git copy-head'
+alias gup='git update'
 
 # git pairing
 alias me_and="git-pair me_and"
