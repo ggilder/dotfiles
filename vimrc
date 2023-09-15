@@ -40,6 +40,7 @@ Plug 'uarun/vim-protobuf'
 Plug 'vim-ruby/vim-ruby'
 Plug 'vim-scripts/VimClojure'
 Plug 'vim-scripts/greplace.vim'
+Plug 'bkad/CamelCaseMotion'
 call plug#end()
 
 " Enable syntax highlighting
@@ -162,18 +163,18 @@ vnoremap p "_dP
 nnoremap gV `[v`]
 
 " CONTROL KEYS
-" control-w to write file in insert mode
-inoremap <C-w> <C-o>:w<CR>
+" control-s to write file in insert mode
+inoremap <C-s> <C-o>:w<CR>
 " close window
 nnoremap <C-x> <C-w>q
 " Type C-A after some math to calculate the result
 ino <C-A> <C-O>yiW<End>=<C-R>=<C-R>0<CR>
 
 " LEADER KEYS
-" leader-w to write file
-nnoremap <leader>w :w<CR>
-" leader-s to toggle highlighting on/off, and show current value.
-nnoremap <leader>s :set hlsearch! hlsearch?<CR>
+" leader-s to write file
+nnoremap <leader>s :w<CR>
+" leader-a to toggle highlighting on/off, and show current value.
+nnoremap <leader>a :set hlsearch! hlsearch?<CR>
 " leader-c to toggle cursor line
 nnoremap <leader>c :set cursorcolumn! cursorline!<CR>
 " Switch between the last two files
@@ -191,22 +192,14 @@ nnoremap <leader>t :FZF<cr>
 " Leader-d for FZF in same directory
 nnoremap <leader>d :FZF <C-R>=expand('%:h').'/'<cr><cr>
 
+" Open files from FZF in new tab by default
+let g:fzf_action = { 'enter': 'tab split' }
+
 " Search in project/directory
 nnoremap <leader>/ :Ack!<Space>
 " Search current word in project/directory
 " With or without word boundaries
 function SearchInProject()
-" if has('nvim')
-"function! s:Ack!(file_mode, args)
-  " let cmd = "ag --vimgrep --smart-case ".substitute(a:args, '\\', '\\\\', 'g')
-  " let custom_maker = neomake#utils#MakerFromCommand('bash', cmd)
-  " let custom_maker.name = cmd
-  " let custom_maker.remove_invalid_entries = 0
-  " let custom_maker.place_signs = 0
-  " let enabled_makers =  [custom_maker]
-  " call neomake#Make({'enabled_makers': enabled_makers, 'file_mode': a:file_mode}) | echo "running: " . cmd
-" endfunction
-" command! -bang -nargs=* -complete=file Ack! call s:Ack!(<bang>0, <q-args>)
   let word = expand("<cword>")
   let @/=word
   set hls
@@ -307,3 +300,6 @@ call LocalSettings()
 " Go Settings
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
+
+" CamelCaseMotion
+let g:camelcasemotion_key = '<leader>'
