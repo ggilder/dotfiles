@@ -13,6 +13,5 @@ Installation
   rake install
 
 To-do:
-- Add some ssh-add magic to automatically load oddly-named keys (not just id_rsa, id_dsa, identity)
 - Migrate more stuff from https://github.com/ggilder/newmac/blob/master/babushka-deps/newmac.rb
 - Include vim setup (install plugins)
