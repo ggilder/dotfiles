@@ -183,6 +183,9 @@ nnoremap <leader><leader> <c-^>
 nnoremap <leader>v <C-w>v<C-w>l
 " Toggle invisible characters
 nnoremap <leader><tab> :set nolist!<CR>
+" Navigate tabs
+nnoremap <leader>h gT
+nnoremap <leader>l gt
 
 " Load FZF
 set rtp+=/usr/local/opt/fzf
