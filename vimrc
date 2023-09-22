@@ -41,6 +41,7 @@ Plug 'vim-ruby/vim-ruby'
 Plug 'vim-scripts/VimClojure'
 Plug 'vim-scripts/greplace.vim'
 Plug 'bkad/CamelCaseMotion'
+Plug 'github/copilot.vim'
 call plug#end()
 
 " Enable syntax highlighting
