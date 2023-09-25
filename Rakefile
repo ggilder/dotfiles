@@ -27,6 +27,7 @@ namespace :install do
     md5deep
     watch
     jq
+    gh
     ))
   end
 
