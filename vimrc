@@ -42,6 +42,7 @@ Plug 'vim-scripts/VimClojure'
 Plug 'vim-scripts/greplace.vim'
 Plug 'bkad/CamelCaseMotion'
 Plug 'github/copilot.vim'
+Plug 'djoshea/vim-autoread'
 call plug#end()
 
 " Enable syntax highlighting
