@@ -222,11 +222,11 @@ nnoremap <leader>f :call SearchInProject()<CR>
 nnoremap <leader>F :call SearchWordInProject()<CR>
 
 function CopyCurrentFileAndLine()
-  call system('echo ' . expand('%') . ':' . line('.') . ' | pbcopy')
+  call system('echo -n ' . expand('%') . ':' . line('.') . ' | pbcopy')
 endfunction
 
 function CopyCurrentFile()
-  call system('echo ' . expand('%') . ' | pbcopy')
+  call system('echo -n ' . expand('%') . ' | pbcopy')
 endfunction
 
 nnoremap <leader>r :call CopyCurrentFile()<CR>
