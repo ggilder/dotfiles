@@ -73,10 +73,10 @@ autocmd FileType text setl wrap linebreak nolist
 autocmd FileType sass setl iskeyword+=-
 " go file formatting
 autocmd FileType go setl sw=4 ts=4 noet nolist
-" php file formatting
-autocmd FileType php setl sw=4 ts=4 et nolist
 " auto fix go imports on save
 let g:go_imports_autosave = 1
+" php file formatting
+autocmd FileType php setl sw=4 ts=4 et nolist
 
 " protos
 autocmd FileType proto setl sw=4 ts=4 noet
