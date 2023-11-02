@@ -83,6 +83,9 @@ autocmd FileType proto setl sw=4 ts=4 noet
 " yaml, coffee folding
 autocmd FileType yaml,coffee setl foldmethod=expr foldexpr=(getline(v:lnum)=~'^$')?-1:((indent(v:lnum)<indent(v:lnum+1))?('>'.indent(v:lnum+1)):indent(v:lnum))
 autocmd FileType yaml,coffee normal zR
+" json folding - this is quite slow with files above a few hundred kb though
+autocmd FileType json setl foldmethod=syntax
+autocmd FileType json normal zR
 
 let mapleader = "\<Space>"
 nnoremap ; :
