@@ -79,7 +79,7 @@ let g:go_imports_autosave = 1
 autocmd FileType php setl sw=4 ts=4 et nolist
 
 " protos
-autocmd FileType proto setl sw=4 ts=4 noet
+autocmd FileType proto setl sw=2 ts=2 et
 " yaml, coffee folding
 autocmd FileType yaml,coffee setl foldmethod=expr foldexpr=(getline(v:lnum)=~'^$')?-1:((indent(v:lnum)<indent(v:lnum+1))?('>'.indent(v:lnum+1)):indent(v:lnum))
 autocmd FileType yaml,coffee normal zR
