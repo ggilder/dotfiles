@@ -1,7 +1,7 @@
 #echo "=> Loading `pwd`/paths"
 
 export GOPATH="$HOME/go"
-export PATH="$HOME/bin:/opt/homebrew/bin:$GOPATH/bin:$HOME/.rvm/bin:/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/share/npm/bin:/usr/local/heroku/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/local/git/bin:$PATH"
+export PATH="$HOME/bin:/opt/homebrew/bin:/opt/homebrew/sbin:$GOPATH/bin:$HOME/.rvm/bin:/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/share/npm/bin:/usr/local/heroku/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/local/git/bin:$PATH"
 export MANPATH="/opt/homebrew/share/man:/usr/local/share/man:$MANPATH"
 export NODE_PATH="/opt/homebrew/lib/node_modules:/usr/local/lib/node_modules:$NODE_PATH"
 
