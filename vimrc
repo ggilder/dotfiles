@@ -87,6 +87,9 @@ autocmd FileType yaml,coffee normal zR
 autocmd FileType json setl foldmethod=syntax
 autocmd FileType json normal zR
 
+" c: autoindent with four spaces, always expand tabs
+autocmd FileType cpp set sw=4 sts=4 et
+
 let mapleader = "\<Space>"
 nnoremap ; :
 
