@@ -4,6 +4,9 @@ export GOPATH="$HOME/go"
 export PATH="$HOME/bin:/opt/homebrew/bin:/opt/homebrew/sbin:$GOPATH/bin:$HOME/.rvm/bin:/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/share/npm/bin:/usr/local/heroku/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/local/git/bin:$PATH"
 export MANPATH="/opt/homebrew/share/man:/usr/local/share/man:$MANPATH"
 export NODE_PATH="/opt/homebrew/lib/node_modules:/usr/local/lib/node_modules:$NODE_PATH"
+export C_INCLUDE_PATH="/opt/homebrew/include:$C_INCLUDE_PATH"
+export LIBRARY_PATH="/opt/homebrew/lib:$LIBRARY_PATH"
+export DYLD_LIBRARY_PATH="/opt/homebrew/lib:$DYLD_LIBRARY_PATH"
 
 # Deduplication of PATH, etc.
 # Based on https://github.com/mislav/dotfiles/blob/master/bin/consolidate-path
