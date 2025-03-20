@@ -43,6 +43,7 @@ Plug 'vim-scripts/greplace.vim'
 Plug 'bkad/CamelCaseMotion'
 Plug 'github/copilot.vim'
 Plug 'djoshea/vim-autoread'
+Plug 'hashivim/vim-terraform'
 call plug#end()
 
 " Enable syntax highlighting
