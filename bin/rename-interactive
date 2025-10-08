@@ -1,0 +1,82 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'fileutils'
+require 'tempfile'
+
+options = { dry_run: false }
+OptionParser.new do |opts|
+  opts.banner = "Usage: rename_files.rb [options] DIRECTORY"
+  opts.on("--dry-run", "Perform a dry run without renaming files") do
+    options[:dry_run] = true
+  end
+end.parse!
+
+if ARGV.length != 1
+  puts "Error: You must provide a directory path."
+  exit 1
+end
+
+dir = ARGV.first
+
+unless Dir.exist?(dir)
+  puts "Error: Directory not found: #{dir}"
+  exit 1
+end
+
+# List files in the directory (non-recursive)
+original_names = Dir.children(dir).sort
+
+if original_names.empty?
+  puts "No files found in directory: #{dir}"
+  exit 0
+end
+
+# Create a temp file path instead of holding it open
+temp_path = File.join(Dir.tmpdir, "rename_#{Time.now.to_i}.txt")
+File.write(temp_path, original_names.join("\n"))
+
+# Let the user edit the file
+editor = ENV['EDITOR'] || 'vi'
+system(editor, temp_path)
+
+# Read back edited names
+renamed_names = File.read(temp_path).split("\n")
+
+File.delete(temp_path) if File.exist?(temp_path)
+
+if original_names.length != renamed_names.length
+  puts "Error: The number of renamed entries must match the original count (#{original_names.length})."
+  exit 1
+end
+
+# Validate no destination collisions
+if renamed_names.uniq.length != renamed_names.length
+  puts "Error: Duplicate names detected in destination list."
+  exit 1
+end
+
+# Validate original files still exist
+missing_files = original_names.reject { |name| File.exist?(File.join(dir, name)) }
+unless missing_files.empty?
+  puts "Error: The following original files do not exist:"
+  puts missing_files
+  exit 1
+end
+
+# Perform renaming or dry run
+original_names.zip(renamed_names).each do |old_name, new_name|
+  old_path = File.join(dir, old_name)
+  new_path = File.join(dir, new_name)
+  dirname = File.dirname(new_path)
+  FileUtils.mkdir_p(dirname) unless Dir.exist?(dirname)
+
+  if options[:dry_run]
+    puts "Would rename: #{old_path} -> #{new_path}"
+  else
+    File.rename(old_path, new_path)
+    puts "Renamed: #{old_path} -> #{new_path}"
+  end
+end
+
+puts "Operation completed successfully."
