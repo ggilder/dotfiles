@@ -7,7 +7,9 @@ These are config files to set up a system the way I like it.
 
 Installation
 
-  mkdir -p ~/src
-  git clone --recursive git@github.com:ggilder/dotfiles ~/src/dotfiles
-  cd ~/src/dotfiles
-  rake install
+```
+    mkdir -p ~/src
+    git clone --recursive git@github.com:ggilder/dotfiles ~/src/dotfiles
+    cd ~/src/dotfiles
+    rake install
+```
