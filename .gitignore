@@ -4,3 +4,6 @@ config/htop/htoprc
 dlv/.*
 config/coc
 config/configstore
+config/gh
+config/iterm2
+config/github-copilot

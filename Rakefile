@@ -5,7 +5,7 @@ require 'fileutils'
 home = `printf $HOME`
 timestamp = Time.now.strftime("%Y-%m-%d_%I-%M-%S")
 
-task :install => %w(install:dependencies install:submodules install:files clean:symlinks update:fzf)
+task :install => %w(install:dependencies install:submodules clean:symlinks install:files update:fzf install:vimplugs)
 
 namespace :install do
   desc "Install dependencies"
@@ -85,6 +85,12 @@ namespace :install do
       puts "linking ~/.ssh/config"
       system %Q{ln -s "$PWD/ssh/config" "#{home}/.ssh/config"}
     end
+  end
+
+  desc "Install vim plugins"
+  task :vimplugs do
+    puts "Updating vim plugins..."
+    system %Q{nvim --headless +PlugUpdate +PlugInstall +qall}
   end
 end
 

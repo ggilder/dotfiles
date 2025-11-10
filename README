@@ -1,4 +1,4 @@
-Gabriel's Dot Files
+# Gabriel's Dot Files
 
 Modified from Faun's Dot Files
 Credit to Ben Orenstein & Ryan Bates
@@ -11,8 +11,3 @@ Installation
   git clone --recursive git@github.com:ggilder/dotfiles ~/src/dotfiles
   cd ~/src/dotfiles
   rake install
-
-To-do:
-- Add some ssh-add magic to automatically load oddly-named keys (not just id_rsa, id_dsa, identity)
-- Migrate more stuff from https://github.com/ggilder/newmac/blob/master/babushka-deps/newmac.rb
-- Include vim setup (install plugins)
