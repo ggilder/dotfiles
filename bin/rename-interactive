@@ -71,7 +71,11 @@ original_names.zip(renamed_names).each do |old_name, new_name|
   dirname = File.dirname(new_path)
   FileUtils.mkdir_p(dirname) unless Dir.exist?(dirname)
 
-  if options[:dry_run]
+  if old_name == new_name
+    puts "Skipping (no change): #{old_path}"
+  elsif File.exist?(new_path)
+    puts "Error: Destination file already exists: #{new_path}"
+  elsif options[:dry_run]
     puts "Would rename: #{old_path} -> #{new_path}"
   else
     File.rename(old_path, new_path)
