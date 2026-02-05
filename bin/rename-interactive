@@ -27,6 +27,9 @@ end
 # List files in the directory (non-recursive)
 original_names = Dir.children(dir).sort
 
+# Skip `.DS_Store` and similar system files
+original_names.reject! { |name| name.start_with?('.') }
+
 if original_names.empty?
   puts "No files found in directory: #{dir}"
   exit 0
