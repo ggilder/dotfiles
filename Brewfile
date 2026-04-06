@@ -19,8 +19,12 @@ cask "clipy"
 cask "copilot-cli"
 cask "font-meslo-for-powerline"
 cask "ghostty"
+cask "google-chrome"
+cask "paulxstretch"
 cask "pd"
 cask "utc-menu-clock"
+cask "visual-studio-code"
+cask "vlc"
 mas "1Password for Safari", id: 1569813296
 mas "AdGuard Mini", id: 1440147259
 mas "AmorphousDiskMark", id: 1168254295
