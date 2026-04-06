@@ -1,8 +1,8 @@
 # Appearance
 maximize = true
-macos-titlebar-style = hidden
 window-padding-x = 8
 window-padding-y = 8
+macos-titlebar-style = native
 theme = Subliminal
 font-family = "JetBrains Mono"
 font-size = 11

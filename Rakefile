@@ -10,25 +10,12 @@ task :install => %w(install:dependencies install:submodules clean:symlinks insta
 namespace :install do
   desc "Install dependencies"
   task :dependencies do
-    brew_bulk_install(%w(
-    tmux
-    neovim
-    z
-    fzf
-    reattach-to-user-namespace
-    ripgrep
-    clipy
-    font-meslo-for-powerline
-    utc-menu-clock
-    htop
-    tig
-    git-delta
-    tree
-    md5deep
-    watch
-    jq
-    gh
-    ))
+    ensure_homebrew_installed
+    brew_bundle || exit(1)
+    run_app("/Applications/Clipy.app")
+    run_app("/Applications/UTCMenuClock.app")
+    run_app("/Applications/Sleep Control Center.app")
+    run_app("/Applications/Hidden Bar.app")
   end
 
   desc "Update submodules"
@@ -40,23 +27,23 @@ namespace :install do
   task :files do
 
     replace_all = false
-    Dir['*'].each do |file|
-      next if %w[Rakefile README LICENSE bin ssh].include? file or %r{(.*)\.pub} =~ file
-
-      dest = File.join(ENV['HOME'], ".#{file}")
+    dot_dir = Pathname.new(File.expand_path("./dot"))
+    Dir["#{dot_dir}/*"].each do |file|
+      dest_name = Pathname.new(file).relative_path_from(dot_dir)
+      dest = File.join(ENV['HOME'], ".#{dest_name}")
       if File.exist?(dest) || File.symlink?(dest)
         if replace_all
-          replace_file(file, timestamp)
-        elsif Pathname.new(dest).realpath == Pathname.new(ENV['PWD']).join(file).realpath
-          puts "correct symlink already exists for "+File.join(ENV['PWD'], file)
+          replace_symlink(file, dest, timestamp)
+        elsif (Pathname.new(dest).realpath rescue nil) == Pathname.new(file).realpath
+          puts "correct symlink already exists for #{dest}"
         else
-          print "overwrite ~/.#{file}? [ynaq] "
+          print "overwrite ~/.#{dest_name}? [ynaq] "
           case $stdin.gets.chomp
           when 'a'
             replace_all = true
-            replace_file(file, timestamp)
+            replace_symlink(file, dest, timestamp)
           when 'y'
-            replace_file(file, timestamp)
+            replace_symlink(file, dest, timestamp)
           when 'q'
             exit
           else
@@ -64,7 +51,7 @@ namespace :install do
           end
         end
       else
-        link_file(file)
+        link_file(file, dest)
       end
     end
 
@@ -72,7 +59,7 @@ namespace :install do
 
     Dir['bin/*'].each do |file|
       filepath = File.expand_path("#{home}/#{file}")
-      if !(File.exist? filepath)
+      if !(File.exist?(filepath) || File.symlink?(filepath))
         puts "linking ~/#{file}"
         system %Q{ln -s "$PWD/#{file}" "#{home}/#{file}"}
       else
@@ -120,30 +107,35 @@ end
 
 task :default => :install
 
-def replace_file(file, timestamp)
+def replace_symlink(source, dest, timestamp)
+  raise "Unsafe destination!" unless dest.start_with?("#{ENV['HOME']}/.")
   system %Q{mkdir -p "$HOME/_dot_backups/#{timestamp}"}
-  if File.exist?(File.join(ENV['HOME'], ".#{file}"))
-    puts "Backing up $HOME/.#{file} to $HOME/_dot_backups/#{timestamp}/#{file}"
-    system %Q{cp -RLi "$HOME/.#{file}" "$HOME/_dot_backups/#{timestamp}/#{file}"}
-    system %Q{rm "$HOME/.#{file}"}
+  if File.exist?(dest) || File.symlink?(dest)
+    puts "Backing up #{dest} to $HOME/_dot_backups/#{timestamp}/"
+    system %Q{cp -a "#{dest}" "$HOME/_dot_backups/#{timestamp}/"}
+    system %Q{rm -rf "#{dest}"}
   end
-  link_file(file)
+  link_file(source, dest)
 end
 
-def link_file(file)
-  puts "linking ~/.#{file}"
-  system %Q{ln -s "$PWD/#{file}" "$HOME/.#{file}"}
+def link_file(file, dest)
+  puts "linking #{dest} -> #{file}"
+  system %Q{ln -s "#{file}" "#{dest}"}
 end
 
-def brew_install(formula)
-  puts `brew list #{formula} >/dev/null 2>&1 && echo "#{formula} already installed" || brew install #{formula}`
+def ensure_homebrew_installed
+  if !system("which brew")
+    system(%{/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"})
+    ENV["PATH"] = "/opt/homebrew/bin/:#{ENV["PATH"]}"
+  end
 end
 
-def brew_bulk_install(formulae)
-  installed = `brew list -1`.split("\n")
-  installed = installed & formulae
-  puts "Already installed: #{installed.join(", ")}" unless installed.empty?
-  (formulae - installed).each do |formula|
-    system "brew install #{formula}"
+def brew_bundle
+  system("brew bundle")
+end
+
+def run_app(app)
+  if !system("ps aux | grep '#{app}' | grep -v grep")
+    system("open", app)
   end
 end

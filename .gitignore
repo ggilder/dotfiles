@@ -1,5 +1,5 @@
-vim/.netrwhist
-vim/bundle
-config/htop/htoprc
+dot/vim/.netrwhist
+dot/vim/bundle
+dot/config/htop/htoprc
 dlv/.*
-config/*
+dot/config/*
