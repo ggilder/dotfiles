@@ -5,7 +5,7 @@ require 'fileutils'
 home = `printf $HOME`
 timestamp = Time.now.strftime("%Y-%m-%d_%I-%M-%S")
 
-task :install => %w(install:dependencies install:submodules clean:symlinks install:files update:fzf install:vimplugs)
+task :install => %w(install:dependencies install:submodules clean:symlinks install:files update:fzf install:vimplugs install:agent_config)
 
 namespace :install do
   desc "Install dependencies"
@@ -78,6 +78,25 @@ namespace :install do
   task :vimplugs do
     puts "Updating vim plugins..."
     system %Q{nvim --headless +PlugUpdate +PlugInstall +qall}
+  end
+
+  desc "Install coding agent config"
+  task :agent_config do
+    source = File.expand_path("agents/AGENTS.md")
+    target = Pathname.new("~").expand_path.join(".claude", "CLAUDE.md")
+    if !target.exist?
+      link_file(source, target.to_s)
+    else
+      print "overwrite #{target.to_s}? [ynq] "
+      case $stdin.gets.chomp
+      when 'y'
+        replace_symlink(source, target.to_s, timestamp)
+      when 'q'
+        exit
+      else
+        puts "skipping ~/.#{file}"
+      end
+    end
   end
 end
 

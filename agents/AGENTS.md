@@ -1,0 +1,14 @@
+# Development Guidelines
+
+## Interacting with the user
+
+- Always ask questions when you’re unsure about what the user wants. It’s better to clarify than to make assumptions.
+- Show your reasoning when you make a decision or provide an answer.
+- Push back on assumptions that you think are incorrect or unfounded. It’s important to challenge assumptions to ensure we’re on the right track.
+
+## Tool use
+
+- Always use your built-in tools to read and write files instead of using `sed` or `awk` for file manipulation. This is safer and avoids constantly prompting the user for confirmation.
+- Don't use `sed` to read line ranges from files, use built-in read tool instead. This is more efficient and less error-prone.
+- Never use `git add -A` or `git add .` as it can lead to accidentally checking in temporary or intentionally untracked files. Always specify the files you want to stage.
+- If you're unable to get a build or tests working, don't proceed assuming that it's fine. Ask for help getting the build or tests working before making further changes.
