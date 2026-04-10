@@ -83,18 +83,24 @@ namespace :install do
   desc "Install coding agent config"
   task :agent_config do
     source = File.expand_path("agents/AGENTS.md")
-    target = Pathname.new("~").expand_path.join(".claude", "CLAUDE.md")
-    if !target.exist?
-      link_file(source, target.to_s)
-    else
-      print "overwrite #{target.to_s}? [ynq] "
-      case $stdin.gets.chomp
-      when 'y'
-        replace_symlink(source, target.to_s, timestamp)
-      when 'q'
-        exit
+    targets = [
+      Pathname.new("~").expand_path.join(".claude", "CLAUDE.md"),
+      Pathname.new("~").expand_path.join(".copilot", "copilot-instructions.md"),
+    ]
+    targets.each do |target|
+      if !target.exist?
+        target.dirname.mkpath
+        link_file(source, target.to_s)
       else
-        puts "skipping ~/.#{file}"
+        print "overwrite #{target.to_s}? [ynq] "
+        case $stdin.gets.chomp
+        when 'y'
+          replace_symlink(source, target.to_s, timestamp)
+        when 'q'
+          exit
+        else
+          puts "skipping ~/.#{file}"
+        end
       end
     end
   end
