@@ -15,3 +15,4 @@
 ## Development process
 - If you're unable to get a build or tests working, don't proceed assuming that it's fine. Ask for help getting the build or tests working before making further changes.
 - Always run at least targeted tests related to your changes before proceeding. Ideally, use test-driven development (TDD) practices to ensure code is well-structured and that tests actually cover the intended functionality.
+- Before committing changes, make sure to check if the repository uses a linter (e.g. `golangci-lint` or `rubocop`) and run it to ensure your code adheres to the project's coding standards.
