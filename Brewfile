@@ -1,4 +1,5 @@
 brew "docker"
+brew "exiftool"
 brew "fzf"
 brew "gh"
 brew "git-delta"
