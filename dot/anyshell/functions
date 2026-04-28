@@ -274,13 +274,13 @@ function ship() {
 
 function tmux-set-window-name() {
   if [[ -n "$TMUX" ]]; then
+    local window_name
     if [[ -n "$1" ]]; then
-      local window_name="$1"
+      window_name="$1"
     else
-      local window_name="$(basename $PWD)"
+      window_name="$(basename $PWD)"
     fi
-    pane=$(tmux list-panes -a | grep "$TMUX_PANE" | sed 's/[0-9]*:\([0-9]*\).*/\1/')
-    tmux rename-window -t $pane "$window_name"
+    tmux rename-window -t "$(tmux display-message -p '#{window_id}')" "$window_name"
   fi
 }
 
