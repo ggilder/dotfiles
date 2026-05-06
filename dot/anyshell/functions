@@ -280,7 +280,7 @@ function tmux-set-window-name() {
     else
       window_name="$(basename $PWD)"
     fi
-    tmux rename-window -t "$(tmux display-message -p '#{window_id}')" "$window_name"
+    tmux rename-window -t "$(tmux display-message -p -t "$TMUX_PANE" '#{window_id}')" "$window_name"
   fi
 }
 
