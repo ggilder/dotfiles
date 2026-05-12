@@ -5,3 +5,5 @@
 \#*#
 .rbx
 .claude
+.worktrees
+.bk.yaml
