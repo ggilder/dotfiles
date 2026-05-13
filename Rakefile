@@ -29,7 +29,20 @@ namespace :install do
     replace_all = false
     dot_dir = Pathname.new(File.expand_path("./dot"))
     Dir["#{dot_dir}/*"].each do |file|
-      dest_name = Pathname.new(file).relative_path_from(dot_dir)
+      dest_name = Pathname.new(file).relative_path_from(dot_dir).to_s
+
+      if dest_name.end_with?(".example")
+        stripped = dest_name.sub(/\.example\z/, "")
+        dest = File.join(ENV['HOME'], ".#{stripped}")
+        if File.exist?(dest) || File.symlink?(dest)
+          puts "~/.#{stripped} already exists; leaving it alone (example: #{file})"
+        else
+          puts "copying #{file} -> #{dest}"
+          FileUtils.cp(file, dest)
+        end
+        next
+      end
+
       dest = File.join(ENV['HOME'], ".#{dest_name}")
       if File.exist?(dest) || File.symlink?(dest)
         if replace_all
@@ -72,6 +85,8 @@ namespace :install do
       puts "linking ~/.ssh/config"
       system %Q{ln -s "$PWD/ssh/config" "#{home}/.ssh/config"}
     end
+
+    check_gitconfig_includes_behavior
   end
 
   desc "Install vim plugins"
@@ -146,6 +161,22 @@ end
 def link_file(file, dest)
   puts "linking #{dest} -> #{file}"
   system %Q{ln -s "#{file}" "#{dest}"}
+end
+
+def check_gitconfig_includes_behavior
+  gitconfig = File.expand_path("~/.gitconfig")
+  unless File.exist?(gitconfig)
+    puts "WARNING: ~/.gitconfig does not exist; behavior include not verified."
+    return
+  end
+
+  contents = File.read(gitconfig)
+  return if contents.include?("gitconfig.behavior")
+
+  puts "WARNING: ~/.gitconfig does not include ~/.gitconfig.behavior."
+  puts "  Add the following to ~/.gitconfig:"
+  puts "    [include]"
+  puts "      path = ~/.gitconfig.behavior"
 end
 
 def ensure_homebrew_installed
