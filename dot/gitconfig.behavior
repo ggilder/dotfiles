@@ -40,7 +40,7 @@
   autosetuprebase = always
 
 [push]
-  default = tracking
+  default = simple
 
 [merge]
   conflictstyle = diff3
