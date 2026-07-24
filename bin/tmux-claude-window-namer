@@ -4,24 +4,29 @@
 # `claude` pane running in it (e.g. right after /rename in Claude Code, or
 # when it goes from working to waiting on you).
 #
+# Usage:
+#   tmux-claude-window-namer                 run the background daemon
+#   tmux-claude-window-namer --print-name ID  print the claude-derived name
+#                                             for one window (or nothing),
+#                                             without touching tmux state
+#
+# The --print-name mode exists so dot/anyshell/functions' zsh-side
+# tmux-set-window-name can react instantly (on precmd/preexec/chpwd)
+# without duplicating this logic; the daemon below handles the case where
+# nothing in the window's own shell fires those hooks (e.g. Claude's title
+# changing on its own, like after /rename).
+#
 # tmux has no hook that fires when a pane's title changes via escape
 # sequence (only things like after-rename-window, which fires *after* a
 # manual rename), so there's no direct way to react to Claude's own title
-# updates. This polls instead. Started from tmux.conf on server start and
-# config reload; a pidfile keeps it to one running instance.
+# updates -- hence the daemon polls.
 #
 # Status comes from the Claude Status app's per-session .cstatus files
 # (~/.claude/projects/*/*.cstatus), which carry a "pid" (the claude
 # process) and "state" (active/waiting/idle) -- richer than what's
 # recoverable from Claude's own pane-title spinner glyph, which only
-# distinguishes busy vs. not-busy.
-
-pidfile="/tmp/tmux-claude-window-namer.pid"
-
-if [[ -f "$pidfile" ]] && kill -0 "$(cat "$pidfile" 2>/dev/null)" 2>/dev/null; then
-  exit 0
-fi
-echo $$ > "$pidfile"
+# distinguishes busy vs. not-busy. If that plugin isn't installed, no
+# .cstatus files exist, so no icon is added -- the plain title is used.
 
 tab=$'\t'
 cstatus_glob="$HOME/.claude/projects/*/*.cstatus"
@@ -35,10 +40,11 @@ icon_for_state() {
 }
 
 # Find a `claude` process descended from pid $1, by walking each
-# claude-named process's ppid chain in a cached `ps` snapshot. Needed
-# because the pane's direct process may be a login shell, or a wrapper
-# like reattach-to-user-namespace, several hops above the actual claude
-# process -- and pgrep -P was unreliable for this in testing.
+# claude-named process's ppid chain in a cached `ps` snapshot ($ps_snapshot,
+# set by the caller). Needed because the pane's direct process may be a
+# login shell, or a wrapper like reattach-to-user-namespace, several hops
+# above the actual claude process -- and pgrep -P was unreliable for this
+# in testing.
 find_claude_pid() {
   local ancestor="$1"
   awk -v anc="$ancestor" '
@@ -61,41 +67,67 @@ find_claude_pid() {
     }' <<< "$ps_snapshot" | head -1
 }
 
-while tmux list-sessions >/dev/null 2>&1; do
+# Refreshes the process/status caches used by claude_name_for_window.
+# Cheap enough to call once per daemon tick or per --print-name call.
+refresh_caches() {
   ps_snapshot="$(ps -eo pid,ppid,comm)"
   pid_states="$(for f in $cstatus_glob; do
     [[ -f "$f" ]] || continue
     jq -r 'if .pid then "\(.pid) \(.state)" else empty end' "$f" 2>/dev/null
   done)"
+}
 
-  for window_id in $(tmux list-windows -a -F '#{window_id}' 2>/dev/null); do
-    claude_line="$(tmux list-panes -t "$window_id" -F "#{pane_current_command}${tab}#{pane_title}${tab}#{pane_pid}" 2>/dev/null | grep -m1 "^claude${tab}")"
-    if [[ -n "$claude_line" ]]; then
-      rest="${claude_line#*$tab}"
-      claude_title="${rest%$tab*}"
-      pane_pid="${rest##*$tab}"
-      base_name="${claude_title#* }"
+# Prints the claude-derived name for window $1 (icon + session title), or
+# nothing (and returns 1) if it has no `claude` pane. Requires
+# refresh_caches to have been called first.
+claude_name_for_window() {
+  local window_id="$1"
+  local claude_line
+  claude_line="$(tmux list-panes -t "$window_id" -F "#{pane_current_command}${tab}#{pane_title}${tab}#{pane_pid}" 2>/dev/null | grep -m1 "^claude${tab}")"
+  [[ -n "$claude_line" ]] || return 1
 
-      icon=""
-      claude_pid="$(find_claude_pid "$pane_pid")"
-      if [[ -n "$claude_pid" ]]; then
-        state="$(awk -v p="$claude_pid" '$1==p{print $2}' <<< "$pid_states")"
-        icon="$(icon_for_state "$state")"
-      fi
+  local rest="${claude_line#*$tab}"
+  local claude_title="${rest%$tab*}"
+  local pane_pid="${rest##*$tab}"
+  local base_name="${claude_title#* }"
 
-      if [[ -n "$icon" ]]; then
-        window_name="${icon}${base_name}"
-      else
-        window_name="$base_name"
-      fi
+  local icon="" claude_pid state
+  claude_pid="$(find_claude_pid "$pane_pid")"
+  if [[ -n "$claude_pid" ]]; then
+    state="$(awk -v p="$claude_pid" '$1==p{print $2}' <<< "$pid_states")"
+    icon="$(icon_for_state "$state")"
+  fi
 
+  echo "${icon}${base_name}"
+}
+
+run_daemon() {
+  local pidfile="/tmp/tmux-claude-window-namer.pid"
+  if [[ -f "$pidfile" ]] && kill -0 "$(cat "$pidfile" 2>/dev/null)" 2>/dev/null; then
+    exit 0
+  fi
+  echo $$ > "$pidfile"
+
+  while tmux list-sessions >/dev/null 2>&1; do
+    refresh_caches
+
+    for window_id in $(tmux list-windows -a -F '#{window_id}' 2>/dev/null); do
+      local window_name current_name
+      window_name="$(claude_name_for_window "$window_id")" || continue
       current_name="$(tmux display-message -p -t "$window_id" '#{window_name}' 2>/dev/null)"
       if [[ -n "$window_name" && "$current_name" != "$window_name" ]]; then
         tmux rename-window -t "$window_id" "$window_name"
       fi
-    fi
+    done
+    sleep 1
   done
-  sleep 1
-done
 
-rm -f "$pidfile"
+  rm -f "$pidfile"
+}
+
+if [[ "$1" == "--print-name" ]]; then
+  refresh_caches
+  claude_name_for_window "$2"
+else
+  run_daemon
+fi
