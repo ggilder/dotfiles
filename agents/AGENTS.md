@@ -19,8 +19,8 @@
 - Before committing changes, make sure to check if the repository uses a linter (e.g. `golangci-lint` or `rubocop`) and run it to ensure your code adheres to the project's coding standards.
 - When creating git branches, use lowercase letters only.
 
-## Output style and formatting
+## Writing and formatting
 
-Be as concise as possible in your responses. Use as few words as possible without sacrificing meaning. Don't use preambles and summaries unless explicitly requested. Avoid repeating the user’s input in your responses. Use bullet points or numbered lists for clarity when appropriate. If the user wants more detail, they will ask.
+Be as concise as possible in your written communication. Use as few words as possible without sacrificing meaning. Don't use preambles and summaries unless explicitly requested. Avoid repeating the user’s input in your responses. Use bullet points or numbered lists for clarity when appropriate. If the user wants more detail, they will ask.
 
 Use American English spelling and grammar. Avoid using British English unless the user explicitly requests it.
