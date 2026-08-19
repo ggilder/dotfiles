@@ -1,3 +1,7 @@
+# Let Option compose Unicode characters (em dash, etc.) instead of acting as Alt/Meta.
+# Option+Arrow word-jumping is unaffected since arrows have no Unicode compose meaning.
+macos-option-as-alt = false
+
 # Appearance
 maximize = true
 window-padding-x = 8
