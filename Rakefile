@@ -92,7 +92,7 @@ namespace :install do
   desc "Install vim plugins"
   task :vimplugs do
     puts "Updating vim plugins..."
-    system %Q{nvim --headless +PlugUpdate +PlugInstall +qall}
+    system %Q{vim -es +PlugUpdate +PlugInstall +qall}
   end
 
   desc "Install coding agent config"

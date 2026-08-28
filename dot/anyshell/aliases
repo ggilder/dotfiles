@@ -8,11 +8,7 @@ elif [[ $platform = 'Darwin' ]]; then
   alias flushdns="dscacheutil -flushcache"
 fi
 
-if which nvim &>/dev/null; then
-  export EDITOR="nvim"
-else
-  export EDITOR="vim"
-fi
+export EDITOR="vim"
 
 # ruby (irb)
 alias irb='irb --readline -r irb/completion'
