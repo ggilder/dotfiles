@@ -42,6 +42,10 @@ bindkey '^[[3~' delete-char # forward delete key
 # Bind Ctrl-O to clear screen
 bindkey '^O' clear-screen
 
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey '^G' edit-command-line
+
 # Ctrl-Z to foreground!
 # http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
 fancy-ctrl-z () {
