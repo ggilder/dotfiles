@@ -41,3 +41,4 @@ Do not use the following cliche words or phrases unless they are strictly necess
 - "the part nobody tells you"
 - "the bit that really matters"
 - "the deeper point"
+- "vacuous" / "vacuously"
