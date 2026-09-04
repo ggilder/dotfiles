@@ -52,6 +52,7 @@ record_time "rvm"
 
 # Use FZF
 source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git"'
 record_time "fzf"
 
 # Initial tmux window name
