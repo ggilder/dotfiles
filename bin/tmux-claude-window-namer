@@ -73,8 +73,8 @@ refresh_caches() {
   ps_snapshot="$(ps -eo pid,ppid,comm)"
   pid_states="$(for f in $cstatus_glob; do
     [[ -f "$f" ]] || continue
-    jq -r 'if .pid then "\(.pid) \(.state)" else empty end' "$f" 2>/dev/null
-  done)"
+    jq -r 'if .pid then "\(.pid) \(.state) \(.timestamp)" else empty end' "$f" 2>/dev/null
+  done | sort -k3)"
 }
 
 # Prints the claude-derived name for window $1 (icon + session title), or
@@ -94,7 +94,9 @@ claude_name_for_window() {
   local icon="" claude_pid state
   claude_pid="$(find_claude_pid "$pane_pid")"
   if [[ -n "$claude_pid" ]]; then
-    state="$(awk -v p="$claude_pid" '$1==p{print $2}' <<< "$pid_states")"
+    # A pid can have several .cstatus files (e.g. after a worktree switch);
+    # pid_states is sorted by timestamp, so the last match is the newest.
+    state="$(awk -v p="$claude_pid" '$1==p{s=$2} END{print s}' <<< "$pid_states")"
     icon="$(icon_for_state "$state")"
   fi
 
