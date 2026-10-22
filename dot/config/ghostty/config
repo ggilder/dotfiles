@@ -15,3 +15,6 @@ font-feature = -calt
 # Tmux window navigation
 keybind = super+shift+left_bracket=text:\x01p
 keybind = super+shift+right_bracket=text:\x01n
+
+# Copy on text selection
+copy-on-select = clipboard
